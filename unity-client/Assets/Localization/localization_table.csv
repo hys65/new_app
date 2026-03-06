@@ -1,0 +1,45 @@
+key,module,zh-CN,zh-TW,en,ja,ko,de,fr,es,pt-BR,ru,comment
+ui_start_game,UI,开始游戏,開始遊戲,Start Game,ゲーム開始,게임 시작,Spiel starten,Démarrer,Iniciar juego,Iniciar jogo,Начать игру,主入口按钮
+ui_continue_game,UI,继续游戏,繼續遊戲,Continue,続ける,계속하기,Fortsetzen,Continuer,Continuar,Continuar,Продолжить,继续按钮
+ui_back,UI,返回,返回,Back,戻る,뒤로,Zurück,Retour,Atrás,Voltar,Назад,通用返回
+ui_confirm,UI,确认,確認,Confirm,確認,확인,Bestätigen,Confirmer,Confirmar,Confirmar,Подтвердить,通用确认
+ui_cancel,UI,取消,取消,Cancel,キャンセル,취소,Abbrechen,Annuler,Cancelar,Cancelar,Отмена,通用取消
+menu_title_main,MENU,主菜单,主選單,Main Menu,メインメニュー,메인 메뉴,Hauptmenü,Menu principal,Menú principal,Menu principal,Главное меню,主菜单标题
+menu_btn_play,MENU,开始,開始,Play,プレイ,플레이,Spielen,Jouer,Jugar,Jogar,Играть,开始按钮
+menu_btn_shop,MENU,商店,商店,Shop,ショップ,상점,Shop,Boutique,Tienda,Loja,Магазин,商店按钮
+menu_btn_settings,MENU,设置,設置,Settings,設定,설정,Einstellungen,Paramètres,Ajustes,Configurações,Настройки,设置按钮
+menu_btn_exit,MENU,退出,退出,Exit,終了,종료,Beenden,Quitter,Salir,Sair,Выход,退出按钮
+shop_title,SHOP,商店,商店,Shop,ショップ,상점,Shop,Boutique,Tienda,Loja,Магазин,商店标题
+shop_tab_items,SHOP,道具,道具,Items,アイテム,아이템,Gegenstände,Objets,Objetos,Itens,Предметы,道具标签
+shop_tab_bundles,SHOP,礼包,禮包,Bundles,バンドル,번들,Bundles,Packs,Lotes,Pacotes,Наборы,礼包标签
+shop_btn_buy,SHOP,购买,購買,Buy,購入,구매,Kaufen,Acheter,Comprar,Comprar,Купить,购买按钮
+shop_restore_purchase,SHOP,恢复购买,恢復購買,Restore Purchase,購入を復元,구매 복원,Käufe wiederherstellen,Restaurer les achats,Restaurar compra,Restaurar compra,Восстановить покупки,恢复购买
+settings_title,SETTINGS,设置,設置,Settings,設定,설정,Einstellungen,Paramètres,Ajustes,Configurações,Настройки,设置标题
+settings_music,SETTINGS,音乐,音樂,Music,音楽,음악,Musik,Musique,Música,Música,Музыка,音乐开关
+settings_sound,SETTINGS,音效,音效,Sound,サウンド,사운드,Sound,Sonido,Son,Som,Звук,音效开关
+settings_vibration,SETTINGS,震动,震動,Vibration,バイブ,진동,Vibration,Vibration,Vibración,Vibração,Вибрация,震动开关
+settings_language,SETTINGS,语言,語言,Language,言語,언어,Sprache,Langue,Idioma,Idioma,Язык,语言设置
+result_victory,RESULT,胜利,勝利,Victory,勝利,승리,Sieg,Victoire,Victoria,Vitória,Победа,胜利标题
+result_failed,RESULT,失败,失敗,Failed,失敗,실패,Fehlgeschlagen,Échec,Derrota,Falha,Поражение,失败标题
+result_score,RESULT,得分,得分,Score,スコア,점수,Punktzahl,Score,Puntuación,Pontuação,Счет,分数标签
+result_retry,RESULT,重试,重試,Retry,リトライ,다시 시도,Erneut versuchen,Réessayer,Reintentar,Tentar novamente,Повторить,重试按钮
+result_next_level,RESULT,下一关,下一關,Next Level,次のレベル,다음 레벨,Nächstes Level,Niveau suivant,Siguiente nivel,Próximo nível,Следующий уровень,下一关按钮
+tutorial_swipe_to_aim,TUTORIAL,滑动瞄准,滑動瞄準,Swipe to Aim,スワイプで狙う,스와이프로 조준,Wischen zum Zielen,Glissez pour viser,Desliza para apuntar,Deslize para mirar,Проведите для прицеливания,教学提示
+tutorial_tap_to_throw,TUTORIAL,点击投掷,點擊投擲,Tap to Throw,タップで投げる,탭하여 던지기,Tippen zum Werfen,Touchez pour lancer,Toca para lanzar,Toque para arremessar,Нажмите, чтобы бросить,教学提示
+goal_break_briefcase,GOAL,先打破公文包防御,先打破公文包防禦,Break briefcase defense first,まずブリーフケース防御を壊そう,먼저 서류가방 방어를 깨세요,Zuerst Aktentaschenabwehr brechen,Détruisez d'abord la défense de la mallette,Rompe primero la defensa del maletín,Quebre primeiro a defesa da maleta,Сначала сломайте защиту портфеля,目标提示
+goal_hit_with_egg,GOAL,用鸡蛋命中目标,用雞蛋命中目標,Hit the target with egg,卵でターゲットに当てる,달걀로 목표를 맞히세요,Ziel mit Ei treffen,Touchez la cible avec un œuf,Golpea el objetivo con huevo,Acerte o alvo com ovo,Попадите в цель яйцом,目标提示
+goal_hit_with_tomato,GOAL,用番茄命中目标,用番茄命中目標,Hit the target with tomato,トマトでターゲットに当てる,토마토로 목표를 맞히세요,Ziel mit Tomate treffen,Touchez la cible avec une tomate,Golpea el objetivo con tomate,Acerte o alvo com tomate,Попадите в цель помидором,目标提示
+error_network,ERROR,网络异常,網路異常,Network error,ネットワークエラー,네트워크 오류,Netzwerkfehler,Erreur réseau,Error de red,Erro de rede,Ошибка сети,错误提示
+error_purchase_failed,ERROR,购买失败,購買失敗,Purchase failed,購入失敗,구매 실패,Kauf fehlgeschlagen,Achat échoué,Compra fallida,Falha na compra,Покупка не удалась,错误提示
+error_language_load_failed,ERROR,语言加载失败,語言載入失敗,Language load failed,言語の読み込みに失敗,언어 로드 실패,Sprachladen fehlgeschlagen,Échec du chargement de la langue,Error al cargar idioma,Falha ao carregar idioma,Не удалось загрузить язык,错误提示
+item_egg_name,ITEM,鸡蛋,雞蛋,Egg,卵,달걀,Ei,Œuf,Huevo,Ovo,Яйцо,道具名称
+item_tomato_name,ITEM,番茄,番茄,Tomato,トマト,토마토,Tomate,Tomate,Tomate,Tomate,Помидор,道具名称
+item_paint_ball_name,ITEM,颜料球,顏料球,Paint Ball,ペイントボール,페인트 볼,Farbball,Boule de peinture,Bola de pintura,Bola de tinta,Шарик с краской,道具名称
+item_foam_sprayer_name,ITEM,泡沫喷枪,泡沫噴槍,Foam Sprayer,フォームスプレー,폼 스프레이,Schaumsprüher,Pulvérisateur de mousse,Rociador de espuma,Pulverizador de espuma,Пенный распылитель,道具名称
+item_sponge_hammer_name,ITEM,海绵锤,海綿錘,Sponge Hammer,スポンジハンマー,스펀지 해머,Schwammhammer,Marteau éponge,Martillo de esponja,Martelo de esponja,Губчатый молот,道具名称
+enemy_meeting_tyrant_name,ENEMY,会议暴君,會議暴君,Meeting Tyrant,会議の暴君,회의 폭군,Besprechungstyrann,Tyran de réunion,Tirano de reuniones,Tirano de reunião,Тиран совещаний,敌人名称
+enemy_narcissist_manager_name,ENEMY,自恋主管,自戀主管,Narcissist Manager,ナルシスト上司,나르시시스트 매니저,Narzisstischer Manager,Manager narcissique,Gerente narcisista,Gerente narcisista,Самовлюбленный менеджер,敌人名称
+state_briefcase_block_name,STATE,公文包格挡,公文包格擋,Briefcase Block,ブリーフケース防御,서류가방 방어,Aktentaschenblock,Blocage mallette,Bloqueo con maletín,Bloqueio com maleta,Блок портфелем,状态名称
+state_adjust_glasses_name,STATE,扶正眼镜,扶正眼鏡,Adjust Glasses,眼鏡を直す,안경 고쳐쓰기,Brille richten,Ajuster les lunettes,Ajustarse las gafas,Ajustar os óculos,Поправить очки,状态名称
+state_sunglasses_paint_resist_name,STATE,墨镜防颜料,墨鏡防顏料,Sunglasses Paint Resist,サングラスで塗料防御,선글라스 페인트 저항,Sonnenbrille schützt vor Farbe,Lunettes protègent de la peinture,Gafas bloquean pintura,Óculos bloqueiam tinta,Солнцезащитные очки защищают от краски,状态名称
+state_fix_hair_name,STATE,整理发型,整理髮型,Fix Hair,髪を整える,머리 정리,Haare richten,Remettre la coiffure,Arreglar peinado,Arrumar cabelo,Поправить прическу,状态名称
