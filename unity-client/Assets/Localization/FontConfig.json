@@ -1,0 +1,8 @@
+{
+  "font_groups": {
+    "Latin": ["en", "de", "fr", "es", "pt-BR"],
+    "CJK": ["zh-CN", "zh-TW", "ja", "ko"],
+    "Cyrillic": ["ru"]
+  },
+  "selection_rule": "Pick the first font group that contains the current locale; if locale is not mapped, use Latin."
+}

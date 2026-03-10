@@ -1,0 +1,17 @@
+{
+  "supported_locales": [
+    "zh-CN",
+    "zh-TW",
+    "en",
+    "ja",
+    "ko",
+    "de",
+    "fr",
+    "es",
+    "pt-BR",
+    "ru"
+  ],
+  "default_locale": "en",
+  "fallback_locale": "en",
+  "auto_detect_system_language": true
+}

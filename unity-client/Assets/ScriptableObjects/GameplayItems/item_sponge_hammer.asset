@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5c4e68bd4b8cd643a690717fdd5008d, type: 3}
+  m_Name: item_sponge_hammer
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.GameplayItemData
+  itemId: item_sponge_hammer
+  displayKey: item_sponge_hammer_name
+  baseBreakdownScore: 22
+  feedbackType: 2
+  projectilePrefab: {fileID: 4218001305349613295, guid: 20092b5f51a4cc8428764941e3a8dec0, type: 3}
+  throwForce: 10
