@@ -5,14 +5,43 @@ namespace PowerPrank3D.Gameplay
 {
     public class EnemyHitReaction : MonoBehaviour
     {
-        [SerializeField] private Renderer targetRenderer;
+        [Header("References")]
         [SerializeField] private Transform visualRoot;
-        [SerializeField] private float reactionDuration = 0.2f;
+        [SerializeField] private Renderer[] targetRenderers;
 
-        private Vector3 originLocalScale;
-        private Vector3 originLocalPosition;
-        private Color originColor = Color.white;
-        private Material runtimeMaterial;
+        [Header("Hit Stop")]
+        [SerializeField] private float defaultHitStopDuration = 0.05f;
+        [SerializeField] private float heavyHitStopDuration = 0.07f;
+
+        [Header("Scale Punch")]
+        [SerializeField] private float scalePunchAmount = 0.12f;
+        [SerializeField] private float scalePunchDuration = 0.12f;
+
+        [Header("Flash Color")]
+        [SerializeField] private Color flashColor = new Color(1f, 0.65f, 0.65f, 1f);
+        [SerializeField] private float flashDuration = 0.10f;
+
+        [Header("Small Knockback")]
+        [SerializeField] private Vector3 knockbackOffset = new Vector3(0f, 0f, -0.18f);
+        [SerializeField] private float knockbackDuration = 0.12f;
+
+        [Header("Foam Tint")]
+        [SerializeField] private Color foamTintColor = new Color(0.8f, 0.95f, 1f, 1f);
+        [SerializeField] private float foamTintDuration = 0.6f;
+
+        [Header("Wiggle")]
+        [SerializeField] private float wiggleAngle = 8f;
+        [SerializeField] private float wiggleDuration = 0.16f;
+
+        private bool hitStopRunning;
+        private Coroutine reactionCoroutine;
+
+        private Vector3 originalLocalScale;
+        private Vector3 originalLocalPosition;
+        private Quaternion originalLocalRotation;
+
+        private Material[] runtimeMaterials;
+        private Color[] originalColors;
 
         private void Awake()
         {
@@ -21,70 +50,282 @@ namespace PowerPrank3D.Gameplay
                 visualRoot = transform;
             }
 
-            originLocalScale = visualRoot.localScale;
-            originLocalPosition = visualRoot.localPosition;
+            originalLocalScale = visualRoot.localScale;
+            originalLocalPosition = visualRoot.localPosition;
+            originalLocalRotation = visualRoot.localRotation;
 
-            if (targetRenderer != null)
-            {
-                runtimeMaterial = targetRenderer.material;
-                originColor = runtimeMaterial.color;
-            }
+            CacheMaterials();
         }
 
         public void PlayHitFeedback(HitFeedbackType feedbackType)
         {
-            StopAllCoroutines();
-            StartCoroutine(DoFeedback(feedbackType));
-        }
+            float hitStopDuration = feedbackType == HitFeedbackType.ScalePunch
+                ? heavyHitStopDuration
+                : defaultHitStopDuration;
 
-        private IEnumerator DoFeedback(HitFeedbackType feedbackType)
-        {
-            var elapsed = 0f;
-            while (elapsed < reactionDuration)
+            PlayHitStop(hitStopDuration);
+
+            if (reactionCoroutine != null)
             {
-                elapsed += Time.deltaTime;
-                var progress = Mathf.Clamp01(elapsed / reactionDuration);
-
-                ApplyVisual(feedbackType, progress);
-                yield return null;
+                StopCoroutine(reactionCoroutine);
+                ResetVisualState();
             }
 
-            visualRoot.localScale = originLocalScale;
-            visualRoot.localPosition = originLocalPosition;
-            if (runtimeMaterial != null)
+            reactionCoroutine = StartCoroutine(PlayReactionCoroutine(feedbackType));
+        }
+
+        private void PlayHitStop(float duration)
+        {
+            if (!hitStopRunning)
             {
-                runtimeMaterial.color = originColor;
+                StartCoroutine(HitStopCoroutine(duration));
             }
         }
 
-        private void ApplyVisual(HitFeedbackType feedbackType, float progress)
+        private IEnumerator HitStopCoroutine(float duration)
         {
-            var pingPong = Mathf.Sin(progress * Mathf.PI);
+            hitStopRunning = true;
+
+            float originalTimeScale = Time.timeScale;
+            Time.timeScale = 0f;
+
+            yield return new WaitForSecondsRealtime(duration);
+
+            Time.timeScale = originalTimeScale;
+            hitStopRunning = false;
+        }
+
+        private IEnumerator PlayReactionCoroutine(HitFeedbackType feedbackType)
+        {
             switch (feedbackType)
             {
                 case HitFeedbackType.ScalePunch:
-                    visualRoot.localScale = originLocalScale * (1f + pingPong * 0.2f);
+                    yield return StartCoroutine(ScalePunchCoroutine());
                     break;
+
                 case HitFeedbackType.FlashColor:
-                    if (runtimeMaterial != null)
-                    {
-                        runtimeMaterial.color = Color.Lerp(originColor, Color.red, pingPong);
-                    }
+                    yield return StartCoroutine(FlashColorCoroutine());
                     break;
+
                 case HitFeedbackType.SmallKnockback:
-                    visualRoot.localPosition = originLocalPosition + new Vector3(0f, 0f, -0.1f * pingPong);
+                    yield return StartCoroutine(SmallKnockbackCoroutine());
                     break;
+
                 case HitFeedbackType.FoamTint:
-                    if (runtimeMaterial != null)
-                    {
-                        runtimeMaterial.color = Color.Lerp(originColor, new Color(0.85f, 0.95f, 1f), pingPong);
-                    }
+                    yield return StartCoroutine(FoamTintCoroutine());
                     break;
+
                 case HitFeedbackType.Wiggle:
-                    var wiggleX = Mathf.Sin(progress * 20f) * 0.03f;
-                    visualRoot.localPosition = originLocalPosition + new Vector3(wiggleX, 0f, 0f);
+                    yield return StartCoroutine(WiggleCoroutine());
+                    break;
+
+                default:
+                    yield return StartCoroutine(WiggleCoroutine());
                     break;
             }
+
+            ResetVisualState();
+            reactionCoroutine = null;
+        }
+
+        private IEnumerator ScalePunchCoroutine()
+        {
+            float timer = 0f;
+            Vector3 punchScale = originalLocalScale * (1f + scalePunchAmount);
+
+            while (timer < scalePunchDuration)
+            {
+                timer += Time.unscaledDeltaTime;
+                float t = timer / scalePunchDuration;
+
+                if (t < 0.5f)
+                {
+                    float lerp = t / 0.5f;
+                    visualRoot.localScale = Vector3.Lerp(originalLocalScale, punchScale, lerp);
+                }
+                else
+                {
+                    float lerp = (t - 0.5f) / 0.5f;
+                    visualRoot.localScale = Vector3.Lerp(punchScale, originalLocalScale, lerp);
+                }
+
+                yield return null;
+            }
+
+            visualRoot.localScale = originalLocalScale;
+        }
+
+        private IEnumerator FlashColorCoroutine()
+        {
+            if (runtimeMaterials == null || runtimeMaterials.Length == 0)
+            {
+                yield break;
+            }
+
+            SetAllMaterialColors(flashColor);
+
+            float timer = 0f;
+            while (timer < flashDuration)
+            {
+                timer += Time.unscaledDeltaTime;
+                float t = timer / flashDuration;
+
+                for (int i = 0; i < runtimeMaterials.Length; i++)
+                {
+                    if (runtimeMaterials[i] != null)
+                    {
+                        Color color = Color.Lerp(flashColor, originalColors[i], t);
+                        runtimeMaterials[i].color = color;
+                    }
+                }
+
+                yield return null;
+            }
+
+            RestoreOriginalColors();
+        }
+
+        private IEnumerator SmallKnockbackCoroutine()
+        {
+            float timer = 0f;
+            Vector3 hitPosition = originalLocalPosition + knockbackOffset;
+
+            while (timer < knockbackDuration)
+            {
+                timer += Time.unscaledDeltaTime;
+                float t = timer / knockbackDuration;
+
+                if (t < 0.5f)
+                {
+                    float lerp = t / 0.5f;
+                    visualRoot.localPosition = Vector3.Lerp(originalLocalPosition, hitPosition, lerp);
+                }
+                else
+                {
+                    float lerp = (t - 0.5f) / 0.5f;
+                    visualRoot.localPosition = Vector3.Lerp(hitPosition, originalLocalPosition, lerp);
+                }
+
+                yield return null;
+            }
+
+            visualRoot.localPosition = originalLocalPosition;
+        }
+
+        private IEnumerator FoamTintCoroutine()
+        {
+            if (runtimeMaterials == null || runtimeMaterials.Length == 0)
+            {
+                yield break;
+            }
+
+            SetAllMaterialColors(foamTintColor);
+
+            float timer = 0f;
+            while (timer < foamTintDuration)
+            {
+                timer += Time.unscaledDeltaTime;
+                float t = timer / foamTintDuration;
+
+                for (int i = 0; i < runtimeMaterials.Length; i++)
+                {
+                    if (runtimeMaterials[i] != null)
+                    {
+                        Color color = Color.Lerp(foamTintColor, originalColors[i], t);
+                        runtimeMaterials[i].color = color;
+                    }
+                }
+
+                yield return null;
+            }
+
+            RestoreOriginalColors();
+        }
+
+        private IEnumerator WiggleCoroutine()
+        {
+            float timer = 0f;
+
+            while (timer < wiggleDuration)
+            {
+                timer += Time.unscaledDeltaTime;
+                float t = timer / wiggleDuration;
+
+                float angle = Mathf.Sin(t * Mathf.PI * 4f) * wiggleAngle * (1f - t);
+                visualRoot.localRotation = originalLocalRotation * Quaternion.Euler(0f, angle, 0f);
+
+                yield return null;
+            }
+
+            visualRoot.localRotation = originalLocalRotation;
+        }
+
+        private void CacheMaterials()
+        {
+            if (targetRenderers == null || targetRenderers.Length == 0)
+            {
+                runtimeMaterials = new Material[0];
+                originalColors = new Color[0];
+                return;
+            }
+
+            runtimeMaterials = new Material[targetRenderers.Length];
+            originalColors = new Color[targetRenderers.Length];
+
+            for (int i = 0; i < targetRenderers.Length; i++)
+            {
+                if (targetRenderers[i] == null)
+                {
+                    continue;
+                }
+
+                runtimeMaterials[i] = targetRenderers[i].material;
+                originalColors[i] = runtimeMaterials[i].color;
+            }
+        }
+
+        private void SetAllMaterialColors(Color color)
+        {
+            if (runtimeMaterials == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < runtimeMaterials.Length; i++)
+            {
+                if (runtimeMaterials[i] != null)
+                {
+                    runtimeMaterials[i].color = color;
+                }
+            }
+        }
+
+        private void RestoreOriginalColors()
+        {
+            if (runtimeMaterials == null || originalColors == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < runtimeMaterials.Length; i++)
+            {
+                if (runtimeMaterials[i] != null)
+                {
+                    runtimeMaterials[i].color = originalColors[i];
+                }
+            }
+        }
+
+        private void ResetVisualState()
+        {
+            if (visualRoot != null)
+            {
+                visualRoot.localScale = originalLocalScale;
+                visualRoot.localPosition = originalLocalPosition;
+                visualRoot.localRotation = originalLocalRotation;
+            }
+
+            RestoreOriginalColors();
         }
     }
 }

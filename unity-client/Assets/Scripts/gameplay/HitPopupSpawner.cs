@@ -1,29 +1,32 @@
 using UnityEngine;
 
-public class HitPopupSpawner : MonoBehaviour
+namespace PowerPrank3D.Gameplay
 {
-    [SerializeField] private Canvas hudCanvas;
-    [SerializeField] private Camera gameplayCamera;
-    [SerializeField] private GameObject hitPopupPrefab;
-
-    public void SpawnPopup(Vector3 worldPosition, string message)
+    public class HitPopupSpawner : MonoBehaviour
     {
-        if (hudCanvas == null || gameplayCamera == null || hitPopupPrefab == null)
+        [SerializeField] private Canvas hudCanvas;
+        [SerializeField] private Camera gameplayCamera;
+        [SerializeField] private GameObject hitPopupPrefab;
+
+        public void SpawnPopup(Vector3 worldPosition, string message)
         {
-            return;
-        }
+            if (hudCanvas == null || gameplayCamera == null || hitPopupPrefab == null)
+            {
+                return;
+            }
 
-        GameObject popupObject = Instantiate(hitPopupPrefab, hudCanvas.transform);
-        RectTransform popupRect = popupObject.GetComponent<RectTransform>();
+            GameObject popupObject = Instantiate(hitPopupPrefab, hudCanvas.transform);
+            RectTransform popupRect = popupObject.GetComponent<RectTransform>();
 
-        Vector3 screenPosition = gameplayCamera.WorldToScreenPoint(worldPosition);
+            Vector3 screenPosition = gameplayCamera.WorldToScreenPoint(worldPosition);
 
-        popupRect.position = screenPosition;
+            popupRect.position = screenPosition;
 
-        HitPopupController popupController = popupObject.GetComponent<HitPopupController>();
-        if (popupController != null)
-        {
-            popupController.SetText(message);
+            HitPopupController popupController = popupObject.GetComponent<HitPopupController>();
+            if (popupController != null)
+            {
+                popupController.SetText(message);
+            }
         }
     }
 }

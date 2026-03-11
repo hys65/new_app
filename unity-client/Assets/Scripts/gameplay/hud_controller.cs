@@ -16,6 +16,11 @@ namespace PowerPrank3D.Gameplay
         [SerializeField] private TextMeshProUGUI timerText;
         [SerializeField] private TextMeshProUGUI selectedItemText;
 
+        [Header("Combo")]
+        [SerializeField] private GameObject comboRoot;
+        [SerializeField] private TextMeshProUGUI comboText;
+        [SerializeField] private Image comboTimerFill;
+
         [Header("Result")]
         [SerializeField] private GameObject resultPanel;
         [SerializeField] private TextMeshProUGUI resultTitleText;
@@ -32,6 +37,8 @@ namespace PowerPrank3D.Gameplay
             {
                 resultPanel.SetActive(false);
             }
+
+            SetComboVisible(false);
         }
 
         private void OnEnable()
@@ -64,37 +71,6 @@ namespace PowerPrank3D.Gameplay
 
         private void Start()
         {
-            if (currentBreakdownText != null)
-            {
-                currentBreakdownText.text = "CURRENT TEST 123";
-                currentBreakdownText.color = Color.red;
-                currentBreakdownText.fontSize = 48;
-            }
-
-            if (targetBreakdownText != null)
-            {
-                targetBreakdownText.text = "TARGET TEST 456";
-                targetBreakdownText.color = Color.green;
-                targetBreakdownText.fontSize = 48;
-            }
-
-            if (timerText != null)
-            {
-                timerText.text = "TIME TEST 789";
-                timerText.color = Color.yellow;
-                timerText.fontSize = 48;
-            }
-
-            if (selectedItemText != null)
-            {
-                selectedItemText.text = "ITEM TEST XYZ";
-                selectedItemText.color = Color.cyan;
-                selectedItemText.fontSize = 48;
-            }
-        }
-
-        private void Update()
-        {
             RefreshHud();
         }
 
@@ -109,11 +85,81 @@ namespace PowerPrank3D.Gameplay
             SetText(targetBreakdownText, "ui_breakdown_target", gameplayManager.TargetBreakdownValue.ToString());
             SetText(timerText, "ui_time_left", Mathf.CeilToInt(gameplayManager.RemainingTimeSeconds).ToString());
 
-            var itemLabel = gameplayManager.CurrentItem != null
+            string itemLabel = gameplayManager.CurrentItem != null
                 ? GetText(gameplayManager.CurrentItem.displayKey)
                 : "-";
 
             SetText(selectedItemText, "ui_selected_item", itemLabel);
+
+            RefreshComboHud();
+        }
+
+        private void RefreshComboHud()
+        {
+            if (gameplayManager == null)
+            {
+                SetComboVisible(false);
+                return;
+            }
+
+            int comboCount = gameplayManager.ComboCount;
+
+            if (comboCount < 2)
+            {
+                SetComboVisible(false);
+                return;
+            }
+
+            SetComboVisible(true);
+
+            if (comboText != null)
+            {
+                comboText.text = $"COMBO x{comboCount}";
+                comboText.color = GetComboColor(comboCount);
+            }
+
+            if (comboTimerFill != null)
+            {
+                float maxWindow = 2f;
+                float remain = gameplayManager.ComboTimeRemaining;
+                comboTimerFill.fillAmount = Mathf.Clamp01(remain / maxWindow);
+                comboTimerFill.color = GetComboColor(comboCount);
+            }
+        }
+
+        private Color GetComboColor(int comboCount)
+        {
+            if (comboCount >= 5)
+            {
+                return new Color(1f, 0.55f, 0f, 1f);
+            }
+
+            if (comboCount >= 3)
+            {
+                return Color.yellow;
+            }
+
+            return Color.white;
+        }
+
+        private void SetComboVisible(bool visible)
+        {
+            if (comboRoot != null)
+            {
+                comboRoot.SetActive(visible);
+            }
+            else
+            {
+                if (comboText != null)
+                {
+                    comboText.gameObject.SetActive(visible);
+                }
+
+                if (comboTimerFill != null && comboTimerFill.transform.parent != null)
+                {
+                    comboTimerFill.transform.parent.gameObject.SetActive(visible);
+                }
+            }
         }
 
         private void OnRoundFinished(bool isWin)
@@ -125,9 +171,11 @@ namespace PowerPrank3D.Gameplay
 
             if (resultTitleText != null)
             {
-                var key = isWin ? "result_victory" : "result_failed";
+                string key = isWin ? "result_victory" : "result_failed";
                 resultTitleText.text = GetText(key);
             }
+
+            SetComboVisible(false);
         }
 
         private void OnLocaleChanged(string _)
@@ -147,52 +195,12 @@ namespace PowerPrank3D.Gameplay
                 return;
             }
 
-            var label = GetText(labelKey);
-
-            if (string.IsNullOrWhiteSpace(label) || label == labelKey)
-            {
-                label = GetFallbackLabel(labelKey);
-            }
-
-            textComponent.text = $"{label}: {value}";
+            textComponent.text = $"{GetText(labelKey)}: {value}";
         }
 
         private string GetText(string key)
         {
-            if (string.IsNullOrWhiteSpace(key))
-            {
-                return string.Empty;
-            }
-
-            var text = localizationManager != null ? localizationManager.GetText(key) : key;
-
-            if (string.IsNullOrWhiteSpace(text))
-            {
-                return GetFallbackLabel(key);
-            }
-
-            return text;
-        }
-
-        private string GetFallbackLabel(string key)
-        {
-            switch (key)
-            {
-                case "ui_breakdown_current":
-                    return "Current Breakdown";
-                case "ui_breakdown_target":
-                    return "Target Breakdown";
-                case "ui_time_left":
-                    return "Time Left";
-                case "ui_selected_item":
-                    return "Selected Item";
-                case "result_victory":
-                    return "Victory";
-                case "result_failed":
-                    return "Failed";
-                default:
-                    return key;
-            }
+            return localizationManager != null ? localizationManager.GetText(key) : key;
         }
     }
 }

@@ -11,6 +11,7 @@ namespace PowerPrank3D.Gameplay
 
         [Header("Aim")]
         [SerializeField] private float upwardFactor = 0.25f;
+        [SerializeField] private float minDragDistance = 40f;
 
         private Vector2 dragStartPos;
         private bool isDragging;
@@ -38,10 +39,16 @@ namespace PowerPrank3D.Gameplay
 
             if (Input.GetMouseButtonUp(0) && isDragging)
             {
-                var dragEndPos = (Vector2)Input.mousePosition;
-                var dragDirection = dragEndPos - dragStartPos;
+                Vector2 dragEndPos = Input.mousePosition;
+                Vector2 dragDirection = dragEndPos - dragStartPos;
 
-                var throwDirection = BuildThrowDirection(dragDirection);
+                if (dragDirection.magnitude < minDragDistance)
+                {
+                    isDragging = false;
+                    return;
+                }
+
+                Vector3 throwDirection = BuildThrowDirection(dragDirection);
                 SpawnAndThrow(throwDirection);
                 isDragging = false;
             }
@@ -78,27 +85,22 @@ namespace PowerPrank3D.Gameplay
                 return (transform.forward + Vector3.up * upwardFactor).normalized;
             }
 
-            if (dragDirection.sqrMagnitude < 4f)
-            {
-                return (gameplayCamera.transform.forward + Vector3.up * upwardFactor).normalized;
-            }
-
-            var screenDir = new Vector3(dragDirection.x, dragDirection.y, gameplayCamera.pixelHeight * 0.2f);
-            var worldDir = gameplayCamera.transform.TransformDirection(screenDir.normalized);
+            Vector3 screenDir = new Vector3(dragDirection.x, dragDirection.y, gameplayCamera.pixelHeight * 0.2f);
+            Vector3 worldDir = gameplayCamera.transform.TransformDirection(screenDir.normalized);
             worldDir.y = Mathf.Abs(worldDir.y) + upwardFactor;
             return worldDir.normalized;
         }
 
         private void SpawnAndThrow(Vector3 throwDirection)
         {
-            var itemData = gameplayManager.CurrentItem;
+            GameplayItemData itemData = gameplayManager.CurrentItem;
             if (itemData == null || itemData.projectilePrefab == null || throwSpawnPoint == null)
             {
                 return;
             }
 
-            var spawned = Instantiate(itemData.projectilePrefab, throwSpawnPoint.position, Quaternion.identity);
-            var projectile = spawned.GetComponent<ProjectileBehavior>();
+            GameObject spawned = Instantiate(itemData.projectilePrefab, throwSpawnPoint.position, Quaternion.identity);
+            ProjectileBehavior projectile = spawned.GetComponent<ProjectileBehavior>();
             if (projectile == null)
             {
                 projectile = spawned.AddComponent<ProjectileBehavior>();

@@ -15,6 +15,6 @@ MonoBehaviour:
   itemId: item_egg
   displayKey: item_egg_name
   baseBreakdownScore: 10
-  feedbackType: 0
+  feedbackType: 4
   projectilePrefab: {fileID: 4218001305349613295, guid: 20092b5f51a4cc8428764941e3a8dec0, type: 3}
-  throwForce: 7
+  throwForce: 12

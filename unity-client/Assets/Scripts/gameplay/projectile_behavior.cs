@@ -1,5 +1,4 @@
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace PowerPrank3D.Gameplay
 {
@@ -9,14 +8,26 @@ namespace PowerPrank3D.Gameplay
 
         private GameplayItemData itemData;
         private GameplayManager gameplayManager;
+        private HitPopupSpawner popupSpawner;
         private bool hasHit;
-        private HitPopupSpawner hitPopupSpawner;
 
         public void Initialize(GameplayItemData data, GameplayManager manager)
         {
             itemData = data;
             gameplayManager = manager;
-            hitPopupSpawner = Object.FindFirstObjectByType<HitPopupSpawner>();
+
+            if (popupSpawner == null)
+            {
+                popupSpawner = FindFirstObjectByType<HitPopupSpawner>();
+            }
+        }
+
+        private void Awake()
+        {
+            if (popupSpawner == null)
+            {
+                popupSpawner = FindFirstObjectByType<HitPopupSpawner>();
+            }
         }
 
         private void Start()
@@ -26,46 +37,32 @@ namespace PowerPrank3D.Gameplay
 
         private void OnCollisionEnter(Collision collision)
         {
-            HandleHit(collision.collider);
-        }
-
-        private void OnTriggerEnter(Collider other)
-        {
-            HandleHit(other);
-        }
-
-        private void HandleHit(Collider hitCollider)
-        {
-            if (hasHit || hitCollider == null)
+            if (hasHit)
             {
                 return;
             }
 
             hasHit = true;
 
-            var receiver = hitCollider.GetComponentInParent<EnemyHitReaction>();
+            var receiver = collision.collider.GetComponentInParent<EnemyHitReaction>();
             if (receiver != null)
             {
-                receiver.PlayHitFeedback(itemData != null ? itemData.feedbackType : HitFeedbackType.ScalePunch);
+                receiver.PlayHitFeedback(HitFeedbackType.ScalePunch);
 
-                if (gameplayManager != null && gameplayManager.IsRoundRunning && itemData != null)
+                bool isHeadHit = collision.collider.CompareTag("Head");
+                int scoreUnits = isHeadHit ? 2 : 1;
+
+                int gainedScore = gameplayManager != null
+                    ? gameplayManager.AddBreakdown(itemData, scoreUnits)
+                    : 0;
+
+                if (popupSpawner != null && gainedScore > 0)
                 {
-                    bool isHeadshot = hitCollider.CompareTag("Head");
-                    int popupScore = itemData.baseBreakdownScore;
+                    Vector3 hitPoint = collision.contacts.Length > 0
+                        ? collision.contacts[0].point
+                        : collision.collider.bounds.center;
 
-                    gameplayManager.AddBreakdown(itemData);
-
-                    if (isHeadshot)
-                    {
-                        gameplayManager.AddBreakdown(itemData);
-                        popupScore *= 2;
-                    }
-
-                    if (hitPopupSpawner != null)
-                    {
-                        Vector3 popupWorldPosition = hitCollider.bounds.center + Vector3.up * 0.5f;
-                        hitPopupSpawner.SpawnPopup(popupWorldPosition, "+" + popupScore);
-                    }
+                    popupSpawner.SpawnPopup(hitPoint, "+" + gainedScore);
                 }
             }
 
