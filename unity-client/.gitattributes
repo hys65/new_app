@@ -1,0 +1,46 @@
+* text=auto
+
+*.cs text diff=csharp
+*.shader text
+*.cginc text
+*.compute text
+*.hlsl text
+
+*.unity text
+*.prefab text
+*.mat text
+*.anim text
+*.controller text
+*.meta text
+*.asset text
+*.physicsMaterial2D text
+*.physicsMaterial text
+*.overrideController text
+*.mask text
+*.playable text
+*.renderTexture text
+*.terrainlayer text
+*.spriteatlas text
+*.guiskin text
+*.flare text
+*.fontsettings text
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.psd binary
+*.tga binary
+*.tif binary
+*.tiff binary
+*.exr binary
+*.fbx binary
+*.blend binary
+*.wav binary
+*.mp3 binary
+*.ogg binary
+*.mp4 binary
+*.mov binary
+*.zip binary
+*.ttf binary
+*.otf binary
