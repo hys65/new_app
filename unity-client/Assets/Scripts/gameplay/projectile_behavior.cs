@@ -4,7 +4,7 @@ namespace PowerPrank3D.Gameplay
 {
     public class ProjectileBehavior : MonoBehaviour
     {
-        [SerializeField] private float autoDestroySeconds = 5f;
+        [SerializeField] private float autoDestroySeconds = 20f;
 
         private GameplayItemData itemData;
         private GameplayManager gameplayManager;
@@ -35,6 +35,15 @@ namespace PowerPrank3D.Gameplay
             Destroy(gameObject, autoDestroySeconds);
         }
 
+        private void Update()
+        {
+            // 掉出世界底部再强制清理
+            if (transform.position.y < -10f)
+            {
+                Destroy(gameObject);
+            }
+        }
+
         private void OnCollisionEnter(Collision collision)
         {
             if (hasHit)
@@ -42,12 +51,21 @@ namespace PowerPrank3D.Gameplay
                 return;
             }
 
-            hasHit = true;
+            Debug.Log(
+                "Projectile hit -> name: " + collision.collider.name +
+                " | tag: " + collision.collider.tag +
+                " | layer: " + LayerMask.LayerToName(collision.collider.gameObject.layer)
+            );
 
             var receiver = collision.collider.GetComponentInParent<EnemyHitReaction>();
-            if (receiver != null)
+            bool hitEnemy = receiver != null;
+            bool hitGround = collision.collider.CompareTag("Ground");
+
+            if (hitEnemy)
             {
-                receiver.PlayHitFeedback(HitFeedbackType.ScalePunch);
+                hasHit = true;
+
+                receiver.PlayHitFeedback(itemData != null ? itemData.feedbackType : HitFeedbackType.ScalePunch);
 
                 bool isHeadHit = collision.collider.CompareTag("Head");
                 int scoreUnits = isHeadHit ? 2 : 1;
@@ -64,9 +82,19 @@ namespace PowerPrank3D.Gameplay
 
                     popupSpawner.SpawnPopup(hitPoint, "+" + gainedScore);
                 }
+
+                Destroy(gameObject);
+                return;
             }
 
-            Destroy(gameObject);
+            if (hitGround)
+            {
+                hasHit = true;
+                Destroy(gameObject);
+                return;
+            }
+
+            // 非敌人、非地面：先不销毁，方便继续观察问题
         }
     }
 }
