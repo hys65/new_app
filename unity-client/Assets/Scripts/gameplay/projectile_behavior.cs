@@ -1,4 +1,5 @@
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace PowerPrank3D.Gameplay
 {
@@ -9,11 +10,13 @@ namespace PowerPrank3D.Gameplay
         private GameplayItemData itemData;
         private GameplayManager gameplayManager;
         private bool hasHit;
+        private HitPopupSpawner hitPopupSpawner;
 
         public void Initialize(GameplayItemData data, GameplayManager manager)
         {
             itemData = data;
             gameplayManager = manager;
+            hitPopupSpawner = Object.FindFirstObjectByType<HitPopupSpawner>();
         }
 
         private void Start()
@@ -44,9 +47,25 @@ namespace PowerPrank3D.Gameplay
             if (receiver != null)
             {
                 receiver.PlayHitFeedback(itemData != null ? itemData.feedbackType : HitFeedbackType.ScalePunch);
+
                 if (gameplayManager != null && gameplayManager.IsRoundRunning && itemData != null)
                 {
+                    bool isHeadshot = hitCollider.CompareTag("Head");
+                    int popupScore = itemData.baseBreakdownScore;
+
                     gameplayManager.AddBreakdown(itemData);
+
+                    if (isHeadshot)
+                    {
+                        gameplayManager.AddBreakdown(itemData);
+                        popupScore *= 2;
+                    }
+
+                    if (hitPopupSpawner != null)
+                    {
+                        Vector3 popupWorldPosition = hitCollider.bounds.center + Vector3.up * 0.5f;
+                        hitPopupSpawner.SpawnPopup(popupWorldPosition, "+" + popupScore);
+                    }
                 }
             }
 
