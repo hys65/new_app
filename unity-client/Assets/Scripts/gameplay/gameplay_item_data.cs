@@ -18,12 +18,15 @@ namespace PowerPrank3D.Gameplay
         public string itemId = "item_egg";
         public string displayKey = "item_egg_name";
 
+        [Header("Projectile")]
+        public GameObject projectilePrefab;
+
         [Header("Core Values")]
         public int baseBreakdownScore = 10;
+        public float throwForce = 12f;
         public HitFeedbackType feedbackType = HitFeedbackType.ScalePunch;
 
-        [Header("Throw")]
-        public GameObject projectilePrefab;
-        public float throwForce = 14f;
+        [Header("Impact VFX")]
+        public GameObject impactVfxPrefab;
     }
 }

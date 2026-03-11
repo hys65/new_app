@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.GameplayItemData
   itemId: item_tomato
   displayKey: item_tomato_name
-  baseBreakdownScore: 15
-  feedbackType: 1
   projectilePrefab: {fileID: 4218001305349613295, guid: 20092b5f51a4cc8428764941e3a8dec0, type: 3}
+  baseBreakdownScore: 15
   throwForce: 13
+  feedbackType: 1
+  impactVfxPrefab: {fileID: 6222307007742526998, guid: 02561656f1cb99a458eb1f01a55a08d6, type: 3}

@@ -65,6 +65,13 @@ namespace PowerPrank3D.Gameplay
             {
                 hasHit = true;
 
+                // ★新增：命中粒子
+                if (collision.contacts.Length > 0)
+                {
+                    ContactPoint contact = collision.contacts[0];
+                    SpawnImpactVfx(contact.point, contact.normal);
+                }
+
                 receiver.PlayHitFeedback(itemData != null ? itemData.feedbackType : HitFeedbackType.ScalePunch);
 
                 bool isHeadHit = collision.collider.CompareTag("Head");
@@ -95,6 +102,55 @@ namespace PowerPrank3D.Gameplay
             }
 
             // 非敌人、非地面：先不销毁，方便继续观察问题
+        }
+        private void SpawnImpactVfx(Vector3 position, Vector3 normal)
+        {
+            if (itemData == null)
+            {
+                return;
+            }
+
+            if (itemData.impactVfxPrefab == null)
+            {
+                return;
+            }
+
+            Quaternion rotation = Quaternion.LookRotation(normal);
+            GameObject vfx = Instantiate(itemData.impactVfxPrefab, position + normal * 0.02f, rotation);
+
+            ParticleSystem[] particleSystems = vfx.GetComponentsInChildren<ParticleSystem>();
+            float maxDuration = 0f;
+
+            foreach (ParticleSystem ps in particleSystems)
+            {
+                var main = ps.main;
+                float duration = main.duration;
+
+                if (main.startLifetime.mode == ParticleSystemCurveMode.TwoConstants)
+                {
+                    duration += main.startLifetime.constantMax;
+                }
+                else if (main.startLifetime.mode == ParticleSystemCurveMode.Constant)
+                {
+                    duration += main.startLifetime.constant;
+                }
+                else
+                {
+                    duration += 2f;
+                }
+
+                if (duration > maxDuration)
+                {
+                    maxDuration = duration;
+                }
+            }
+
+            if (maxDuration <= 0f)
+            {
+                maxDuration = 2f;
+            }
+
+            Destroy(vfx, maxDuration + 0.5f);
         }
     }
 }
