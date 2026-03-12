@@ -70,6 +70,9 @@ namespace PowerPrank3D.Gameplay
                 {
                     ContactPoint contact = collision.contacts[0];
                     SpawnImpactVfx(contact.point, contact.normal);
+                    PlayImpactSfx(contact.point);
+                    SpawnImpactStain(contact.point, contact.normal, collision.collider.transform, true, false);
+                    CameraShake.Shake(0.12f, 0.06f);
                 }
 
                 receiver.PlayHitFeedback(itemData != null ? itemData.feedbackType : HitFeedbackType.ScalePunch);
@@ -97,6 +100,14 @@ namespace PowerPrank3D.Gameplay
             if (hitGround)
             {
                 hasHit = true;
+
+                if (collision.contacts.Length > 0)
+                {
+                    ContactPoint contact = collision.contacts[0];
+                    SpawnImpactVfx(contact.point, contact.normal);
+                    PlayImpactSfx(contact.point);
+                }
+
                 Destroy(gameObject);
                 return;
             }
@@ -151,6 +162,60 @@ namespace PowerPrank3D.Gameplay
             }
 
             Destroy(vfx, maxDuration + 0.5f);
+        }
+
+        private void PlayImpactSfx(Vector3 position)
+        {
+            if (itemData == null)
+            {
+                return;
+            }
+
+            if (itemData.impactSfx == null)
+            {
+                return;
+            }
+
+            ImpactSfxPlayer.PlayAtPoint(
+                itemData.impactSfx,
+                position,
+                itemData.impactVolume,
+                itemData.impactPitchRange
+            );
+        }
+
+        private void SpawnImpactStain(Vector3 position, Vector3 normal, Transform hitParent, bool isEnemyHit, bool isGroundHit)
+        {
+            if (itemData == null)
+            {
+                return;
+            }
+
+            if (itemData.impactStainPrefab == null)
+            {
+                return;
+            }
+
+            if (isEnemyHit && !itemData.spawnStainOnEnemy)
+            {
+                return;
+            }
+
+            if (isGroundHit && !itemData.spawnStainOnGround)
+            {
+                return;
+            }
+
+            Quaternion rotation = Quaternion.LookRotation(normal);
+
+            Vector3 spawnPos = position + normal * 0.015f;
+
+            Transform parentToUse = isEnemyHit ? hitParent : null;
+
+            GameObject stain = Instantiate(itemData.impactStainPrefab, spawnPos, rotation, parentToUse);
+
+            float stainScale = Mathf.Max(0.01f, itemData.impactStainScale);
+            stain.transform.localScale = Vector3.one * stainScale;
         }
     }
 }

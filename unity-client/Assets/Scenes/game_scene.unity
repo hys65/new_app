@@ -2055,6 +2055,7 @@ GameObject:
   - component: {fileID: 1428852419}
   - component: {fileID: 1428852421}
   - component: {fileID: 1428852420}
+  - component: {fileID: 1428852422}
   m_Layer: 0
   m_Name: MainCamera
   m_TagString: Untagged
@@ -2136,6 +2137,18 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!114 &1428852422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1428852418}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 700b329097a1d764084651854e47ef91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.CameraShake
 --- !u!1 &1479783944
 GameObject:
   m_ObjectHideFlags: 0

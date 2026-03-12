@@ -19,3 +19,6 @@ MonoBehaviour:
   throwForce: 12
   feedbackType: 4
   impactVfxPrefab: {fileID: 6222307007742526998, guid: 20d04ed328491384cb2ab12eedc5ade7, type: 3}
+  impactSfx: {fileID: 8300000, guid: f5b91e7781d22494aab763451903269f, type: 3}
+  impactVolume: 1
+  impactPitchRange: {x: 0.95, y: 1.05}
