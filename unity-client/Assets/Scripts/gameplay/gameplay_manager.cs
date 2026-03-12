@@ -17,6 +17,9 @@ namespace PowerPrank3D.Gameplay
         [Header("Combo")]
         [SerializeField] private float comboWindowSeconds = 2f;
 
+        [Header("Enemy Reaction")]
+        [SerializeField] private EnemyReactionLayerController enemyReactionLayer;
+
         public event Action OnStateChanged;
         public event Action<bool> OnRoundFinished;
 
@@ -84,6 +87,11 @@ namespace PowerPrank3D.Gameplay
 
             currentItemIndex = Mathf.Clamp(defaultItemIndex, 0, Mathf.Max(0, itemList != null ? itemList.Length - 1 : 0));
 
+            if (enemyReactionLayer != null)
+            {
+                enemyReactionLayer.RefreshStage(CurrentBreakdownValue, TargetBreakdownValue);
+            }
+
             OnStateChanged?.Invoke();
         }
 
@@ -115,6 +123,15 @@ namespace PowerPrank3D.Gameplay
             if (CurrentBreakdownValue >= TargetBreakdownValue)
             {
                 CurrentBreakdownValue = TargetBreakdownValue;
+            }
+
+            if (enemyReactionLayer != null)
+            {
+                enemyReactionLayer.RefreshStage(CurrentBreakdownValue, TargetBreakdownValue);
+            }
+
+            if (CurrentBreakdownValue >= TargetBreakdownValue)
+            {
                 ResetCombo();
                 FinishRound(true);
                 return finalScore;

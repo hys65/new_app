@@ -4,7 +4,7 @@ namespace PowerPrank3D.Gameplay
 {
     public class ImpactStain : MonoBehaviour
     {
-        [SerializeField] private float lifeTime = 60f;
+        [SerializeField] private float lifeTime = 15f;
         [SerializeField] private bool randomRotation = true;
         [SerializeField] private Vector2 randomScaleMultiplier = new Vector2(0.9f, 1.15f);
 

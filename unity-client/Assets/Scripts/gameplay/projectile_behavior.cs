@@ -9,6 +9,7 @@ namespace PowerPrank3D.Gameplay
         private GameplayItemData itemData;
         private GameplayManager gameplayManager;
         private HitPopupSpawner popupSpawner;
+        private Rigidbody rb;
         private bool hasHit;
 
         public void Initialize(GameplayItemData data, GameplayManager manager)
@@ -24,6 +25,7 @@ namespace PowerPrank3D.Gameplay
 
         private void Awake()
         {
+            rb = GetComponent<Rigidbody>();
             if (popupSpawner == null)
             {
                 popupSpawner = FindFirstObjectByType<HitPopupSpawner>();
@@ -84,6 +86,21 @@ namespace PowerPrank3D.Gameplay
                     ? gameplayManager.AddBreakdown(itemData, scoreUnits)
                     : 0;
 
+                EnemyReactionLayerController reactionLayer =
+                    collision.collider.GetComponentInParent<EnemyReactionLayerController>();
+
+                if (reactionLayer != null)
+                {
+                    Vector3 incomingDirection = Vector3.zero;
+
+                    if (rb != null && rb.linearVelocity.sqrMagnitude > 0.01f)
+                    {
+                        incomingDirection = rb.linearVelocity.normalized;
+                    }
+
+                    reactionLayer.ReactToHit(itemData, isHeadHit, incomingDirection);
+                }
+
                 if (popupSpawner != null && gainedScore > 0)
                 {
                     Vector3 hitPoint = collision.contacts.Length > 0
@@ -126,7 +143,9 @@ namespace PowerPrank3D.Gameplay
                 return;
             }
 
-            Quaternion rotation = Quaternion.LookRotation(normal);
+            Quaternion rotation = Quaternion.LookRotation(-normal);
+            // 随机旋转污渍
+            rotation *= Quaternion.Euler(0f, 0f, Random.Range(0f, 360f));
             GameObject vfx = Instantiate(itemData.impactVfxPrefab, position + normal * 0.02f, rotation);
 
             ParticleSystem[] particleSystems = vfx.GetComponentsInChildren<ParticleSystem>();
@@ -208,8 +227,10 @@ namespace PowerPrank3D.Gameplay
 
             Transform stainsRoot = GameObject.Find("Stains")?.transform;
 
-            Vector3 spawnPos = position + normal * 0.06f;
+            Vector3 spawnPos = position + normal * 0.02f;
+
             Quaternion rotation = Quaternion.LookRotation(-normal);
+            rotation *= Quaternion.Euler(0f, 0f, Random.Range(0f, 360f));
 
             Transform parentToUse = stainsRoot != null ? stainsRoot : null;
 

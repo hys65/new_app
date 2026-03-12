@@ -231,6 +231,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 507aed7787c12bf43a01be57986231ba, type: 2}
   defaultItemIndex: 0
   comboWindowSeconds: 2
+  enemyReactionLayer: {fileID: 0}
 --- !u!1 &172173061
 GameObject:
   m_ObjectHideFlags: 0
@@ -1445,6 +1446,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1310628144}
+  - component: {fileID: 1310628145}
   m_Layer: 0
   m_Name: EnemyRoot
   m_TagString: Untagged
@@ -1468,6 +1470,77 @@ Transform:
   - {fileID: 324402295}
   m_Father: {fileID: 1224865017}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1310628145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1310628143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1220c1117d2b5e14b81d57ba19ed914b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyReactionLayerController
+  enemyArchetype: {fileID: 11400000, guid: d1582996d9d3f36418f2fe089c9b1d0d, type: 2}
+  useArchetype: 1
+  bodyVisual: {fileID: 324402295}
+  headVisual: {fileID: 1294028790}
+  annoyedThreshold: 0.3
+  agitatedThreshold: 0.6
+  furiousThreshold: 0.9
+  calmBodyYaw: 0.8
+  annoyedBodyYaw: 2
+  agitatedBodyYaw: 4
+  furiousBodyYaw: 7
+  meltdownBodyYaw: 11
+  calmHeadYaw: 1.5
+  annoyedHeadYaw: 4
+  agitatedHeadYaw: 7
+  furiousHeadYaw: 11
+  meltdownHeadYaw: 16
+  hitBodyKickAngle: 8
+  hitBodySideAngle: 6
+  headHitKickAngle: 16
+  headHitSideAngle: 12
+  bodyHitRecoverSpeed: 12
+  headHitRecoverSpeed: 15
+  stageBlendSpeed: 4
+  angerRecoverSpeed: 5
+  disgustRecoverSpeed: 4
+  panicRecoverSpeed: 4
+  collapseRecoverSpeed: 2.5
+  meltdownBodyForward: 10
+  meltdownHeadDown: 18
+  meltdownBodyDrop: 0.05
+  hitFreezeDuration: 0.05
+  headHitFreezeBonus: 0.03
+  headJerkDuration: 0.12
+  headJerkYawAngle: 18
+  headJerkPitchAngle: 10
+  furiousStaggerChancePerSecond: 0.45
+  meltdownBreakChancePerSecond: 0.4
+  staggerDuration: 0.1
+  staggerBodyAngle: 7
+  staggerHeadAngle: 10
+  annoyedEntryDuration: 0.22
+  agitatedEntryDuration: 0.26
+  furiousEntryDuration: 0.28
+  meltdownEntryDuration: 0.34
+  annoyedEntryHeadYaw: 18
+  annoyedEntryHeadPitch: 6
+  agitatedEntryBodyRoll: 12
+  agitatedEntryHeadYaw: 12
+  furiousEntryBodyYaw: 10
+  furiousEntryHeadYaw: 20
+  furiousEntryHeadPitch: -8
+  meltdownEntryBodyPitch: 18
+  meltdownEntryHeadYaw: 22
+  meltdownEntryHeadPitch: 18
+  meltdownBreakDuration: 0.22
+  meltdownBreakBodyPitch: 16
+  meltdownBreakHeadYaw: 22
+  meltdownBreakHeadPitch: 16
 --- !u!1 &1334280080
 GameObject:
   m_ObjectHideFlags: 0
