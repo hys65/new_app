@@ -22,3 +22,7 @@ MonoBehaviour:
   impactSfx: {fileID: 8300000, guid: b06741ded966e1b41904b354710b2787, type: 3}
   impactVolume: 1
   impactPitchRange: {x: 0.95, y: 1.05}
+  impactStainPrefab: {fileID: 1776004489995925340, guid: b4f06aba2bc1e144881b8325f3eca656, type: 3}
+  impactStainScale: 0.24
+  spawnStainOnEnemy: 1
+  spawnStainOnGround: 0

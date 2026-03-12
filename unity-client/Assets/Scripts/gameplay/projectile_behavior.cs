@@ -71,7 +71,7 @@ namespace PowerPrank3D.Gameplay
                     ContactPoint contact = collision.contacts[0];
                     SpawnImpactVfx(contact.point, contact.normal);
                     PlayImpactSfx(contact.point);
-                    SpawnImpactStain(contact.point, contact.normal, collision.collider.transform, true, false);
+                    SpawnImpactStain(contact.point, contact.normal, receiver.transform, true, false);
                     CameraShake.Shake(0.12f, 0.06f);
                 }
 
@@ -206,16 +206,23 @@ namespace PowerPrank3D.Gameplay
                 return;
             }
 
-            Quaternion rotation = Quaternion.LookRotation(normal);
+            Transform stainsRoot = GameObject.Find("Stains")?.transform;
 
-            Vector3 spawnPos = position + normal * 0.015f;
+            Vector3 spawnPos = position + normal * 0.06f;
+            Quaternion rotation = Quaternion.LookRotation(-normal);
 
-            Transform parentToUse = isEnemyHit ? hitParent : null;
+            Transform parentToUse = stainsRoot != null ? stainsRoot : null;
 
             GameObject stain = Instantiate(itemData.impactStainPrefab, spawnPos, rotation, parentToUse);
 
             float stainScale = Mathf.Max(0.01f, itemData.impactStainScale);
             stain.transform.localScale = Vector3.one * stainScale;
+
+            Collider stainCollider = stain.GetComponent<Collider>();
+            if (stainCollider != null)
+            {
+                stainCollider.enabled = false;
+            }
         }
     }
 }
