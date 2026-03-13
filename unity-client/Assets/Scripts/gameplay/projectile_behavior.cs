@@ -97,30 +97,45 @@ namespace PowerPrank3D.Gameplay
 
                 if (defenseResult.wasBlocked)
                 {
-                    finalUnits = Mathf.Max(1, Mathf.RoundToInt(scoreUnits * defenseResult.breakdownMultiplier));
+                    finalUnits = 0;
                 }
                 else if (defenseResult.weaknessApplied)
                 {
-                    finalUnits = Mathf.RoundToInt(scoreUnits * defenseResult.breakdownMultiplier);
+                    finalUnits = Mathf.Max(1, Mathf.RoundToInt(scoreUnits * defenseResult.breakdownMultiplier));
                 }
 
-                int gainedScore = gameplayManager != null
-                    ? gameplayManager.AddBreakdown(itemData, finalUnits)
-                    : 0;
+                int gainedScore = 0;
+
+                if (gameplayManager != null && finalUnits > 0)
+                {
+                    gainedScore = gameplayManager.AddBreakdown(itemData, finalUnits);
+                }
 
                 EnemyReactionLayerController reactionLayer =
                     collision.collider.GetComponentInParent<EnemyReactionLayerController>();
 
+                EnemyDefenseVisualLayerController defenseVisual =
+                    collision.collider.GetComponentInParent<EnemyDefenseVisualLayerController>();
+
+                Vector3 incomingDirection = Vector3.zero;
+
+                if (rb != null && rb.linearVelocity.sqrMagnitude > 0.01f)
+                {
+                    incomingDirection = rb.linearVelocity.normalized;
+                }
+
                 if (reactionLayer != null)
                 {
-                    Vector3 incomingDirection = Vector3.zero;
-
-                    if (rb != null && rb.linearVelocity.sqrMagnitude > 0.01f)
-                    {
-                        incomingDirection = rb.linearVelocity.normalized;
-                    }
-
                     reactionLayer.ReactToHit(itemData, isHeadHit, incomingDirection, defenseResult.reactionMultiplier);
+                }
+
+                if (defenseVisual != null)
+                {
+                    defenseVisual.ApplyDefenseVisual(
+                        defenseResult.popupText,
+                        isHeadHit,
+                        defenseResult.reactionMultiplier
+                    );
                 }
 
                 if (popupSpawner != null)

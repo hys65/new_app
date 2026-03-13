@@ -221,7 +221,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5495e49ff88a4ed49a366f6654ce10f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.GameplayManager
-  targetBreakdownValue: 100
+  targetBreakdownValue: 400
   roundDurationSeconds: 45
   itemList:
   - {fileID: 11400000, guid: f0aad0f66d85b2b4ba372a5103e2383b, type: 2}
@@ -353,6 +353,38 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 172173061}
   m_CullTransparentMesh: 1
+--- !u!1 &201078843
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 201078844}
+  m_Layer: 0
+  m_Name: DefenseBodyPivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &201078844
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 201078843}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 324402295}
+  m_Father: {fileID: 1310628144}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &240443086
 GameObject:
   m_ObjectHideFlags: 0
@@ -423,8 +455,8 @@ Transform:
   m_LocalScale: {x: 2, y: 3, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1294028790}
-  m_Father: {fileID: 1310628144}
+  - {fileID: 572992033}
+  m_Father: {fileID: 201078844}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &324402296
 CapsuleCollider:
@@ -746,6 +778,38 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 507062198}
   m_CullTransparentMesh: 1
+--- !u!1 &572992032
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 572992033}
+  m_Layer: 0
+  m_Name: DefenseHeadPivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &572992033
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 572992032}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1294028790}
+  m_Father: {fileID: 324402295}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &657057593
 GameObject:
   m_ObjectHideFlags: 0
@@ -1341,12 +1405,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1294028789}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.8, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.8000001, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 324402295}
+  m_Father: {fileID: 572992033}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &1294028791
 SphereCollider:
@@ -1448,6 +1512,7 @@ GameObject:
   - component: {fileID: 1310628144}
   - component: {fileID: 1310628145}
   - component: {fileID: 1310628146}
+  - component: {fileID: 1310628147}
   m_Layer: 0
   m_Name: EnemyRoot
   m_TagString: Untagged
@@ -1468,7 +1533,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 324402295}
+  - {fileID: 201078844}
   m_Father: {fileID: 1224865017}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1310628145
@@ -1554,13 +1619,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cfd0d2474865b347985de99a5947b93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyDefenseController
-  defensePattern: {fileID: 0}
+  defensePattern: {fileID: 11400000, guid: 4a61937521b232e4d89083dc0edc9f1a, type: 2}
   useDefensePattern: 1
   defenseActive: 0
   defenseTimer: 0
   defenseCooldownTimer: 0
   recentHitCount: 0
   repeatedHitWindowTimer: 0
+--- !u!114 &1310628147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1310628143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f88ca9e6bc5c4ae4e8adb7041fd7e9d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyDefenseVisualLayerController
+  bodyVisualPivot: {fileID: 201078844}
+  headVisualPivot: {fileID: 572992033}
+  visualProfile: {fileID: 11400000, guid: 1229c953eb15c4f4cbd6659794cb00fe, type: 2}
+  reactionLayerController: {fileID: 1310628145}
+  enableDebugLog: 0
 --- !u!1 &1334280080
 GameObject:
   m_ObjectHideFlags: 0
