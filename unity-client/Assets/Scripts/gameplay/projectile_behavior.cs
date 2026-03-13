@@ -82,8 +82,30 @@ namespace PowerPrank3D.Gameplay
                 bool isHeadHit = collision.collider.CompareTag("Head");
                 int scoreUnits = isHeadHit ? 2 : 1;
 
+                EnemyDefenseController defenseController =
+                    collision.collider.GetComponentInParent<EnemyDefenseController>();
+
+                DefenseHitResult defenseResult = DefenseHitResult.Default();
+
+                if (defenseController != null)
+                {
+                    defenseResult = defenseController.EvaluateHit(itemData, isHeadHit);
+                }
+
+                // 根据防御倍率调整得分单位
+                int finalUnits = scoreUnits;
+
+                if (defenseResult.wasBlocked)
+                {
+                    finalUnits = Mathf.Max(1, Mathf.RoundToInt(scoreUnits * defenseResult.breakdownMultiplier));
+                }
+                else if (defenseResult.weaknessApplied)
+                {
+                    finalUnits = Mathf.RoundToInt(scoreUnits * defenseResult.breakdownMultiplier);
+                }
+
                 int gainedScore = gameplayManager != null
-                    ? gameplayManager.AddBreakdown(itemData, scoreUnits)
+                    ? gameplayManager.AddBreakdown(itemData, finalUnits)
                     : 0;
 
                 EnemyReactionLayerController reactionLayer =
@@ -98,16 +120,23 @@ namespace PowerPrank3D.Gameplay
                         incomingDirection = rb.linearVelocity.normalized;
                     }
 
-                    reactionLayer.ReactToHit(itemData, isHeadHit, incomingDirection);
+                    reactionLayer.ReactToHit(itemData, isHeadHit, incomingDirection, defenseResult.reactionMultiplier);
                 }
 
-                if (popupSpawner != null && gainedScore > 0)
+                if (popupSpawner != null)
                 {
                     Vector3 hitPoint = collision.contacts.Length > 0
                         ? collision.contacts[0].point
                         : collision.collider.bounds.center;
 
-                    popupSpawner.SpawnPopup(hitPoint, "+" + gainedScore);
+                    if (!string.IsNullOrEmpty(defenseResult.popupText))
+                    {
+                        popupSpawner.SpawnPopup(hitPoint, defenseResult.popupText);
+                    }
+                    else if (gainedScore > 0)
+                    {
+                        popupSpawner.SpawnPopup(hitPoint, "+" + gainedScore);
+                    }
                 }
 
                 Destroy(gameObject);

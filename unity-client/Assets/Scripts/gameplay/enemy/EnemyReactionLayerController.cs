@@ -227,9 +227,9 @@ namespace PowerPrank3D.Gameplay
             SetStage(nextStage);
         }
 
-        public void ReactToHit(GameplayItemData itemData, bool isHeadHit, Vector3 incomingDirection)
+        public void ReactToHit(GameplayItemData itemData, bool isHeadHit, Vector3 incomingDirection, float reactionMultiplier = 1f)
         {
-            float itemStrength = GetItemStrength(itemData);
+            float itemStrength = GetItemStrength(itemData) * Mathf.Max(0f, reactionMultiplier);
             float stageBoost = 1f + stageWeightTarget * 0.5f;
 
             float bodyHitMul = EvalBodyHitMultiplier();
