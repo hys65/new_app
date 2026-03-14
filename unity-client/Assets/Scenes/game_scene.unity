@@ -1627,6 +1627,7 @@ MonoBehaviour:
   defenseCooldownTimer: 0
   recentHitCount: 0
   repeatedHitWindowTimer: 0
+  defenseStateWindow: {fileID: 0}
 --- !u!114 &1310628147
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1657,8 +1658,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyDefenseStateWindowController
   stateProfile: {fileID: 11400000, guid: f26baf1d44d44f74fa04615a806eabd7, type: 2}
-  defenseVisualLayer: {fileID: 0}
-  defenseController: {fileID: 0}
+  defenseVisualLayer: {fileID: 1310628147}
+  defenseController: {fileID: 1310628146}
   currentState: 0
   stateTimer: 0
   activeWindowEnabled: 0
