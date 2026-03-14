@@ -38,5 +38,20 @@ namespace PowerPrank3D.Gameplay
         [Header("Global Multipliers")]
         public float bodyMotionMultiplier = 1f;
         public float headMotionMultiplier = 1f;
+
+        [Header("State Window Pose")]
+        public Vector3 telegraphBodyRotation = new Vector3(0f, 8f, -4f);
+        public Vector3 telegraphBodyPosition = new Vector3(0f, 0f, -0.03f);
+        public Vector3 telegraphHeadRotation = new Vector3(6f, -4f, 0f);
+
+        public Vector3 activeBodyRotation = new Vector3(2f, 16f, -8f);
+        public Vector3 activeBodyPosition = new Vector3(0f, 0f, -0.08f);
+        public Vector3 activeHeadRotation = new Vector3(10f, -10f, 0f);
+
+        public Vector3 recoverBodyRotation = new Vector3(-3f, 4f, 2f);
+        public Vector3 recoverBodyPosition = new Vector3(0f, 0f, -0.02f);
+        public Vector3 recoverHeadRotation = new Vector3(-4f, 3f, 0f);
+
+        public float stateWindowBlendSpeed = 8f;
     }
 }

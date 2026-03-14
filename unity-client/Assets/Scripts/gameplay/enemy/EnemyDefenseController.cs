@@ -14,9 +14,18 @@ namespace PowerPrank3D.Gameplay
         [SerializeField] private float defenseCooldownTimer;
         [SerializeField] private int recentHitCount;
         [SerializeField] private float repeatedHitWindowTimer;
+        [SerializeField] private EnemyDefenseStateWindowController defenseStateWindow;
 
         public EnemyDefensePatternData DefensePattern => defensePattern;
         public bool IsDefenseActive => useDefensePattern && defensePattern != null && defenseActive;
+
+        private void Awake()
+        {
+            if (defenseStateWindow == null)
+            {
+                defenseStateWindow = GetComponent<EnemyDefenseStateWindowController>();
+            }
+        }
 
         private bool HasPattern()
         {
@@ -57,9 +66,19 @@ namespace PowerPrank3D.Gameplay
 
         public DefenseHitResult EvaluateHit(GameplayItemData itemData, bool isHeadHit)
         {
+            bool weakWindowOpen = defenseStateWindow == null || defenseStateWindow.CanExposeWeakness();
+            if (defenseStateWindow != null && !defenseStateWindow.CanUseDefenseLogic())
+                {
+                    return DefenseHitResult.Default();
+                }
             DefenseHitResult result = DefenseHitResult.Default();
 
             if (!HasPattern())
+            {
+                return result;
+            }
+
+            if (defenseStateWindow != null && !defenseStateWindow.CanUseDefenseLogic())
             {
                 return result;
             }
@@ -98,7 +117,10 @@ namespace PowerPrank3D.Gameplay
                 result.popupText = "GUARD";
             }
 
-            if (!defenseActive && defensePattern.weakToHeadHits && isHeadHit)
+            if (!defenseActive &&
+            defensePattern.weakToHeadHits &&
+            isHeadHit &&
+            (defenseStateWindow == null || defenseStateWindow.CanExposeWeakness()))
             {
                 result.weaknessApplied = true;
                 result.breakdownMultiplier *= defensePattern.headWeaknessMultiplier;

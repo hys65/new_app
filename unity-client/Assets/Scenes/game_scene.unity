@@ -1513,6 +1513,7 @@ GameObject:
   - component: {fileID: 1310628145}
   - component: {fileID: 1310628146}
   - component: {fileID: 1310628147}
+  - component: {fileID: 1310628148}
   m_Layer: 0
   m_Name: EnemyRoot
   m_TagString: Untagged
@@ -1643,6 +1644,25 @@ MonoBehaviour:
   visualProfile: {fileID: 11400000, guid: 1229c953eb15c4f4cbd6659794cb00fe, type: 2}
   reactionLayerController: {fileID: 1310628145}
   enableDebugLog: 0
+--- !u!114 &1310628148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1310628143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 898a7dcd47bcad2448168596d74bbb75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyDefenseStateWindowController
+  stateProfile: {fileID: 11400000, guid: f26baf1d44d44f74fa04615a806eabd7, type: 2}
+  defenseVisualLayer: {fileID: 0}
+  defenseController: {fileID: 0}
+  currentState: 0
+  stateTimer: 0
+  activeWindowEnabled: 0
+  weakWindowEnabled: 0
 --- !u!1 &1334280080
 GameObject:
   m_ObjectHideFlags: 0
