@@ -12,9 +12,14 @@ Power Prank 3D 是一个 **3D 休闲解压 + 轻策略互动 + 轻度收集** �
 - 10 语言本地化框架（首版）
 
 ## 3) 客户端目录说明（Unity）
-- `unity-client/Assets/Scenes/`：场景文件
-- `unity-client/Assets/Scripts/`：游戏逻辑脚本
-- `unity-client/Assets/Localization/`：本地化文本与配置资源
+- unity-client/Assets/Scenes/              场景文件
+- unity-client/Assets/Scripts/             游戏逻辑脚本
+- unity-client/Assets/ScriptableObjects/   ScriptableObject 配置资源
+- unity-client/Assets/Localization/        本地化文本与配置
+- unity-client/Assets/Prefabs/             预制体
+- unity-client/Assets/UI/                  UI 资源
+- unity-client/Assets/Audio/               音频资源
+- unity-client/Assets/Art/                 美术资源
 
 ## 4) 命名规范摘要
 - 统一小写蛇形命名：`snake_case`
@@ -24,6 +29,15 @@ Power Prank 3D 是一个 **3D 休闲解压 + 轻策略互动 + 轻度收集** �
   - `state_sunglasses_paint_resist`
   - `level_001`
   - `sku_starter_pack`
+
+- C# 文件名 / 类名：统一改成 PascalCase
+- 例如：
+- ProjectileBehavior.cs
+- ThrowController.cs
+- GameplayManager.cs
+- EnemyHitReaction.cs
+- HudController.cs
+- GameplayItemData.cs
 
 ## 5) Localization
 - 正式本地化资源路径：`unity-client/Assets/Localization/localization_table.csv`
