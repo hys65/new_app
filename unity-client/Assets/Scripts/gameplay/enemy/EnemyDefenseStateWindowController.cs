@@ -5,7 +5,7 @@ namespace PowerPrank3D.Gameplay
     public class EnemyDefenseStateWindowController : MonoBehaviour
     {
         [Header("References")]
-        [SerializeField] private EnemyDefenseStateWindowProfileData stateProfile;
+        public EnemyDefenseStateWindowProfileData stateProfile;
         [SerializeField] private EnemyDefenseVisualLayerController defenseVisualLayer;
         [SerializeField] private EnemyDefenseController defenseController;
 

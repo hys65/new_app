@@ -1515,6 +1515,7 @@ GameObject:
   - component: {fileID: 1310628147}
   - component: {fileID: 1310628148}
   - component: {fileID: 1310628149}
+  - component: {fileID: 1310628150}
   m_Layer: 0
   m_Name: EnemyRoot
   m_TagString: Untagged
@@ -1693,6 +1694,23 @@ MonoBehaviour:
   lastObservedHitTime: -999
   nextDecisionAllowedTime: 0
   brokenRecoverTimer: 0
+--- !u!114 &1310628150
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1310628143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73aa5b298a9a38b498f9d00411aa4399, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyPresetApplicator
+  preset: {fileID: 11400000, guid: bc0df5fa7e58c9d479c85586f88c36c0, type: 2}
+  reactionLayer: {fileID: 1310628145}
+  defenseController: {fileID: 1310628146}
+  aiLayer: {fileID: 1310628149}
+  defenseWindow: {fileID: 1310628148}
 --- !u!1 &1334280080
 GameObject:
   m_ObjectHideFlags: 0

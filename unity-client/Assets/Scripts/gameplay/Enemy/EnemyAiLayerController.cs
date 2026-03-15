@@ -12,7 +12,7 @@ namespace PowerPrank3D.Gameplay
     public class EnemyAiLayerController : MonoBehaviour
     {
         [Header("Profile")]
-        [SerializeField] private EnemyAiProfileData aiProfile;
+        public EnemyAiProfileData aiProfile;
 
         [Header("References")]
         [SerializeField] private EnemyReactionLayerController reactionLayer;

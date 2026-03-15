@@ -5,7 +5,7 @@ namespace PowerPrank3D.Gameplay
     public class EnemyDefenseController : MonoBehaviour
     {
         [Header("Defense Pattern")]
-        [SerializeField] private EnemyDefensePatternData defensePattern;
+        public EnemyDefensePatternData defensePattern;
         [SerializeField] private bool useDefensePattern = true;
 
         [Header("Runtime Debug")]

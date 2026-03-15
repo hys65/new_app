@@ -14,7 +14,7 @@ namespace PowerPrank3D.Gameplay
         }
 
         [Header("Archetype")]
-        [SerializeField] private EnemyArchetypeData enemyArchetype;
+        public EnemyArchetypeData enemyArchetype;
         [SerializeField] private bool useArchetype = true;
 
         [Header("References")]
