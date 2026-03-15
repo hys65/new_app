@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee01657fbe6fe134aa14d693aa8a4189, type: 3}
+  m_Name: enemy_archetype_meeting_tyrant
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyArchetypeData
+  archetypeId: meeting_tyrant
+  displayName: Meeting Tyrant
+  idleBodySwayMultiplier: 1
+  idleBodyLeanMultiplier: 1
+  idleHeadMotionMultiplier: 1
+  idleAgitationMultiplier: 1
+  bodyHitMultiplier: 1
+  headHitMultiplier: 1
+  knockbackMultiplier: 1
+  hitFreezeMultiplier: 1
+  staggerMultiplier: 1
+  calmMultiplier: 1
+  annoyedMultiplier: 1
+  agitatedMultiplier: 1
+  furiousMultiplier: 1
+  meltdownMultiplier: 1
+  stageEntryBodyMultiplier: 1
+  stageEntryHeadMultiplier: 1
+  stageEntryShakeMultiplier: 1
+  vanityHeadRecoverMultiplier: 1
+  intimidationChestForwardMultiplier: 1
+  panicShakeMultiplier: 1
