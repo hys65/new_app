@@ -1550,7 +1550,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1220c1117d2b5e14b81d57ba19ed914b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyReactionLayerController
-  enemyArchetype: {fileID: 11400000, guid: d1582996d9d3f36418f2fe089c9b1d0d, type: 2}
+  enemyArchetype: {fileID: 11400000, guid: c91f654b40d8b13499a037860b435ab1, type: 2}
   useArchetype: 1
   bodyVisual: {fileID: 324402295}
   headVisual: {fileID: 1294028790}

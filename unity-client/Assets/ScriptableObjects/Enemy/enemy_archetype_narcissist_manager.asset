@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee01657fbe6fe134aa14d693aa8a4189, type: 3}
+  m_Name: enemy_archetype_narcissist_manager
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyArchetypeData
+  archetypeId: narcissist_manager
+  displayName: Narcissist Manager
+  idleBodySwayMultiplier: 0.65
+  idleBodyLeanMultiplier: 0.55
+  idleHeadMotionMultiplier: 1.45
+  idleAgitationMultiplier: 0.7
+  bodyHitMultiplier: 0.85
+  headHitMultiplier: 1.2
+  knockbackMultiplier: 0.75
+  hitFreezeMultiplier: 0.9
+  staggerMultiplier: 0.8
+  calmMultiplier: 0.9
+  annoyedMultiplier: 1
+  agitatedMultiplier: 1.1
+  furiousMultiplier: 1.2
+  meltdownMultiplier: 1.35
+  stageEntryBodyMultiplier: 0.7
+  stageEntryHeadMultiplier: 1.35
+  stageEntryShakeMultiplier: 0.8
+  vanityHeadRecoverMultiplier: 1.6
+  intimidationChestForwardMultiplier: 0.6
+  panicShakeMultiplier: 1.3
