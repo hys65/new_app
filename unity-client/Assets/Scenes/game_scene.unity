@@ -1427,7 +1427,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -1514,6 +1514,7 @@ GameObject:
   - component: {fileID: 1310628146}
   - component: {fileID: 1310628147}
   - component: {fileID: 1310628148}
+  - component: {fileID: 1310628149}
   m_Layer: 0
   m_Name: EnemyRoot
   m_TagString: Untagged
@@ -1620,14 +1621,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cfd0d2474865b347985de99a5947b93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyDefenseController
-  defensePattern: {fileID: 11400000, guid: 4a61937521b232e4d89083dc0edc9f1a, type: 2}
+  defensePattern: {fileID: 11400000, guid: e31ccb6b18ec3744286b0b7d4164bc3b, type: 2}
   useDefensePattern: 1
   defenseActive: 0
   defenseTimer: 0
   defenseCooldownTimer: 0
   recentHitCount: 0
   repeatedHitWindowTimer: 0
-  defenseStateWindow: {fileID: 0}
+  defenseStateWindow: {fileID: 1310628148}
+  enemyAiLayer: {fileID: 1310628149}
 --- !u!114 &1310628147
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1664,6 +1666,33 @@ MonoBehaviour:
   stateTimer: 0
   activeWindowEnabled: 0
   weakWindowEnabled: 0
+--- !u!114 &1310628149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1310628143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20e1c25d6b7d61e42bc10e29572ecb7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyAiLayerController
+  aiProfile: {fileID: 11400000, guid: 6efa4cef62e518442a763378068cdcb7, type: 2}
+  reactionLayer: {fileID: 1310628145}
+  defenseController: {fileID: 1310628146}
+  defenseVisualLayer: {fileID: 1310628147}
+  defenseStateWindow: {fileID: 1310628148}
+  brainState: 0
+  currentThreat: 0
+  predictedInterval: 0.9
+  predictedNextHitTime: -1
+  sampledHitCount: 0
+  lastObservedHeadHit: 0
+  lastObservedItemId: 
+  lastObservedHitTime: -999
+  nextDecisionAllowedTime: 0
+  brokenRecoverTimer: 0
 --- !u!1 &1334280080
 GameObject:
   m_ObjectHideFlags: 0

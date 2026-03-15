@@ -16,6 +16,8 @@ namespace PowerPrank3D.Gameplay
         [SerializeField] private float repeatedHitWindowTimer;
         [SerializeField] private EnemyDefenseStateWindowController defenseStateWindow;
 
+        [SerializeField] private EnemyAiLayerController enemyAiLayer;
+
         public EnemyDefensePatternData DefensePattern => defensePattern;
         public bool IsDefenseActive => useDefensePattern && defensePattern != null && defenseActive;
 
@@ -25,6 +27,17 @@ namespace PowerPrank3D.Gameplay
             {
                 defenseStateWindow = GetComponent<EnemyDefenseStateWindowController>();
             }
+
+            if (enemyAiLayer == null)
+            {
+                enemyAiLayer = GetComponent<EnemyAiLayerController>();
+            }
+        }
+
+        private DefenseHitResult FinalizeResult(GameplayItemData itemData, bool isHeadHit, DefenseHitResult result)
+        {
+            enemyAiLayer?.NotifyHitEvaluated(itemData, isHeadHit, result);
+            return result;
         }
 
         private bool HasPattern()
@@ -66,27 +79,23 @@ namespace PowerPrank3D.Gameplay
 
         public DefenseHitResult EvaluateHit(GameplayItemData itemData, bool isHeadHit)
         {
-            bool weakWindowOpen = defenseStateWindow == null || defenseStateWindow.CanExposeWeakness();
-            if (defenseStateWindow != null && !defenseStateWindow.CanUseDefenseLogic())
-                {
-                    return DefenseHitResult.Default();
-                }
             DefenseHitResult result = DefenseHitResult.Default();
+
+            if (defenseStateWindow != null && !defenseStateWindow.CanUseDefenseLogic())
+            {
+                return FinalizeResult(itemData, isHeadHit, result);
+            }
 
             if (!HasPattern())
             {
-                return result;
-            }
-
-            if (defenseStateWindow != null && !defenseStateWindow.CanUseDefenseLogic())
-            {
-                return result;
+                return FinalizeResult(itemData, isHeadHit, result);
             }
 
             CountRepeatedHit();
 
             if (defenseActive)
             {
+
                 if (CanBreakDefense(itemData))
                 {
                     defenseActive = false;
@@ -97,7 +106,7 @@ namespace PowerPrank3D.Gameplay
                     result.breakdownMultiplier = 1.15f;
                     result.reactionMultiplier = 1.25f;
                     result.popupText = "BREAK";
-                    return result;
+                    return FinalizeResult(itemData, isHeadHit, result);
                 }
 
                 if (ShouldBlockHit(isHeadHit))
@@ -106,7 +115,7 @@ namespace PowerPrank3D.Gameplay
                     result.breakdownMultiplier = defensePattern.blockedBreakdownMultiplier;
                     result.reactionMultiplier = defensePattern.blockedReactionMultiplier;
                     result.popupText = "BLOCK";
-                    return result;
+                    return FinalizeResult(itemData, isHeadHit, result);
                 }
             }
 
@@ -117,19 +126,20 @@ namespace PowerPrank3D.Gameplay
                 result.popupText = "GUARD";
             }
 
-            if (!defenseActive &&
-            defensePattern.weakToHeadHits &&
-            isHeadHit &&
-            (defenseStateWindow == null || defenseStateWindow.CanExposeWeakness()))
+            if (defensePattern.weakToHeadHits &&
+                isHeadHit &&
+                (defenseStateWindow == null || defenseStateWindow.CanExposeWeakness()))
             {
                 result.weaknessApplied = true;
                 result.breakdownMultiplier *= defensePattern.headWeaknessMultiplier;
                 result.reactionMultiplier *= 1.15f;
+                result.wasBlocked = false;
 
-                if (string.IsNullOrEmpty(result.popupText))
+                if (string.IsNullOrEmpty(result.popupText) || result.popupText == "GUARD")
                 {
                     result.popupText = "WEAK";
                 }
+                Debug.Log("[DefenseEval] WEAK triggered");
             }
 
             if (defenseActive && defensePattern.patternType == EnemyDefensePatternType.FaceGuard)
@@ -140,11 +150,11 @@ namespace PowerPrank3D.Gameplay
                     result.breakdownMultiplier *= defensePattern.blockedBreakdownMultiplier;
                     result.reactionMultiplier *= defensePattern.blockedReactionMultiplier;
                     result.popupText = "FACE GUARD";
-                    return result;
+                    return FinalizeResult(itemData, isHeadHit, result);
                 }
             }
 
-            return result;
+            return FinalizeResult(itemData, isHeadHit, result);
         }
 
         private void CountRepeatedHit()

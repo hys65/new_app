@@ -12,16 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d67f26a74c6cf2e4fb354f9da58f3960, type: 3}
   m_Name: defense_state_window_meeting_tyrant
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyDefenseStateWindowProfileData
-  telegraphDuration: 0.28
-  activeDuration: 0.6
-  recoverDuration: 0.35
-  autoCycle: 1
+  telegraphDuration: 0.12
+  activeDuration: 0.55
+  recoverDuration: 0.28
+  autoCycle: 0
   idleCooldownBetweenCycles: 1.25
   cycleJitter: {x: 0, y: 0.35}
   startCycleChance: 1
   allowTelegraphRestartDuringRecover: 0
   activeWindowUsesDefenseLogic: 1
-  enableWeakWindowInsideActive: 1
-  weakWindowNormalizedStart: 0.55
+  enableWeakWindowInsideActive: 0
+  weakWindowNormalizedStart: 0.2
   weakWindowNormalizedEnd: 0.85
-  debugLog: 0
+  debugLog: 1

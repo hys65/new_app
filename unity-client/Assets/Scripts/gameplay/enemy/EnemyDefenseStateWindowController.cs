@@ -285,12 +285,32 @@ namespace PowerPrank3D.Gameplay
 
         public bool CanUseDefenseLogic()
         {
-            return activeWindowEnabled;
+            return currentState == EnemyDefenseWindowState.Active && activeWindowEnabled;
         }
 
         public bool CanExposeWeakness()
         {
-            return weakWindowEnabled;
+            if (currentState != EnemyDefenseWindowState.Active)
+            {
+                return false;
+            }
+
+            if (!weakWindowEnabled)
+            {
+                return false;
+            }
+
+            if (stateProfile == null)
+            {
+                return false;
+            }
+
+            float duration = Mathf.Max(0.001f, stateProfile.activeDuration);
+            float elapsed = duration - Mathf.Max(0f, stateTimer);
+            float normalized = Mathf.Clamp01(elapsed / duration);
+
+            return normalized >= stateProfile.weakWindowNormalizedStart &&
+                   normalized <= stateProfile.weakWindowNormalizedEnd;
         }
     }
 }
