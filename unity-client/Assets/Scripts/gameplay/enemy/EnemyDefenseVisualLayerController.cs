@@ -9,6 +9,10 @@ namespace PowerPrank3D.Gameplay
         [SerializeField] private Transform headVisualPivot;
         [SerializeField] private EnemyDefenseVisualProfileData visualProfile;
 
+        [Header("Proxy Visual")]
+        [SerializeField] private EnemyVisualProxyController visualProxy;
+        [SerializeField] private EnemyDefenseController defenseController;
+
         [Header("Optional")]
         [SerializeField] private EnemyReactionLayerController reactionLayerController;
 
@@ -17,7 +21,6 @@ namespace PowerPrank3D.Gameplay
 
         private Vector3 bodyBaseLocalPos;
         private Quaternion bodyBaseLocalRot;
-
         private Vector3 headBaseLocalPos;
         private Quaternion headBaseLocalRot;
 
@@ -53,6 +56,16 @@ namespace PowerPrank3D.Gameplay
                 return;
             }
 
+            if (visualProxy == null)
+            {
+                visualProxy = GetComponent<EnemyVisualProxyController>();
+            }
+
+            if (defenseController == null)
+            {
+                defenseController = GetComponent<EnemyDefenseController>();
+            }
+
             bodyBaseLocalPos = bodyVisualPivot.localPosition;
             bodyBaseLocalRot = bodyVisualPivot.localRotation;
 
@@ -67,12 +80,16 @@ namespace PowerPrank3D.Gameplay
 
         private void LateUpdate()
         {
-            if (visualProfile == null) return;
+            if (visualProfile == null)
+            {
+                return;
+            }
 
             UpdateTimers();
             UpdateWeights();
             UpdateStateWindowWeights();
             ApplyVisualPose();
+            ApplyProxyState();
         }
 
         private void UpdateStateWindowWeights()
@@ -107,9 +124,20 @@ namespace PowerPrank3D.Gameplay
 
         private void UpdateTimers()
         {
-            if (guardTimer > 0f) guardTimer -= Time.deltaTime;
-            if (breakTimer > 0f) breakTimer -= Time.deltaTime;
-            if (weakTimer > 0f) weakTimer -= Time.deltaTime;
+            if (guardTimer > 0f)
+            {
+                guardTimer -= Time.deltaTime;
+            }
+
+            if (breakTimer > 0f)
+            {
+                breakTimer -= Time.deltaTime;
+            }
+
+            if (weakTimer > 0f)
+            {
+                weakTimer -= Time.deltaTime;
+            }
         }
 
         private void UpdateWeights()
@@ -142,9 +170,23 @@ namespace PowerPrank3D.Gameplay
                 Time.deltaTime * visualProfile.weakRecoverSpeed
             );
 
-            blockBodyPosOffset = Vector3.Lerp(blockBodyPosOffset, Vector3.zero, Time.deltaTime * visualProfile.blockRecoverSpeed);
-            blockBodyRotOffset = Vector3.Lerp(blockBodyRotOffset, Vector3.zero, Time.deltaTime * visualProfile.blockRecoverSpeed);
-            blockHeadRotOffset = Vector3.Lerp(blockHeadRotOffset, Vector3.zero, Time.deltaTime * visualProfile.blockRecoverSpeed);
+            blockBodyPosOffset = Vector3.Lerp(
+                blockBodyPosOffset,
+                Vector3.zero,
+                Time.deltaTime * visualProfile.blockRecoverSpeed
+            );
+
+            blockBodyRotOffset = Vector3.Lerp(
+                blockBodyRotOffset,
+                Vector3.zero,
+                Time.deltaTime * visualProfile.blockRecoverSpeed
+            );
+
+            blockHeadRotOffset = Vector3.Lerp(
+                blockHeadRotOffset,
+                Vector3.zero,
+                Time.deltaTime * visualProfile.blockRecoverSpeed
+            );
         }
 
         private void ApplyVisualPose()
@@ -154,35 +196,28 @@ namespace PowerPrank3D.Gameplay
 
             Vector3 finalBodyPos = bodyBaseLocalPos;
             Vector3 finalBodyEuler = Vector3.zero;
-
             Vector3 finalHeadEuler = Vector3.zero;
 
-            // TELEGRAPH
             finalBodyPos += visualProfile.telegraphBodyPosition * telegraphPoseWeight * bodyMul;
             finalBodyEuler += visualProfile.telegraphBodyRotation * telegraphPoseWeight * bodyMul;
             finalHeadEuler += visualProfile.telegraphHeadRotation * telegraphPoseWeight * headMul;
 
-            // ACTIVE
             finalBodyPos += visualProfile.activeBodyPosition * activePoseWeight * bodyMul;
             finalBodyEuler += visualProfile.activeBodyRotation * activePoseWeight * bodyMul;
             finalHeadEuler += visualProfile.activeHeadRotation * activePoseWeight * headMul;
 
-            // RECOVER
             finalBodyPos += visualProfile.recoverBodyPosition * recoverPoseWeight * bodyMul;
             finalBodyEuler += visualProfile.recoverBodyRotation * recoverPoseWeight * bodyMul;
             finalHeadEuler += visualProfile.recoverHeadRotation * recoverPoseWeight * headMul;
 
-            // GUARD
             finalBodyPos += visualProfile.guardBodyPosition * guardWeight * bodyMul;
             finalBodyEuler += visualProfile.guardBodyRotation * guardWeight * bodyMul;
             finalHeadEuler += visualProfile.guardHeadRotation * guardWeight * headMul;
 
-            // BLOCK
             finalBodyPos += blockBodyPosOffset * blockWeight * bodyMul;
             finalBodyEuler += blockBodyRotOffset * blockWeight * bodyMul;
             finalHeadEuler += blockHeadRotOffset * blockWeight * headMul;
 
-            // BREAK
             finalBodyPos += visualProfile.breakBodyPosition * breakWeight * bodyMul;
             finalBodyEuler += visualProfile.breakBodyRotation * breakWeight * bodyMul;
             finalHeadEuler += visualProfile.breakHeadRotation * breakWeight * headMul;
@@ -192,12 +227,10 @@ namespace PowerPrank3D.Gameplay
                 float t = Time.time * visualProfile.breakNoiseSpeed;
                 float nx = (Mathf.PerlinNoise(noiseSeed, t) - 0.5f) * 2f;
                 float ny = (Mathf.PerlinNoise(noiseSeed + 10f, t) - 0.5f) * 2f;
-
                 Vector3 breakNoise = new Vector3(nx, ny, 0f) * visualProfile.breakNoiseAmplitude * breakWeight;
                 finalBodyEuler += breakNoise;
             }
 
-            // WEAK
             finalBodyEuler += visualProfile.weakBodyRotation * weakWeight * bodyMul;
             finalHeadEuler += visualProfile.weakHeadRotation * weakWeight * headMul;
 
@@ -211,23 +244,76 @@ namespace PowerPrank3D.Gameplay
             }
         }
 
+        private void ApplyProxyState()
+        {
+            if (visualProxy == null)
+            {
+                return;
+            }
+
+            bool defenseActive = defenseController != null && defenseController.IsDefenseActive;
+            visualProxy.ApplyDefenseState(defenseWindowState, defenseActive);
+
+            if (breakWeight > 0.15f)
+            {
+                visualProxy.SetDefenseBreakPose();
+                return;
+            }
+
+            if (weakWeight > 0.15f)
+            {
+                visualProxy.SetWeakPose();
+                return;
+            }
+
+            if (guardWeight > 0.15f || activePoseWeight > 0.15f || defenseActive)
+            {
+                visualProxy.SetGuardPose();
+                return;
+            }
+
+            if (telegraphPoseWeight > 0.15f)
+            {
+                visualProxy.SetPrepareDefensePose();
+                return;
+            }
+
+            visualProxy.SetIdlePose();
+        }
+
         public void SetDefenseWindowState(EnemyDefenseWindowState state, float normalized, bool weakWindowOpen)
         {
             defenseWindowState = state;
             defenseWindowNormalized = normalized;
             defenseWeakWindowOpen = weakWindowOpen;
+
+            if (visualProxy != null)
+            {
+                bool defenseActive = defenseController != null && defenseController.IsDefenseActive;
+                visualProxy.ApplyDefenseState(state, defenseActive);
+            }
         }
 
         public void ApplyDefenseVisual(string popupText, bool isHeadHit, float reactionMultiplier = 1f)
         {
-            if (visualProfile == null) return;
-            if (string.IsNullOrEmpty(popupText)) return;
+            if (visualProfile == null)
+            {
+                return;
+            }
+
+            if (string.IsNullOrEmpty(popupText))
+            {
+                return;
+            }
 
             string key = popupText.Trim().ToUpperInvariant();
 
             if (enableDebugLog)
             {
-                Debug.Log($"[EnemyDefenseVisualLayer] ApplyDefenseVisual -> {key}, headHit={isHeadHit}, reaction={reactionMultiplier}", this);
+                Debug.Log(
+                    $"[EnemyDefenseVisualLayer] ApplyDefenseVisual -> {key}, headHit={isHeadHit}, reaction={reactionMultiplier}",
+                    this
+                );
             }
 
             switch (key)
@@ -248,6 +334,8 @@ namespace PowerPrank3D.Gameplay
                     TriggerWeak(isHeadHit, reactionMultiplier);
                     break;
             }
+
+            visualProxy?.ApplyPopupState(key);
         }
 
         private void TriggerGuard()
@@ -274,7 +362,6 @@ namespace PowerPrank3D.Gameplay
 
             breakWeight = 1f;
             breakTimer = visualProfile.breakHoldTime * Mathf.Lerp(0.9f, 1.3f, Mathf.Clamp01(m - 0.5f));
-
             guardTimer = 0f;
         }
 
