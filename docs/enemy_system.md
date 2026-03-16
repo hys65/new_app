@@ -14,17 +14,23 @@ EnemyRoot
 
 # Enemy Components
 
-EnemyDefenseSystem
+EnemyReactionLayerController
+Handles procedural enemy motion and hit reactions.
 
-Handles block logic.
+EnemyDefenseController
+Handles defense state, block logic and break defense.
 
-EnemyHitReceiver
+EnemyDefenseVisualLayerController
+Handles guard visual feedback.
 
-Receives projectile hit events.
+EnemyDefenseStateWindowController
+Controls defense timing windows.
 
-EnemyBreakdownController
+EnemyAiLayerController
+Handles enemy behavior prediction.
 
-Handles breakdown score.
+EnemyPresetApplicator
+Applies enemy preset configuration.
 
 ---
 
