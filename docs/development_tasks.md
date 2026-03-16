@@ -1,51 +1,55 @@
 # Development Tasks
 
-Project
-Power Prank 3D
+This file tracks the current milestone and upcoming tasks.
 
 ---
 
 # Current Milestone
 
-Enemy Defense Visual Layer
+Enemy AI Layer 1.0
 
-Tasks
+Goal:
 
-Create defense pose
-Create hit reaction
-Create visual feedback
+Introduce basic AI decision logic so the enemy actively determines when to defend.
 
----
+The AI should periodically evaluate whether to:
 
-# Next Milestone
-
-Enemy Archetype System
-
-Different behaviour patterns.
-
-Meeting Tyrant
-Narcissist Boss
+Stay Idle  
+Prepare Defense  
+Enter Guard  
+Recover after defense
 
 ---
 
-# Future Systems
+# Previous Milestone
 
-Item variety system
+Enemy Visual Proxy 1.0
 
-Egg
-Tomato
-Paint Ball
-Foam Spray
-Sponge Hammer
+Completed.
+
+The enemy proxy body now clearly communicates gameplay states using primitive geometry.
+
+States supported:
+
+Idle  
+Prepare defense  
+Guard  
+Defense break
 
 ---
 
-# Content Plan
+# Next Milestones
 
-Levels
+Enemy AI Layer 1.0
 
-12 levels
+Add a decision loop controlling defense timing.
 
-Localization
+Enemy Archetype Behavior
 
-10 languages
+Different enemies should have different defense speeds and strategies.
+
+Enemy Animation Layer (future)
+
+Eventually replace proxy poses with real animation.
+
+---

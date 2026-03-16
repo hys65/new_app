@@ -481,10 +481,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2
+  m_Radius: 0.32
+  m_Height: 1.35
   m_Direction: 1
-  m_Center: {x: 0, y: 1, z: 0}
+  m_Center: {x: 0, y: -0.05, z: -0.08}
 --- !u!23 &324402297
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1065,8 +1065,8 @@ Transform:
   m_GameObject: {fileID: 909763360}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.54, z: 0}
-  m_LocalScale: {x: 0.28, y: 1.39, z: 0.78}
+  m_LocalPosition: {x: 0, y: -0.78, z: -0.22}
+  m_LocalScale: {x: 0.18, y: 1.2, z: 0.18}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1617530769}
@@ -1580,7 +1580,7 @@ Transform:
   m_GameObject: {fileID: 1294028789}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.43333334, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1605,7 +1605,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.35
+  m_Radius: 0.22
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1301856301
 GameObject:
@@ -1915,31 +1915,31 @@ MonoBehaviour:
   idleTorsoLocalRot: {x: 0, y: 0, z: 0}
   idleHeadLocalPos: {x: 0, y: 0, z: 0}
   idleHeadLocalRot: {x: 0, y: 0, z: 0}
-  idleLeftArmLocalRot: {x: 0, y: 0, z: -18}
-  idleRightArmLocalRot: {x: 0, y: 0, z: 18}
+  idleLeftArmLocalRot: {x: 0, y: 0, z: 4}
+  idleRightArmLocalRot: {x: 0, y: 0, z: -4}
   idleGuardLocalPos: {x: 0.28, y: 0.05, z: 0.18}
   idleGuardLocalRot: {x: 0, y: -12, z: 8}
-  telegraphTorsoLocalPos: {x: 0, y: 0, z: -0.04}
-  telegraphTorsoLocalRot: {x: -6, y: 0, z: 0}
-  telegraphHeadLocalRot: {x: 6, y: 0, z: 0}
-  telegraphLeftArmLocalRot: {x: -12, y: 0, z: -52}
-  telegraphRightArmLocalRot: {x: -24, y: 0, z: 54}
-  telegraphGuardLocalPos: {x: 0.22, y: 0.12, z: 0.22}
-  telegraphGuardLocalRot: {x: -6, y: -18, z: 18}
-  guardTorsoLocalPos: {x: 0, y: 0, z: -0.08}
-  guardTorsoLocalRot: {x: -10, y: 0, z: 0}
-  guardHeadLocalRot: {x: 10, y: 0, z: 0}
-  guardLeftArmLocalRot: {x: -18, y: 0, z: -70}
-  guardRightArmLocalRot: {x: -34, y: 0, z: 74}
-  guardGuardLocalPos: {x: 0.16, y: 0.18, z: 0.28}
-  guardGuardLocalRot: {x: -10, y: -20, z: 30}
-  breakTorsoLocalPos: {x: 0, y: 0, z: -0.02}
+  telegraphTorsoLocalPos: {x: 0, y: 0, z: -0.02}
+  telegraphTorsoLocalRot: {x: -4, y: 0, z: 0}
+  telegraphHeadLocalRot: {x: 4, y: 0, z: 0}
+  telegraphLeftArmLocalRot: {x: -6, y: 0, z: 8}
+  telegraphRightArmLocalRot: {x: -6, y: 0, z: -8}
+  telegraphGuardLocalPos: {x: 0, y: 0.2, z: 0.18}
+  telegraphGuardLocalRot: {x: -6, y: 0, z: 0}
+  guardTorsoLocalPos: {x: 0, y: 0, z: -0.05}
+  guardTorsoLocalRot: {x: -8, y: 0, z: 0}
+  guardHeadLocalRot: {x: 8, y: 0, z: 0}
+  guardLeftArmLocalRot: {x: -8, y: 0, z: 12}
+  guardRightArmLocalRot: {x: -8, y: 0, z: -12}
+  guardGuardLocalPos: {x: 0, y: 0.3, z: 0.26}
+  guardGuardLocalRot: {x: -8, y: 0, z: 0}
+  breakTorsoLocalPos: {x: 0, y: 0, z: -0.01}
   breakTorsoLocalRot: {x: 8, y: 0, z: 0}
   breakHeadLocalRot: {x: -10, y: 0, z: 0}
-  breakLeftArmLocalRot: {x: 12, y: 0, z: -108}
-  breakRightArmLocalRot: {x: 12, y: 0, z: 108}
-  breakGuardLocalPos: {x: 0.38, y: -0.02, z: 0.05}
-  breakGuardLocalRot: {x: 20, y: 0, z: 60}
+  breakLeftArmLocalRot: {x: 8, y: 0, z: -55}
+  breakRightArmLocalRot: {x: 8, y: 0, z: 55}
+  breakGuardLocalPos: {x: 0.2, y: 0.1, z: 0.08}
+  breakGuardLocalRot: {x: 18, y: 0, z: 45}
   weakTorsoLocalRot: {x: -4, y: 0, z: 0}
   weakHeadLocalRot: {x: 14, y: 0, z: 0}
   weakLeftArmLocalRot: {x: -8, y: 0, z: -40}
@@ -2699,7 +2699,7 @@ Transform:
   m_GameObject: {fileID: 1513454301}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.72, y: 0.55, z: 0}
+  m_LocalPosition: {x: 1.02, y: 0.7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2732,9 +2732,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1562046292}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.43333334, z: 0}
-  m_LocalScale: {x: 0.75, y: 0.75, z: 0.75}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.43, z: 0}
+  m_LocalScale: {x: 0.58, y: 0.58, z: 0.58}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 572992033}
@@ -3011,7 +3011,7 @@ Transform:
   m_GameObject: {fileID: 1617530768}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.72, y: 0.55, z: 0}
+  m_LocalPosition: {x: -1.02, y: 0.7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3120,8 +3120,8 @@ Transform:
   m_GameObject: {fileID: 1756376817}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.55, y: 0.7, z: 0.14}
+  m_LocalPosition: {x: -0.21, y: -0.37, z: -1.15}
+  m_LocalScale: {x: 1, y: 1.2, z: 0.2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1157110249}
@@ -3210,8 +3210,8 @@ Transform:
   m_GameObject: {fileID: 1843874319}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.38, z: 0}
-  m_LocalScale: {x: 0.28, y: 1, z: 0.28}
+  m_LocalPosition: {x: 0, y: -0.78, z: -0.22}
+  m_LocalScale: {x: 0.18, y: 1.2, z: 0.18}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1513454302}
@@ -3344,8 +3344,8 @@ Transform:
   m_GameObject: {fileID: 1918835429}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.6, z: 0}
-  m_LocalScale: {x: 1.2, y: 1.8, z: 0.65}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.55, y: 2.3, z: 0.8}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 201078844}

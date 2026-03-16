@@ -1,270 +1,20 @@
-\# Power Prank 3D – AI Context
+\# AI Context
 
 
 
-Project repository  
+This repository contains a Unity prototype for the game:
 
-https://github.com/hys65/new\_app
 
 
+Power Prank 3D
 
-This file is the entry point for AI assistants.
 
 
+The project is a third-person prank throwing game where the player throws items at enemies.
 
-Before giving any suggestion:
 
-1\. Read this file
 
-2\. Read docs/architecture.md
-
-3\. Read docs/enemy\_system.md
-
-4\. Read docs/gameplay\_systems.md
-
-5\. Check the GitHub repository structure
-
-
-
-\---
-
-
-
-\# Project Overview
-
-
-
-Power Prank 3D is a Unity 6.3 LTS prototype.
-
-
-
-Core gameplay:
-
-
-
-Player throws prank items at enemies.
-
-
-
-Items include:
-
-
-
-\- Egg
-
-\- Tomato
-
-\- Paint Ball
-
-\- Foam Sprayer
-
-\- Hammer
-
-
-
-Enemy systems include:
-
-
-
-\- Reaction Layer
-
-\- Defense System
-
-\- AI Layer
-
-\- Defense Visual Layer
-
-\- Defense State Window
-
-
-
-The game is designed around \*\*readable enemy reactions\*\* instead of complex animation systems.
-
-
-
-\---
-
-
-
-\# Current State
-
-
-
-Implemented systems:
-
-
-
-Projectile system  
-
-Hit popup system  
-
-Breakdown score system  
-
-Enemy defense system  
-
-Enemy reaction layer  
-
-Enemy AI layer  
-
-Enemy preset system  
-
-Enemy level config system  
-
-
-
-Two enemy archetypes exist:
-
-
-
-Meeting Tyrant  
-
-Narcissist Manager
-
-
-
-Differences:
-
-
-
-Meeting Tyrant  
-
-\- earlier defense
-
-\- hammer easier to break defense
-
-
-
-Narcissist Manager  
-
-\- later defense
-
-\- foam easier to break defense
-
-
-
-\---
-
-
-
-\# Unity Environment
-
-
-
-Unity version:
-
-
-
-Unity 6.3 LTS
-
-
-
-Single scene prototype.
-
-
-
-Enemy currently uses procedural motion instead of Animator.
-
-
-
-\---
-
-
-
-\# Naming Rules
-
-
-
-Scripts use PascalCase.
-
-
-
-Example:
-
-
-
-EnemyDefenseController.cs  
-
-EnemyReactionLayerController.cs  
-
-
-
-ScriptableObjects use snake\_case.
-
-
-
-Example:
-
-
-
-enemy\_preset\_meeting\_tyrant  
-
-enemy\_archetype\_narcissist\_manager  
-
-defense\_pattern\_meeting\_tyrant  
-
-
-
-\---
-
-
-
-\# File Placement Rules
-
-
-
-Scripts
-
-
-
-Assets/Scripts/gameplay/
-
-
-
-ScriptableObjects
-
-
-
-Assets/ScriptableObjects/Enemy/
-
-
-
-Scenes
-
-
-
-Assets/Scenes/
-
-
-
-Documentation
-
-
-
-docs/
-
-
-
-\---
-
-
-
-\# AI Coding Rules
-
-
-
-When modifying scripts:
-
-
-
-1\. Always check the repository first
-
-2\. Never guess code structure
-
-3\. Provide \*\*complete replacement file\*\*
-
-4\. Do not suggest partial edits
-
-5\. Respect existing architecture
+The current prototype focuses on building gameplay systems first, with minimal art.
 
 
 
@@ -276,61 +26,19 @@ When modifying scripts:
 
 
 
-Enemy Visual Proxy 1.0
+Enemy AI Layer 1.0
 
 
 
-Goal:
+The previous milestone "Enemy Visual Proxy 1.0" has been completed.
 
 
 
-Replace simple cylinder enemy with a readable proxy body built from Unity primitives.
+The enemy now has a readable proxy body built from primitives.
 
 
 
-Expected hierarchy:
-
-
-
-EnemyRoot  
-
-EnemyBodyPivot  
-
-Torso  
-
-HeadAnchor  
-
-HeadVisual  
-
-HeadCollider  
-
-LeftArmPivot  
-
-LeftArmVisual  
-
-RightArmPivot  
-
-RightArmVisual  
-
-DefenseVisualAnchor  
-
-GuardVisual
-
-
-
-This proxy must visually communicate:
-
-
-
-Idle  
-
-Prepare defense  
-
-Guard  
-
-Hit reaction  
-
-Defense break
+The next step is to implement AI behavior that controls when the enemy defends.
 
 
 
@@ -338,13 +46,117 @@ Defense break
 
 
 
-\# Session Log
+\# Current Enemy Capabilities
 
 
 
-See:
+The enemy currently supports:
 
 
 
-docs/SESSION\_LOG.md
+Idle state  
+
+Prepare defense state  
+
+Guard state  
+
+Defense break state  
+
+Hit reaction feedback
+
+
+
+Defense visuals are controlled through code-driven transform blending rather than Animator.
+
+
+
+\---
+
+
+
+\# Key Gameplay Systems
+
+
+
+ThrowController  
+
+ProjectileBehavior  
+
+HudController  
+
+HitPopupSpawner  
+
+
+
+Enemy system components:
+
+
+
+EnemyReactionLayerController  
+
+EnemyDefenseController  
+
+EnemyDefenseVisualLayerController  
+
+EnemyDefenseStateWindowController  
+
+EnemyAiLayerController  
+
+EnemyPresetApplicator  
+
+EnemyVisualProxyController
+
+
+
+\---
+
+
+
+\# Enemy Archetypes
+
+
+
+Two archetypes currently exist:
+
+
+
+Meeting Tyrant  
+
+Narcissist Manager
+
+
+
+These archetypes control different enemy behavior parameters.
+
+
+
+\---
+
+
+
+\# Important Development Constraints
+
+
+
+No Animator system yet.
+
+
+
+All enemy motion must be controlled via transforms and code.
+
+
+
+The project currently uses a single prototype scene.
+
+
+
+\---
+
+
+
+\# Development Goal
+
+
+
+Create a clear gameplay loop where the player must read enemy defense timing and throw accordingly.
 

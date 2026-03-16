@@ -33,37 +33,37 @@ namespace PowerPrank3D.Gameplay
         [SerializeField] private Vector3 idleTorsoLocalRot = Vector3.zero;
         [SerializeField] private Vector3 idleHeadLocalPos = Vector3.zero;
         [SerializeField] private Vector3 idleHeadLocalRot = Vector3.zero;
-        [SerializeField] private Vector3 idleLeftArmLocalRot = new Vector3(0f, 0f, -18f);
-        [SerializeField] private Vector3 idleRightArmLocalRot = new Vector3(0f, 0f, 18f);
+        [SerializeField] private Vector3 idleLeftArmLocalRot = new Vector3(0f, 0f, -6f);
+        [SerializeField] private Vector3 idleRightArmLocalRot = new Vector3(0f, 0f, 6f);
         [SerializeField] private Vector3 idleGuardLocalPos = new Vector3(0.28f, 0.05f, 0.18f);
         [SerializeField] private Vector3 idleGuardLocalRot = new Vector3(0f, -12f, 8f);
 
         [Header("Prepare Defense Pose")]
-        [SerializeField] private Vector3 telegraphTorsoLocalPos = new Vector3(0f, 0f, -0.04f);
-        [SerializeField] private Vector3 telegraphTorsoLocalRot = new Vector3(-6f, 0f, 0f);
-        [SerializeField] private Vector3 telegraphHeadLocalRot = new Vector3(6f, 0f, 0f);
-        [SerializeField] private Vector3 telegraphLeftArmLocalRot = new Vector3(-12f, 0f, -52f);
-        [SerializeField] private Vector3 telegraphRightArmLocalRot = new Vector3(-24f, 0f, 54f);
-        [SerializeField] private Vector3 telegraphGuardLocalPos = new Vector3(0.22f, 0.12f, 0.22f);
-        [SerializeField] private Vector3 telegraphGuardLocalRot = new Vector3(-6f, -18f, 18f);
+        [SerializeField] private Vector3 telegraphTorsoLocalPos = new Vector3(0f, 0f, -0.02f);
+        [SerializeField] private Vector3 telegraphTorsoLocalRot = new Vector3(-4f, 0f, 0f);
+        [SerializeField] private Vector3 telegraphHeadLocalRot = new Vector3(4f, 0f, 0f);
+        [SerializeField] private Vector3 telegraphLeftArmLocalRot = new Vector3(-18f, 0f, -20f);
+        [SerializeField] private Vector3 telegraphRightArmLocalRot = new Vector3(-18f, 0f, 20f);
+        [SerializeField] private Vector3 telegraphGuardLocalPos = new Vector3(0.05f, 0.12f, 0.18f);
+        [SerializeField] private Vector3 telegraphGuardLocalRot = new Vector3(-8f, -10f, 10f);
 
         [Header("Guard Pose")]
-        [SerializeField] private Vector3 guardTorsoLocalPos = new Vector3(0f, 0f, -0.08f);
-        [SerializeField] private Vector3 guardTorsoLocalRot = new Vector3(-10f, 0f, 0f);
-        [SerializeField] private Vector3 guardHeadLocalRot = new Vector3(10f, 0f, 0f);
-        [SerializeField] private Vector3 guardLeftArmLocalRot = new Vector3(-18f, 0f, -70f);
-        [SerializeField] private Vector3 guardRightArmLocalRot = new Vector3(-34f, 0f, 74f);
-        [SerializeField] private Vector3 guardGuardLocalPos = new Vector3(0.16f, 0.18f, 0.28f);
-        [SerializeField] private Vector3 guardGuardLocalRot = new Vector3(-10f, -20f, 30f);
+        [SerializeField] private Vector3 guardTorsoLocalPos = new Vector3(0f, 0f, -0.05f);
+        [SerializeField] private Vector3 guardTorsoLocalRot = new Vector3(-8f, 0f, 0f);
+        [SerializeField] private Vector3 guardHeadLocalRot = new Vector3(8f, 0f, 0f);
+        [SerializeField] private Vector3 guardLeftArmLocalRot = new Vector3(-28f, 0f, -8f);
+        [SerializeField] private Vector3 guardRightArmLocalRot = new Vector3(-28f, 0f, 8f);
+        [SerializeField] private Vector3 guardGuardLocalPos = new Vector3(0.00f, 0.18f, 0.26f);
+        [SerializeField] private Vector3 guardGuardLocalRot = new Vector3(-12f, 0f, 8f);
 
         [Header("Break Pose")]
-        [SerializeField] private Vector3 breakTorsoLocalPos = new Vector3(0f, 0f, -0.02f);
+        [SerializeField] private Vector3 breakTorsoLocalPos = new Vector3(0f, 0f, -0.01f);
         [SerializeField] private Vector3 breakTorsoLocalRot = new Vector3(8f, 0f, 0f);
         [SerializeField] private Vector3 breakHeadLocalRot = new Vector3(-10f, 0f, 0f);
-        [SerializeField] private Vector3 breakLeftArmLocalRot = new Vector3(12f, 0f, -108f);
-        [SerializeField] private Vector3 breakRightArmLocalRot = new Vector3(12f, 0f, 108f);
-        [SerializeField] private Vector3 breakGuardLocalPos = new Vector3(0.38f, -0.02f, 0.05f);
-        [SerializeField] private Vector3 breakGuardLocalRot = new Vector3(20f, 0f, 60f);
+        [SerializeField] private Vector3 breakLeftArmLocalRot = new Vector3(12f, 0f, -85f);
+        [SerializeField] private Vector3 breakRightArmLocalRot = new Vector3(12f, 0f, 85f);
+        [SerializeField] private Vector3 breakGuardLocalPos = new Vector3(0.2f, 0.1f, 0.08f);
+        [SerializeField] private Vector3 breakGuardLocalRot = new Vector3(18f, 0f, 45f);
 
         [Header("Weak Pose")]
         [SerializeField] private Vector3 weakTorsoLocalRot = new Vector3(-4f, 0f, 0f);

@@ -41,3 +41,26 @@ Plan
 Add arm raise animation.
 
 Trigger when defense active.
+
+## 2026-03-17
+
+Milestone completed: Enemy Visual Proxy 1.0
+
+Replaced the placeholder cylinder enemy with a primitive-based proxy body.
+
+Implemented readable defense states:
+
+Idle  
+Prepare Defense  
+Guard  
+Defense Break
+
+Created EnemyVisualProxyController to control pose blending without Animator.
+
+Adjusted body proportions and guard visual positioning to avoid arm clipping issues.
+
+Enemy now provides clear gameplay readability for defense timing.
+
+Next milestone:
+
+Enemy AI Layer 1.0
