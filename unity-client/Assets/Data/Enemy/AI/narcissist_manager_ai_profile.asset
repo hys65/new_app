@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aaf943a0162351845a0497bc4f6792c8, type: 3}
+  m_Name: narcissist_manager_ai_profile
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyAiProfileData
+  aiId: enemy_ai_narcissist_manager
+  displayName: Narcissist Manager AI
+  requiredHitSamples: 3
+  memoryDuration: 3
+  minAcceptedHitInterval: 0.22
+  predictedIntervalClamp: {x: 0.5, y: 1.9}
+  intervalBlend: 0.45
+  baseLeadTime: 0.16
+  agitatedLeadBonus: 0.03
+  furiousLeadBonus: 0.06
+  meltdownLeadBonus: 0.1
+  decisionCooldown: 0.22
+  calmThreat: 0.16
+  annoyedThreat: 0.26
+  agitatedThreat: 0.42
+  furiousThreat: 0.6
+  meltdownThreat: 0.78
+  headHitThreatBonus: 0.16
+  blockedConfidenceBonus: 0.08
+  weaknessPenalty: 0.2
+  breakPenalty: 0.36
+  defenseTriggerThreshold: 0.62
+  brokenLockDuration: 1.2
+  rearmDelayAfterRecover: 0.45
+  debugLog: 0

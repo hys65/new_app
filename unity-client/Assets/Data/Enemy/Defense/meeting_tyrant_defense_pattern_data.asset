@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be0abebe2f093f745a1704086c0a0b6d, type: 3}
+  m_Name: meeting_tyrant_defense_pattern_data
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyDefensePatternData
+  defenseId: defense_none
+  displayName: No Defense
+  patternType: 0
+  canBlockBody: 1
+  canBlockHead: 1
+  randomBlockChance: 0.1
+  blockDuration: 0.9
+  blockCooldown: 1.2
+  triggeredByRepeatedHits: 1
+  repeatedHitCountThreshold: 2
+  repeatedHitWindow: 1.6
+  blockedBreakdownMultiplier: 0.2
+  blockedReactionMultiplier: 0.45
+  weakToHeadHits: 0
+  headWeaknessMultiplier: 1.25
+  breakByHammer: 1
+  breakByFoam: 0
+  breakByPaint: 0
+  breakByEgg: 0
+  breakByTomato: 0
+  autoActivateOnHeadHit: 0
+  autoActivateOnBodyHit: 0
+  reducePaintOnFaceGuard: 1

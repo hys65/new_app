@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d67f26a74c6cf2e4fb354f9da58f3960, type: 3}
+  m_Name: narcissist_manager_defense_state_window_profile
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyDefenseStateWindowProfileData
+  telegraphDuration: 0.34
+  activeDuration: 0.46
+  recoverDuration: 0.42
+  autoCycle: 0
+  idleCooldownBetweenCycles: 0
+  cycleJitter: {x: 0, y: 0}
+  startCycleChance: 1
+  allowTelegraphRestartDuringRecover: 0
+  activeWindowUsesDefenseLogic: 1
+  enableWeakWindowInsideActive: 1
+  weakWindowNormalizedStart: 0.42
+  weakWindowNormalizedEnd: 0.78
+  debugLog: 0
