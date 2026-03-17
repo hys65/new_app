@@ -4,9 +4,11 @@ namespace PowerPrank3D.Gameplay
 {
     public enum EnemyAiBrainState
     {
-        Observe = 0,
-        Predict = 1,
-        BrokenRecover = 2
+        Idle = 0,
+        Observe = 1,
+        PrepareDefense = 2,
+        Guard = 3,
+        Recover = 4
     }
 
     public class EnemyAiLayerController : MonoBehaviour
@@ -21,7 +23,7 @@ namespace PowerPrank3D.Gameplay
         [SerializeField] private EnemyDefenseStateWindowController defenseStateWindow;
 
         [Header("Runtime Debug")]
-        [SerializeField] private EnemyAiBrainState brainState = EnemyAiBrainState.Observe;
+        [SerializeField] private EnemyAiBrainState brainState = EnemyAiBrainState.Idle;
         [SerializeField] private float currentThreat;
         [SerializeField] private float predictedInterval = 0.9f;
         [SerializeField] private float predictedNextHitTime = -1f;
@@ -67,22 +69,8 @@ namespace PowerPrank3D.Gameplay
             UpdateBrokenRecover();
             UpdateObservationDecay();
 
-            if (brainState == EnemyAiBrainState.BrokenRecover)
-            {
-                return;
-            }
-
             currentThreat = EvaluateThreat();
-
-            if (sampledHitCount >= aiProfile.requiredHitSamples)
-            {
-                brainState = EnemyAiBrainState.Predict;
-            }
-            else
-            {
-                brainState = EnemyAiBrainState.Observe;
-            }
-
+            RefreshBrainState();
             TryStartDefenseCycle();
         }
 
@@ -98,22 +86,23 @@ namespace PowerPrank3D.Gameplay
             if (lastObservedHitTime > -100f)
             {
                 float interval = now - lastObservedHitTime;
+
                 if (interval >= aiProfile.minAcceptedHitInterval)
                 {
-                    float clamped = Mathf.Clamp(
+                    float clampedInterval = Mathf.Clamp(
                         interval,
                         aiProfile.predictedIntervalClamp.x,
                         aiProfile.predictedIntervalClamp.y);
 
                     if (sampledHitCount <= 0)
                     {
-                        predictedInterval = clamped;
+                        predictedInterval = clampedInterval;
                     }
                     else
                     {
                         predictedInterval = Mathf.Lerp(
                             predictedInterval,
-                            clamped,
+                            clampedInterval,
                             aiProfile.intervalBlend);
                     }
 
@@ -147,8 +136,8 @@ namespace PowerPrank3D.Gameplay
 
             if (result.brokeDefense)
             {
-                EnterBrokenRecover();
                 currentThreat -= aiProfile.breakPenalty;
+                EnterRecoverLock();
             }
 
             currentThreat = Mathf.Clamp01(currentThreat);
@@ -165,24 +154,24 @@ namespace PowerPrank3D.Gameplay
 
         private void UpdateBrokenRecover()
         {
-            if (brainState != EnemyAiBrainState.BrokenRecover)
+            if (brokenRecoverTimer <= 0f)
             {
                 return;
             }
 
             brokenRecoverTimer -= Time.deltaTime;
+
             if (brokenRecoverTimer > 0f)
             {
                 return;
             }
 
             brokenRecoverTimer = 0f;
-            brainState = EnemyAiBrainState.Observe;
             nextDecisionAllowedTime = Time.time + aiProfile.rearmDelayAfterRecover;
 
             if (aiProfile.debugLog)
             {
-                Debug.Log("[EnemyAI] BrokenRecover -> Observe", this);
+                Debug.Log("[EnemyAI] Recover lock ended", this);
             }
         }
 
@@ -194,20 +183,44 @@ namespace PowerPrank3D.Gameplay
             }
 
             float timeSinceLastHit = Time.time - lastObservedHitTime;
+
             if (timeSinceLastHit < aiProfile.memoryDuration)
             {
                 return;
             }
 
-            sampledHitCount = 0;
-            predictedNextHitTime = -1f;
-            lastObservedItemId = string.Empty;
-            lastObservedHeadHit = false;
+            ClearObservationMemory();
+        }
 
-            if (brainState != EnemyAiBrainState.BrokenRecover)
+        private void RefreshBrainState()
+        {
+            EnemyDefenseWindowState windowState = defenseStateWindow.CurrentState;
+
+            if (windowState == EnemyDefenseWindowState.Telegraph)
             {
-                brainState = EnemyAiBrainState.Observe;
+                brainState = EnemyAiBrainState.PrepareDefense;
+                return;
             }
+
+            if (windowState == EnemyDefenseWindowState.Active)
+            {
+                brainState = EnemyAiBrainState.Guard;
+                return;
+            }
+
+            if (windowState == EnemyDefenseWindowState.Recover || IsRecoverLocked())
+            {
+                brainState = EnemyAiBrainState.Recover;
+                return;
+            }
+
+            if (!HasObservationMemory())
+            {
+                brainState = EnemyAiBrainState.Idle;
+                return;
+            }
+
+            brainState = EnemyAiBrainState.Observe;
         }
 
         private float EvaluateThreat()
@@ -225,7 +238,10 @@ namespace PowerPrank3D.Gameplay
                 cadenceThreat = fastFactor * 0.35f;
             }
 
-            float headThreat = lastObservedHeadHit ? aiProfile.headHitThreatBonus * 0.5f : 0f;
+            float headThreat = lastObservedHeadHit
+                ? aiProfile.headHitThreatBonus * 0.5f
+                : 0f;
+
             return Mathf.Clamp01(baseThreat + cadenceThreat + headThreat);
         }
 
@@ -260,12 +276,22 @@ namespace PowerPrank3D.Gameplay
 
         private void TryStartDefenseCycle()
         {
-            if (brainState != EnemyAiBrainState.Predict)
+            if (IsRecoverLocked())
             {
                 return;
             }
 
             if (Time.time < nextDecisionAllowedTime)
+            {
+                return;
+            }
+
+            if (defenseStateWindow.CurrentState != EnemyDefenseWindowState.None)
+            {
+                return;
+            }
+
+            if (sampledHitCount < aiProfile.requiredHitSamples)
             {
                 return;
             }
@@ -280,11 +306,6 @@ namespace PowerPrank3D.Gameplay
                 return;
             }
 
-            if (defenseStateWindow.CurrentState != EnemyDefenseWindowState.None)
-            {
-                return;
-            }
-
             float leadTime = GetLeadTime();
             float triggerTime = predictedNextHitTime - leadTime;
 
@@ -295,11 +316,12 @@ namespace PowerPrank3D.Gameplay
 
             defenseStateWindow.ForceStartDefenseCycle();
             nextDecisionAllowedTime = Time.time + aiProfile.decisionCooldown;
+            brainState = EnemyAiBrainState.PrepareDefense;
 
             if (aiProfile.debugLog)
             {
                 Debug.Log(
-                    $"[EnemyAI] StartDefenseCycle stage={reactionLayer.CurrentStage}, " +
+                    $"[EnemyAI] StartDefenseCycle stage={GetReactionStageName()}, " +
                     $"threat={currentThreat:F2}, predictedInterval={predictedInterval:F2}, lead={leadTime:F2}",
                     this);
             }
@@ -328,12 +350,14 @@ namespace PowerPrank3D.Gameplay
             }
         }
 
-        private void EnterBrokenRecover()
+        private void EnterRecoverLock()
         {
-            brainState = EnemyAiBrainState.BrokenRecover;
             brokenRecoverTimer = aiProfile.brokenLockDuration;
             predictedNextHitTime = -1f;
             sampledHitCount = 0;
+            lastObservedHeadHit = false;
+            lastObservedItemId = string.Empty;
+            lastObservedHitTime = -999f;
 
             if (defenseStateWindow != null &&
                 defenseStateWindow.CurrentState != EnemyDefenseWindowState.None)
@@ -341,10 +365,41 @@ namespace PowerPrank3D.Gameplay
                 defenseStateWindow.ForceEndDefenseCycle();
             }
 
+            brainState = EnemyAiBrainState.Recover;
+
             if (aiProfile.debugLog)
             {
-                Debug.Log("[EnemyAI] EnterBrokenRecover", this);
+                Debug.Log("[EnemyAI] EnterRecoverLock", this);
             }
+        }
+
+        private bool HasObservationMemory()
+        {
+            return sampledHitCount > 0 && predictedNextHitTime >= 0f;
+        }
+
+        private bool IsRecoverLocked()
+        {
+            return brokenRecoverTimer > 0f;
+        }
+
+        private void ClearObservationMemory()
+        {
+            sampledHitCount = 0;
+            predictedNextHitTime = -1f;
+            lastObservedHeadHit = false;
+            lastObservedItemId = string.Empty;
+            lastObservedHitTime = -999f;
+        }
+
+        private string GetReactionStageName()
+        {
+            if (reactionLayer == null)
+            {
+                return "Unknown";
+            }
+
+            return reactionLayer.CurrentStage.ToString();
         }
     }
 }

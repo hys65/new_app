@@ -18,33 +18,47 @@ Repository: https://github.com/hys65/new\_app
 
 
 
-Enemy Visual Proxy 1.0 — Completed
+Enemy AI Layer 1.0 — Completed
 
 
 
-The placeholder cylinder enemy has been replaced with a readable proxy body built from Unity primitives.
+The enemy now supports a readable AI-driven defense loop on top of the existing defense window system.
 
 
 
-The proxy enemy now supports readable gameplay states:
+Implemented AI gameplay states:
 
 
 
-Idle  
+\- Idle
 
-Prepare Defense  
+\- Observe
 
-Guard  
+\- Prepare Defense
 
-Defense Break  
+\- Guard
 
-Hit Reaction
+\- Recover
 
 
 
-This version intentionally avoids using Animator or character rigs.  
+The AI does not directly replace the defense system.
 
-All visual state transitions are controlled via code-driven transform blending.
+Instead, it decides when to start a defense cycle, while the defense window system still controls the actual phase flow:
+
+
+
+\- None
+
+\- Telegraph
+
+\- Active
+
+\- Recover
+
+
+
+This keeps the system modular and preserves the existing defense logic.
 
 
 
@@ -56,15 +70,11 @@ All visual state transitions are controlled via code-driven transform blending.
 
 
 
-EnemyRoot
-
-
+EnemyRoot  
 
 EnemyBodyPivot  
 
 DefenseBodyPivot  
-
-
 
 Torso  
 
@@ -72,13 +82,9 @@ LeftArmPivot
 
 LeftArmVisual  
 
-
-
 RightArmPivot  
 
 RightArmVisual  
-
-
 
 DefenseHeadPivot  
 
@@ -86,11 +92,29 @@ HeadVisual
 
 HeadCollider  
 
-
-
 DefenseVisualAnchor  
 
 GuardVisual  
+
+
+
+Core enemy components:
+
+
+
+\- EnemyReactionLayerController
+
+\- EnemyDefenseController
+
+\- EnemyDefenseStateWindowController
+
+\- EnemyDefenseVisualLayerController
+
+\- EnemyAiLayerController
+
+\- EnemyPresetApplicator
+
+\- EnemyVisualProxyController
 
 
 
@@ -106,13 +130,13 @@ Working systems:
 
 
 
-ThrowController  
+\- ThrowController
 
-ProjectileBehavior  
+\- ProjectileBehavior
 
-HudController  
+\- HudController
 
-HitPopupSpawner  
+\- HitPopupSpawner
 
 
 
@@ -120,19 +144,19 @@ Enemy systems:
 
 
 
-EnemyReactionLayerController  
+\- EnemyReactionLayerController
 
-EnemyDefenseController  
+\- EnemyDefenseController
 
-EnemyDefenseVisualLayerController  
+\- EnemyDefenseStateWindowController
 
-EnemyDefenseStateWindowController  
+\- EnemyDefenseVisualLayerController
 
-EnemyAiLayerController  
+\- EnemyAiLayerController
 
-EnemyPresetApplicator  
+\- EnemyPresetApplicator
 
-EnemyVisualProxyController
+\- EnemyVisualProxyController
 
 
 
@@ -140,9 +164,57 @@ Two enemy archetypes exist:
 
 
 
-Meeting Tyrant  
+\- Meeting Tyrant
 
-Narcissist Manager
+\- Narcissist Manager
+
+
+
+Enemy defense behavior now follows a readable gameplay loop:
+
+
+
+\- Observe player throw rhythm
+
+\- Predict likely next hit timing
+
+\- Start prepare-defense window
+
+\- Enter active guard window
+
+\- Recover after defense
+
+\- Re-enter observation
+
+
+
+The proxy body remains code-driven and does not use Animator.
+
+
+
+\---
+
+
+
+\# Verified Gameplay Behavior
+
+
+
+Expected verified loop:
+
+
+
+\- Light or irregular throws keep enemy in Idle or Observe
+
+\- Repeated rhythmic throws increase AI confidence
+
+\- Enemy enters Prepare Defense before Guard
+
+\- During Guard, BLOCK is shown and Breakdown does not increase
+
+\- After defense, enemy enters Recover
+
+\- After defense break, enemy enters recover lock before defending again
 
 
 
@@ -154,15 +226,21 @@ Narcissist Manager
 
 
 
-Enemy AI behavior is currently minimal.
+Enemy AI is currently a basic timing-based defense loop.
 
 
 
-The enemy can defend but does not yet actively make strategic decisions.
+Current limitations:
 
 
 
-Defense timing logic will be expanded in the next phase.
+\- No advanced bait / fake-out behavior
+
+\- No archetype-specific tactical pattern yet
+
+\- No animation rig or Animator layer yet
+
+\- AI readability depends on proxy poses and defense windows
 
 
 
@@ -174,7 +252,7 @@ Defense timing logic will be expanded in the next phase.
 
 
 
-Enemy AI Layer 1.0
+Enemy Archetype Behavior 1.0
 
 
 
@@ -182,23 +260,17 @@ Goal:
 
 
 
-Implement a basic enemy decision loop that determines when to:
+Different enemy archetypes should not feel identical.
 
 
 
-Idle  
-
-Prepare defense  
-
-Guard  
-
-Recover
+Next step:
 
 
 
-The AI will introduce readable gameplay timing rather than passive defense triggers.
+\- Give each archetype different defense timing
 
+\- Vary trigger threshold, lead time, and recovery feel
 
-
-\---
+\- Make Meeting Tyrant and Narcissist Manager readable as different opponents
 

@@ -6,50 +6,74 @@ This file tracks the current milestone and upcoming tasks.
 
 # Current Milestone
 
-Enemy AI Layer 1.0
+Enemy Archetype Behavior 1.0
 
 Goal:
 
-Introduce basic AI decision logic so the enemy actively determines when to defend.
+Different enemies should have different defense timing, recovery feel, and tactical identity.
 
-The AI should periodically evaluate whether to:
+The shared AI loop now exists.
+The next task is to differentiate behavior between archetypes rather than expanding the base loop again.
 
-Stay Idle  
-Prepare Defense  
-Enter Guard  
-Recover after defense
+Target directions:
+
+- Meeting Tyrant should feel more rigid and earlier to defend
+- Narcissist Manager should feel more performative and less stable
+- Archetypes should vary in:
+  - defense trigger threshold
+  - lead time
+  - recover duration
+  - reaction to repeated head hits
+  - break vulnerability
 
 ---
 
 # Previous Milestone
 
-Enemy Visual Proxy 1.0
+Enemy AI Layer 1.0 — Completed
 
-Completed.
+Completed results:
 
-The enemy proxy body now clearly communicates gameplay states using primitive geometry.
+- Added a readable AI state loop
+- AI states now map to gameplay readability:
+  - Idle
+  - Observe
+  - Prepare Defense
+  - Guard
+  - Recover
+- AI now decides when to start a defense cycle
+- Defense window system still controls Telegraph / Active / Recover
+- Existing defense logic was preserved
+- Break recovery lock remains supported
+
+---
+
+# Earlier Milestone
+
+Enemy Visual Proxy 1.0 — Completed
+
+The enemy proxy body clearly communicates gameplay states using primitive geometry.
 
 States supported:
 
-Idle  
-Prepare defense  
-Guard  
-Defense break
+- Idle
+- Prepare Defense
+- Guard
+- Defense Break
+- Hit Reaction
 
 ---
 
 # Next Milestones
 
-Enemy AI Layer 1.0
+## Enemy Archetype Behavior 1.0
 
-Add a decision loop controlling defense timing.
+Add archetype-specific behavior parameters so enemies no longer feel identical.
 
-Enemy Archetype Behavior
+## Enemy Feedback Polish
 
-Different enemies should have different defense speeds and strategies.
+Improve readability of telegraph, guard, break, and recover transitions.
 
-Enemy Animation Layer (future)
+## Enemy Animation Layer (future)
 
-Eventually replace proxy poses with real animation.
-
----
+Eventually replace proxy poses with real animation while preserving the gameplay timing structure.
