@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad9bd1c2addfdca4581d22d682ee7330, type: 3}
+  m_Name: meeting_tyrant_enemy_preset_data
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyPresetData
+  presetId: enemy_preset_meeting_tyrant
+  displayName: Meeting Tyrant Preset
+  archetype: {fileID: 11400000, guid: 9c3d6871c41803c4ab5d6db73bb0ed56, type: 2}
+  defensePattern: {fileID: 11400000, guid: b96d381afacc0ba4799eee280cec0620, type: 2}
+  aiProfile: {fileID: 11400000, guid: 9fc947fe1c2081a4d90e964b213905d8, type: 2}
+  defenseStateWindowProfile: {fileID: 11400000, guid: 21f767d0b50ac9449a21f6248c68b8b3, type: 2}

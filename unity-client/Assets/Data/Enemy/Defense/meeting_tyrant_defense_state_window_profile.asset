@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: meeting_tyrant_defense_state_window_profile
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyDefenseStateWindowProfileData
   telegraphDuration: 0.2
-  activeDuration: 0.78
+  activeDuration: 0.72
   recoverDuration: 0.22
   autoCycle: 0
   idleCooldownBetweenCycles: 0
