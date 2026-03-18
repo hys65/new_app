@@ -1,56 +1,126 @@
 # DEVELOPMENT TASKS
 
+## Current Position
+
+Enemy AI Layer 1.0 is complete.  
+Enemy Switching System 1.0 is complete.
+
+The project is no longer blocked by core enemy architecture.
+
+Current priority is to move from:
+
+- system validation
+
+to:
+
+- scalable enemy content flow
+
+---
+
 ## Completed
 
-- Enemy Visual Proxy 1.0
-- Enemy Defense System 1.0
-- Enemy Defense Window 1.0
-- Enemy AI Layer 1.0
-- Enemy Preset System 1.0
+- Core throw / hit / breakdown gameplay loop ✅
+- Enemy Reaction Layer 1.0 ✅
+- Enemy Defense Visual Layer 1.0 ✅
+- Enemy Archetype System ✅
+- Enemy AI Layer 1.0 ✅
+- Enemy Preset integration ✅
+- Meeting Tyrant preset ✅
+- Narcissist Manager preset ✅
+- Enemy Switching System 1.0 ✅
+
+### Enemy Switching System 1.0 completed scope
+
+- Added EnemyRuntimePresetController
+- Added EnemySwitchingManager
+- Added GameplayManager runtime active reaction target switching
+- Validated preset switching on same enemy object
+- Validated switching between two real enemy objects
+- Validated single active enemy workflow
+- Validated inspector slot setup flow
 
 ---
 
-## Current State
+## Next Recommended Tasks
 
-Two enemy archetypes fully working:
+### 1. Enemy Roster / Level Enemy Selection 1.0
+Goal:
+Move enemy selection from manual scene test setup into reusable level content flow.
 
-- Meeting Tyrant
-- Narcissist Manager
+Suggested scope:
+- define reusable enemy roster data
+- bind enemy selection per level
+- choose startup enemy from level config
+- reduce manual test-scene-only setup
 
----
-
-## Next Tasks
-
-### 1. Enemy Switching System
-
-- Spawn different presets
-- Switch enemy mid-level
-
----
-
-### 2. Additional Archetypes
-
-- Coward
-- Aggressive Charger
-- Fake Defender
+Expected result:
+- levels can declare which enemy or preset should appear
+- startup active enemy becomes content-driven
+- future enemy expansion becomes cleaner
 
 ---
 
-### 3. Difficulty Scaling
+### 2. Enemy Content Expansion 1.0
+Goal:
+Scale from two test enemies to multiple playable enemies.
 
-- Modify AI profiles per level
-- Modify window timing
+Suggested scope:
+- add more enemy presets
+- add more archetype variations
+- expand defense timing diversity
+- expand weakness profiles
+- increase visual personality separation
+
+Expected result:
+- enemy switching becomes meaningful game content instead of only a debug feature
 
 ---
 
-### 4. Feedback Enhancement
+### 3. Runtime Debug Switching UI
+Goal:
+Improve testing efficiency.
 
-- Improve telegraph readability
-- Improve weak window clarity
+Suggested scope:
+- previous enemy button
+- next enemy button
+- current enemy label
+- current preset label
+
+Expected result:
+- faster validation of enemy data tuning
+- less inspector-only testing overhead
 
 ---
 
-### 5. Data Balancing
+### 4. Level Integration Cleanup
+Goal:
+Reduce overlap between older setup path and new switching path.
 
-- Tune threat curves
-- Tune break conditions
+Suggested scope:
+- review LevelEnemyController usage
+- keep legacy compatibility where needed
+- avoid running LevelEnemyController and EnemySwitchingManager as competing setup paths in the same scene
+
+Expected result:
+- cleaner scene setup
+- fewer configuration mistakes
+- easier onboarding in future sessions
+
+---
+
+## Important Constraints
+
+Must remain true:
+
+1. Do not break data-driven enemy setup
+2. EnemyPresetApplicator must remain the only preset injection layer
+3. EnemyDefenseStateWindowProfile.autoCycle must remain FALSE
+4. AI controls defense timing, not the window system
+5. Prefer data tuning over script rewrites
+6. Do not collapse scene orchestration logic into AI logic
+
+---
+
+## Recommended Immediate Next Milestone
+
+**Enemy Roster / Level Enemy Selection 1.0**

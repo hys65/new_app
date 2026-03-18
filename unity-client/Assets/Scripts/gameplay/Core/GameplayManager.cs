@@ -77,6 +77,18 @@ namespace PowerPrank3D.Gameplay
             OnStateChanged?.Invoke();
         }
 
+        public void SetActiveEnemyReactionLayer(EnemyReactionLayerController reactionLayer)
+        {
+            enemyReactionLayer = reactionLayer;
+
+            if (enemyReactionLayer != null)
+            {
+                enemyReactionLayer.RefreshStage(CurrentBreakdownValue, TargetBreakdownValue);
+            }
+
+            OnStateChanged?.Invoke();
+        }
+
         public void StartRound()
         {
             CurrentBreakdownValue = 0;

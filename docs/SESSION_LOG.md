@@ -1,70 +1,96 @@
-# Development Session Log
+# SESSION LOG
+
+## Session: Enemy AI Layer 1.0 Completion
+
+### Goal
+Complete the data-driven enemy AI timing layer.
+
+### Result
+Completed Enemy AI Layer 1.0.
+
+### Confirmed behavior
+- AI controls defense timing
+- EnemyDefenseStateWindowProfile.autoCycle remains FALSE
+- Different presets produce different defense timing behavior
+- Meeting Tyrant and Narcissist Manager are both runtime-validated
+
+### Outcome
+Enemy behavior definition stack reached a stable data-driven state.
 
 ---
 
-## Session 2026-03-16
+## Session: Enemy Switching System 1.0
 
-System
+### Goal
+Implement runtime enemy switching without breaking current enemy architecture.
 
-Enemy Defense
+### Work completed
 
-Progress
+Implemented:
 
-BLOCK state implemented.
+- EnemyRuntimePresetController
+- EnemySwitchingManager
+- GameplayManager runtime active reaction layer switching
 
-Breakdown stops increasing.
+Validation steps completed:
 
-HUD shows BLOCK.
-
-Issue
-
-Enemy has no visual defense animation.
-
-Next Task
-
-Enemy Defense Visual Layer.
+1. Single-slot setup validated
+2. Same-enemy dual-preset switching validated
+3. Two real enemy objects in scene validated
+4. Single active enemy switching validated
+5. Runtime slot switching validated
+6. Preset application logs confirmed
 
 ---
 
-## Session 2026-03-17
+### Scene validation result
 
-System
+Runtime scene setup used:
 
-Enemy Visual
+- EnemyRoot_MeetingTyrant
+- EnemyRoot_NarcissistManager
+- EnemySwitchingManager with two slots
 
-Goal
+Observed results:
 
-Add simple defense pose.
+- before play, both enemy objects exist in scene
+- after play, only the active enemy remains enabled
+- switching slot changes the active enemy correctly
+- Current Slot Index updates correctly
+- preset apply logs confirm correct runtime application
 
-Plan
+---
 
-Add arm raise animation.
+### Architectural result
 
-Trigger when defense active.
+Confirmed layering:
 
-## Session - Enemy AI Layer 1.0 Completion
+Data
+→ EnemyPresetData
+→ EnemyPresetApplicator
+→ EnemyRuntimePresetController
+→ EnemySwitchingManager
 
-- Implemented AI decision loop
-- Integrated Defense Window with AI control
-- Disabled autoCycle
+Gameplay sync:
 
-Created two distinct enemy archetypes:
+EnemySwitchingManager
+→ GameplayManager.SetActiveEnemyReactionLayer(...)
 
-1. Meeting Tyrant
-   - Fast defense
-   - Strong guard
+---
 
-2. Narcissist Manager
-   - Delayed defense
-   - Weak guard
-   - High vulnerability
+### Important notes
 
-Validated:
+- EnemyPresetApplicator remains the single preset injection point
+- Scene switching is orchestration logic, not AI logic
+- Current implementation supports multiple scene enemies but only one active enemy at a time
+- This is not yet a full multi-enemy combat system
+- Enemy Switching System 1.0 is complete
+- Next work should move toward content scaling, not more low-level switching rewrites
 
-- Clear gameplay difference
-- Stable system behavior
-- Data-driven architecture working
+---
 
-Status:
+### Recommended next step
 
-Enemy AI Layer 1.0 COMPLETE
+- Enemy Roster / Level Enemy Selection 1.0
+- Enemy Content Expansion 1.0
+- Runtime Debug Switching UI
