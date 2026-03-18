@@ -1,77 +1,73 @@
-# Gameplay Systems
+# GAMEPLAY SYSTEMS
 
-Game
-Power Prank 3D
+## Core Loop
 
----
-
-# Throw System
-
-Input
-
-Mouse Drag
-
-Process
-
-Calculate throw direction
-Calculate arc
-Spawn projectile
-
-Core Script
-
-ThrowController
+Throw → Hit → Reaction → Defense → Break
 
 ---
 
-# Projectile System
+## Hit Result Types
 
-Projectile prefab
-
-Handles
-
-Physics
-Collision
-Impact event
+1. Normal Hit
+2. Block
+3. Break
 
 ---
 
-# Hit System
+## Breakdown
 
-Hit target detection.
-
-Hit types
-
-Body hit
-Head hit
-
-Score
-
-Body +10
-Head +20
+- Increases on successful hits
+- Pauses during Block
+- Accelerates on weakness hits
 
 ---
 
-# Breakdown System
+## Interaction with Enemy Systems
 
-Enemy mental stability meter.
+### Reaction Layer
+Controls visual feedback
 
-Breakdown increases when hit.
+### Defense Pattern
+Controls whether hit is blocked
 
-When breakdown reaches target
+### Defense Window
+Controls WHEN block is valid
 
-Level completed.
+### AI Layer
+Controls WHEN defense starts
 
 ---
 
-# HUD System
+## Key Rule
 
-Displays
+Block only valid during:
 
-Current Breakdown
-Target Breakdown
-Timer
-Selected Item
+Defense Window → Active
 
-Controller
+---
 
-HudController
+## Weak Window
+
+Inside Active state:
+
+- Vulnerable timing window
+- Allows skilled hits
+
+---
+
+## Player Skill Expression
+
+Player can:
+
+- Read Telegraph
+- Time attacks
+- Exploit Weak Window
+- Break defense
+
+---
+
+## Result
+
+Gameplay is NOT spam
+
+Gameplay = timing + rhythm + reading enemy

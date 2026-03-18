@@ -1,105 +1,82 @@
-# Enemy System
+# ENEMY SYSTEM
 
-The enemy system controls all defensive behavior, hit reactions, and AI decisions.
+## Structure
 
-The system is designed to be modular and layered.
+Enemy = Composition of 4 systems
 
----
-
-# Enemy Layers
-
-Enemy behavior is split into several layers.
-
-Reaction Layer  
-Handles hit reactions and breakdown score changes.
-
-Defense Layer  
-Controls whether the enemy is currently guarding or vulnerable.
-
-Defense Visual Layer  
-Controls visual feedback for defensive states.
-
-AI Layer  
-Determines when the enemy should enter defense states.
-
-Preset Applicator  
-Applies archetype parameters to enemy instances.
-
-Visual Proxy Controller  
-Controls primitive-based body poses.
+1. Reaction
+2. Defense Pattern
+3. Defense Window
+4. AI
 
 ---
 
-# Enemy Visual Proxy
+## EnemyPresetData
 
-Enemy Visual Proxy 1.0 replaces the original placeholder cylinder.
+Single entry point for configuration
 
-The proxy body is built from Unity primitives:
+Contains:
 
-Torso  
-Head  
-Left Arm  
-Right Arm  
-Guard Visual
-
-The proxy supports readable gameplay states without requiring a full character rig.
+- EnemyArchetypeData
+- EnemyDefensePatternData
+- EnemyAiProfileData
+- EnemyDefenseStateWindowProfileData
 
 ---
 
-# Enemy Defense States
+## EnemyPresetApplicator
 
-Idle  
-Enemy is vulnerable.
+Responsibilities:
 
-Prepare Defense  
-Enemy telegraphs that a guard is about to happen.
-
-Guard  
-Enemy blocks incoming attacks.
-
-Break  
-Enemy defense has been broken.
-
-Weak  
-Enemy temporarily vulnerable after break.
+- Apply preset to all controllers
+- Sync data at runtime
+- Ensure consistency
 
 ---
 
-# Visual Control
+## Current Enemy Types
 
-EnemyVisualProxyController drives the body pose using transform blending.
+### Meeting Tyrant
 
-Pose states include:
+Profile:
 
-Idle Pose  
-Telegraph Pose  
-Guard Pose  
-Break Pose
+- Defensive
+- Stable
+- Predictive
 
-Each pose defines transform offsets for:
+Behavior:
 
-Torso  
-Head  
-Arms  
-Guard Visual
+- Fast PrepareDefense
+- Long Guard
+- Short Recover
 
 ---
 
-# AI Control
+### Narcissist Manager
 
-EnemyAiLayerController will determine when the enemy transitions between:
+Profile:
 
-Idle  
-Prepare  
-Guard  
-Recover
+- Reactive
+- Expressive
+- Fragile
 
-The AI will introduce timing-based gameplay rather than passive reactions.
+Behavior:
+
+- Late PrepareDefense
+- Long Telegraph
+- Short Guard
+- Long Recover
+- Head weakness
 
 ---
 
-# Current Status
+## Key Insight
 
-Enemy Visual Proxy 1.0 completed.
+Enemy difference is NOT animation
 
-Enemy AI behavior is the next development milestone.
+Enemy difference =
+
+AI timing  
++ Defense logic  
++ Window timing  
++ Reaction scaling

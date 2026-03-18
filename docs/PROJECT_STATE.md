@@ -1,64 +1,12 @@
-\# Project State
+\# PROJECT STATE
 
 
 
-Project: Power Prank 3D  
-
-Engine: Unity 6.3 LTS  
-
-Repository: https://github.com/hys65/new\_app
+\## Current Milestone
 
 
 
-\---
-
-
-
-\# Current Development Stage
-
-
-
-Enemy AI Layer 1.0 — Completed
-
-
-
-The enemy now supports a readable AI-driven defense loop on top of the existing defense window system.
-
-
-
-Implemented AI gameplay states:
-
-
-
-\- Idle
-
-\- Observe
-
-\- Prepare Defense
-
-\- Guard
-
-\- Recover
-
-
-
-The AI does not directly replace the defense system.
-
-Instead, it decides when to start a defense cycle, while the defense window system still controls the actual phase flow:
-
-
-
-\- None
-
-\- Telegraph
-
-\- Active
-
-\- Recover
-
-
-
-This keeps the system modular and preserves the existing defense logic.
+Enemy AI Layer 1.0 ✅ COMPLETE
 
 
 
@@ -66,129 +14,73 @@ This keeps the system modular and preserves the existing defense logic.
 
 
 
-\# Current Enemy Structure
+\## Completed Systems
 
 
 
-EnemyRoot  
+\### Gameplay
 
-EnemyBodyPivot  
+\- Throw system
 
-DefenseBodyPivot  
+\- Hit detection
 
-Torso  
+\- Breakdown system
 
-LeftArmPivot  
-
-LeftArmVisual  
-
-RightArmPivot  
-
-RightArmVisual  
-
-DefenseHeadPivot  
-
-HeadVisual  
-
-HeadCollider  
-
-DefenseVisualAnchor  
-
-GuardVisual  
+\- HUD feedback
 
 
 
-Core enemy components:
-
-
-
-\- EnemyReactionLayerController
-
-\- EnemyDefenseController
-
-\- EnemyDefenseStateWindowController
-
-\- EnemyDefenseVisualLayerController
-
-\- EnemyAiLayerController
-
-\- EnemyPresetApplicator
+\### Enemy Visual
 
 \- EnemyVisualProxyController
 
-
-
-\---
-
-
-
-\# Current Gameplay Status
+\- Idle / Guard / Break / Hit animations
 
 
 
-Working systems:
+\### Enemy Reaction Layer
+
+\- Driven by EnemyArchetypeData
 
 
 
-\- ThrowController
+\### Enemy Defense System
 
-\- ProjectileBehavior
+\- Block logic
 
-\- HudController
+\- Break logic
 
-\- HitPopupSpawner
-
-
-
-Enemy systems:
+\- Weakness system
 
 
 
-\- EnemyReactionLayerController
+\### Defense Window System
 
-\- EnemyDefenseController
+\- Telegraph / Active / Recover states
 
-\- EnemyDefenseStateWindowController
+\- Weak window inside Active
 
-\- EnemyDefenseVisualLayerController
 
-\- EnemyAiLayerController
+
+\### Enemy AI Layer
+
+\- Observation-based decision making
+
+\- Threat evaluation
+
+\- Defense cycle triggering
+
+\- Break recovery logic
+
+
+
+\### Preset System
+
+\- EnemyPresetData
 
 \- EnemyPresetApplicator
 
-\- EnemyVisualProxyController
-
-
-
-Two enemy archetypes exist:
-
-
-
-\- Meeting Tyrant
-
-\- Narcissist Manager
-
-
-
-Enemy defense behavior now follows a readable gameplay loop:
-
-
-
-\- Observe player throw rhythm
-
-\- Predict likely next hit timing
-
-\- Start prepare-defense window
-
-\- Enter active guard window
-
-\- Recover after defense
-
-\- Re-enter observation
-
-
-
-The proxy body remains code-driven and does not use Animator.
+\- Full data injection pipeline
 
 
 
@@ -196,51 +88,33 @@ The proxy body remains code-driven and does not use Animator.
 
 
 
-\# Verified Gameplay Behavior
+\## Verified Behavior
 
 
 
-Expected verified loop:
+Two archetypes confirmed working:
 
 
 
-\- Light or irregular throws keep enemy in Idle or Observe
+\### Meeting Tyrant
 
-\- Repeated rhythmic throws increase AI confidence
+\- Fast reaction
 
-\- Enemy enters Prepare Defense before Guard
+\- Stable defense
 
-\- During Guard, BLOCK is shown and Breakdown does not increase
-
-\- After defense, enemy enters Recover
-
-\- After defense break, enemy enters recover lock before defending again
+\- Low vulnerability
 
 
 
-\---
+\### Narcissist Manager
 
+\- Slower reaction
 
+\- Exaggerated telegraph
 
-\# Known Limitations
+\- Fragile defense
 
-
-
-Enemy AI is currently a basic timing-based defense loop.
-
-
-
-Current limitations:
-
-
-
-\- No advanced bait / fake-out behavior
-
-\- No archetype-specific tactical pattern yet
-
-\- No animation rig or Animator layer yet
-
-\- AI readability depends on proxy poses and defense windows
+\- High vulnerability
 
 
 
@@ -248,29 +122,37 @@ Current limitations:
 
 
 
-\# Next Development Target
+\## Status
 
 
 
-Enemy Archetype Behavior 1.0
+System is:
 
 
 
-Goal:
+✔ Stable  
+
+✔ Data-driven  
+
+✔ Scalable  
 
 
 
-Different enemy archetypes should not feel identical.
+\---
 
 
 
-Next step:
+\## Next Milestone
 
 
 
-\- Give each archetype different defense timing
+Enemy Content Expansion 1.0
 
-\- Vary trigger threshold, lead time, and recovery feel
 
-\- Make Meeting Tyrant and Narcissist Manager readable as different opponents
+
+\- Add more enemy archetypes
+
+\- Add enemy switching system
+
+\- Add level-based enemy variation
 

@@ -1,91 +1,100 @@
-# Power Prank 3D Architecture
+# ARCHITECTURE
 
-Engine
-Unity 6.3 LTS
+## Core Design
 
-Project Type
-Single Scene Prototype
+Data-driven layered architecture
 
 ---
 
-# System Overview
+## Layers
 
-Player
-↓
-Throw System
-↓
-Projectile
-↓
-Hit Detection
-↓
-Enemy System
-↓
-Breakdown System
-↓
-HUD Update
+### 1. Reaction Layer
+
+Input:
+- Hit events
+
+Driven by:
+- EnemyArchetypeData
+
+Output:
+- Visual reactions
 
 ---
 
-# System Modules
+### 2. Defense Logic Layer
 
-Gameplay
+Input:
+- Hit validation
 
-ThrowSystem
-Handles projectile spawning and trajectory calculation.
+Driven by:
+- EnemyDefensePatternData
 
-Combat
-Handles hit detection and score calculation.
-
-EnemyAI
-Handles enemy behaviour and defense logic.
-
-Items
-Defines projectile item data.
-
-Systems
-
-GameplayManager
-Global game state controller.
-
-UI
-
-HUD
-Displays game status.
-
-Effects
-
-Stains
-Impact visual decals.
+Output:
+- Block / Break decision
 
 ---
 
-# Enemy Logic
+### 3. Defense Window Layer
 
-EnemyRoot
+State Machine:
+- None
+- Telegraph
+- Active
+- Recover
 
-EnemyVisual
-HeadCollider
+Driven by:
+- EnemyDefenseStateWindowProfileData
 
-Components
-
-EnemyDefenseSystem
-EnemyHitReceiver
-EnemyBreakdownController
+IMPORTANT:
+autoCycle must be FALSE
 
 ---
 
-# Game Flow
+### 4. AI Layer
 
-Start Level
-↓
-Player Throws Item
-↓
-Projectile Hit
-↓
-Enemy Reaction
-↓
-Breakdown Increase
-↓
-Target Breakdown Reached
-↓
-Level Complete
+Core brain:
+
+EnemyAiLayerController
+
+Responsibilities:
+
+- Observe player rhythm
+- Predict next hit
+- Evaluate threat
+- Trigger defense cycle
+- Handle break recovery
+
+Driven by:
+- EnemyAiProfileData
+
+---
+
+### 5. Preset Layer
+
+EnemyPresetData:
+
+- archetype
+- defensePattern
+- aiProfile
+- defenseStateWindowProfile
+
+Applied via:
+
+EnemyPresetApplicator
+
+---
+
+## Data Flow
+
+Preset
+→ Applicator
+→ Controllers
+→ Runtime behavior
+
+---
+
+## Design Rule
+
+NO cross-layer hard dependency
+
+ALL behavior comes from data injection

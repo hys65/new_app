@@ -1,79 +1,56 @@
-# Development Tasks
+# DEVELOPMENT TASKS
 
-This file tracks the current milestone and upcoming tasks.
+## Completed
 
----
-
-# Current Milestone
-
-Enemy Archetype Behavior 1.0
-
-Goal:
-
-Different enemies should have different defense timing, recovery feel, and tactical identity.
-
-The shared AI loop now exists.
-The next task is to differentiate behavior between archetypes rather than expanding the base loop again.
-
-Target directions:
-
-- Meeting Tyrant should feel more rigid and earlier to defend
-- Narcissist Manager should feel more performative and less stable
-- Archetypes should vary in:
-  - defense trigger threshold
-  - lead time
-  - recover duration
-  - reaction to repeated head hits
-  - break vulnerability
+- Enemy Visual Proxy 1.0
+- Enemy Defense System 1.0
+- Enemy Defense Window 1.0
+- Enemy AI Layer 1.0
+- Enemy Preset System 1.0
 
 ---
 
-# Previous Milestone
+## Current State
 
-Enemy AI Layer 1.0 — Completed
+Two enemy archetypes fully working:
 
-Completed results:
-
-- Added a readable AI state loop
-- AI states now map to gameplay readability:
-  - Idle
-  - Observe
-  - Prepare Defense
-  - Guard
-  - Recover
-- AI now decides when to start a defense cycle
-- Defense window system still controls Telegraph / Active / Recover
-- Existing defense logic was preserved
-- Break recovery lock remains supported
+- Meeting Tyrant
+- Narcissist Manager
 
 ---
 
-# Earlier Milestone
+## Next Tasks
 
-Enemy Visual Proxy 1.0 — Completed
+### 1. Enemy Switching System
 
-The enemy proxy body clearly communicates gameplay states using primitive geometry.
-
-States supported:
-
-- Idle
-- Prepare Defense
-- Guard
-- Defense Break
-- Hit Reaction
+- Spawn different presets
+- Switch enemy mid-level
 
 ---
 
-# Next Milestones
+### 2. Additional Archetypes
 
-## Enemy Archetype Behavior 1.0
+- Coward
+- Aggressive Charger
+- Fake Defender
 
-Add archetype-specific behavior parameters so enemies no longer feel identical.
+---
 
-## Enemy Feedback Polish
+### 3. Difficulty Scaling
 
-Improve readability of telegraph, guard, break, and recover transitions.
+- Modify AI profiles per level
+- Modify window timing
 
-## Enemy Animation Layer (future)
+---
 
-Eventually replace proxy poses with real animation while preserving the gameplay timing structure.
+### 4. Feedback Enhancement
+
+- Improve telegraph readability
+- Improve weak window clarity
+
+---
+
+### 5. Data Balancing
+
+- Tune threat curves
+- Tune break conditions
