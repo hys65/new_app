@@ -1,76 +1,55 @@
-# Development Workflow
+# DEV WORKFLOW
 
-Project
-Power Prank 3D
+## Rule 1
 
----
-
-# Step 1 Context
-
-Load project documents
-
-docs/project_state.md
-docs/architecture.md
-docs/enemy_system.md
+DO NOT modify multiple systems at once
 
 ---
 
-# Step 2 Define Task
+## Rule 2
 
-Describe the feature or bug.
+Always follow order:
 
-Example
-
-Enemy Defense Visual Layer
-
----
-
-# Step 3 Plan
-
-AI must propose implementation plan.
-
-Example
-
-Add defense animation
-Add block pose
-Add hit reaction
-
-No code yet.
-
-Wait for approval.
+1. Data
+2. Binding
+3. Runtime verification
 
 ---
 
-# Step 4 Implementation
+## Rule 3
 
-Implement feature step by step.
+When adding new enemy:
 
-Each step must be small.
-
-Example
-
-Step 1 create defense visual component
-
-Step 2 connect to EnemyDefenseSystem
-
-Step 3 add animation trigger
+1. Create ArchetypeData
+2. Create DefensePatternData
+3. Create AiProfileData
+4. Create WindowProfileData
+5. Create EnemyPresetData
+6. Bind via EnemyPresetApplicator
+7. Test behavior difference
 
 ---
 
-# Step 5 Verification
+## Rule 4
 
-Check
+If behavior is wrong:
 
-Unity console errors
-Gameplay behaviour
-UI feedback
+Check in order:
+
+1. Preset references
+2. Applicator execution
+3. AI runtime values
+4. Window state
+5. Defense result
 
 ---
 
-# Step 6 Commit
+## Rule 5
 
-Update
+Prefer tuning data over modifying code
 
-docs/project_state.md
+---
 
-Commit to repository.
+## Rule 6
+
+Every milestone must be documented

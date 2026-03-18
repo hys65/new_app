@@ -1,20 +1,76 @@
-\# AI Context
+\# AI CONTEXT
 
 
 
-This repository contains a Unity prototype for the game:
+\## Project
 
 
 
-Power Prank 3D
+Power Prank 3D  
+
+Unity 6.3 LTS  
+
+Single-scene prototype
 
 
 
-The project is a third-person prank throwing game where the player throws items at enemies.
+\## Core Loop
 
 
 
-The current prototype focuses on building gameplay systems first, with minimal art.
+Player throws prank items → Enemy reacts → Enemy defends → Player breaks defense
+
+
+
+\## Architecture Layers
+
+
+
+1\. Gameplay Layer
+
+&#x20;  - ThrowController
+
+&#x20;  - GameplayManager
+
+
+
+2\. Enemy Reaction Layer
+
+&#x20;  - EnemyReactionLayerController
+
+&#x20;  - Driven by EnemyArchetypeData
+
+
+
+3\. Enemy Defense Layer
+
+&#x20;  - EnemyDefenseController
+
+&#x20;  - Driven by EnemyDefensePatternData
+
+
+
+4\. Enemy Defense Window Layer
+
+&#x20;  - EnemyDefenseStateWindowController
+
+&#x20;  - Driven by EnemyDefenseStateWindowProfileData
+
+
+
+5\. Enemy AI Layer
+
+&#x20;  - EnemyAiLayerController
+
+&#x20;  - Driven by EnemyAiProfileData
+
+
+
+6\. Preset Layer
+
+&#x20;  - EnemyPresetData
+
+&#x20;  - Applied by EnemyPresetApplicator
 
 
 
@@ -22,51 +78,23 @@ The current prototype focuses on building gameplay systems first, with minimal a
 
 
 
-\# Current Development Focus
+\## Current State (IMPORTANT)
 
 
 
-Enemy AI Layer 1.0
+System has moved from:
 
 
 
-The previous milestone "Enemy Visual Proxy 1.0" has been completed.
+Static enemy behavior
 
 
 
-The enemy now has a readable proxy body built from primitives.
+→
 
 
 
-The next step is to implement AI behavior that controls when the enemy defends.
-
-
-
-\---
-
-
-
-\# Current Enemy Capabilities
-
-
-
-The enemy currently supports:
-
-
-
-Idle state  
-
-Prepare defense state  
-
-Guard state  
-
-Defense break state  
-
-Hit reaction feedback
-
-
-
-Defense visuals are controlled through code-driven transform blending rather than Animator.
+Data-driven multi-archetype AI system
 
 
 
@@ -74,59 +102,41 @@ Defense visuals are controlled through code-driven transform blending rather tha
 
 
 
-\# Key Gameplay Systems
+\## Implemented Enemy Archetypes
 
 
 
-ThrowController  
-
-ProjectileBehavior  
-
-HudController  
-
-HitPopupSpawner  
+\### 1. Meeting Tyrant
 
 
 
-Enemy system components:
+\- Early defense trigger
+
+\- Strong guard
+
+\- Short recover
+
+\- Hard to break
+
+\- Low weakness
 
 
 
-EnemyReactionLayerController  
-
-EnemyDefenseController  
-
-EnemyDefenseVisualLayerController  
-
-EnemyDefenseStateWindowController  
-
-EnemyAiLayerController  
-
-EnemyPresetApplicator  
-
-EnemyVisualProxyController
+\### 2. Narcissist Manager
 
 
 
-\---
+\- Late defense trigger
 
+\- Long telegraph
 
+\- Short guard
 
-\# Enemy Archetypes
+\- Long recover
 
+\- High head weakness
 
-
-Two archetypes currently exist:
-
-
-
-Meeting Tyrant  
-
-Narcissist Manager
-
-
-
-These archetypes control different enemy behavior parameters.
+\- Easy to break
 
 
 
@@ -134,19 +144,21 @@ These archetypes control different enemy behavior parameters.
 
 
 
-\# Important Development Constraints
+\## Key Principle
 
 
 
-No Animator system yet.
+ALL behavior differences come from DATA
 
 
 
-All enemy motion must be controlled via transforms and code.
+NOT from:
 
 
 
-The project currently uses a single prototype scene.
+\- hardcoded logic
+
+\- branching in scripts
 
 
 
@@ -154,9 +166,25 @@ The project currently uses a single prototype scene.
 
 
 
-\# Development Goal
+\## AI Ownership
 
 
 
-Create a clear gameplay loop where the player must read enemy defense timing and throw accordingly.
+Defense cycle is controlled ONLY by:
+
+
+
+EnemyAiLayerController
+
+
+
+NOT by:
+
+
+
+EnemyDefenseStateWindowController
+
+
+
+(autoCycle must remain FALSE)
 

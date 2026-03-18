@@ -4,94 +4,67 @@
 
 ## Session 2026-03-16
 
-System: Enemy Defense
+System
 
-Progress:
-- BLOCK state implemented
-- Breakdown stops increasing while blocked
-- HUD shows BLOCK
+Enemy Defense
 
-Issue:
-- Enemy had no readable visual defense motion
+Progress
 
-Next Task:
-- Enemy Defense Visual Layer
+BLOCK state implemented.
 
----
+Breakdown stops increasing.
 
-## Session 2026-03-17
+HUD shows BLOCK.
 
-System: Enemy Visual
+Issue
 
-Goal:
-- Add simple defense pose
+Enemy has no visual defense animation.
 
-Plan:
-- Add arm raise animation replacement through transform-driven proxy motion
+Next Task
 
-Milestone completed:
-- Enemy Visual Proxy 1.0
-
-Results:
-- Replaced the placeholder cylinder enemy with a primitive-based proxy body
-- Implemented readable defense states:
-  - Idle
-  - Prepare Defense
-  - Guard
-  - Defense Break
-- Created EnemyVisualProxyController to control pose blending without Animator
-- Adjusted body proportions and guard visual positioning to reduce arm clipping issues
-- Enemy now provides clear gameplay readability for defense timing
-
-Next milestone:
-- Enemy AI Layer 1.0
+Enemy Defense Visual Layer.
 
 ---
 
 ## Session 2026-03-17
 
-System: Enemy AI
+System
 
-Goal:
-- Implement a basic AI decision loop controlling:
-  - Idle
-  - Observe
-  - Prepare Defense
-  - Guard
-  - Recover
+Enemy Visual
 
-Plan:
-- Keep existing defense system intact
-- Do not let AI directly replace defense logic
-- Let AI decide when to start a defense cycle
-- Let defense window system continue to control Telegraph / Active / Recover
-- Preserve break recovery behavior
+Goal
 
-Completed:
-- Refactored EnemyAiLayerController into a readable gameplay-facing state loop
-- AI now observes hit cadence and predicts likely next attack timing
-- AI starts defense cycles through EnemyDefenseStateWindowController
-- AI state now reflects current readable gameplay phase:
-  - Idle
-  - Observe
-  - Prepare Defense
-  - Guard
-  - Recover
-- Existing defense logic remained compatible with:
-  - EnemyDefenseController
-  - EnemyDefenseStateWindowController
-  - EnemyDefenseVisualLayerController
-  - EnemyVisualProxyController
+Add simple defense pose.
 
-Verification target:
-- Confirm stable transition chain:
-  - Idle / Observe
-  - Prepare Defense
-  - Guard
-  - Recover
-- Confirm BREAK enters recovery lock
-- Confirm BLOCK still prevents Breakdown increase
-- Confirm no new Console errors
+Plan
 
-Next milestone:
-- Enemy Archetype Behavior 1.0
+Add arm raise animation.
+
+Trigger when defense active.
+
+## Session - Enemy AI Layer 1.0 Completion
+
+- Implemented AI decision loop
+- Integrated Defense Window with AI control
+- Disabled autoCycle
+
+Created two distinct enemy archetypes:
+
+1. Meeting Tyrant
+   - Fast defense
+   - Strong guard
+
+2. Narcissist Manager
+   - Delayed defense
+   - Weak guard
+   - High vulnerability
+
+Validated:
+
+- Clear gameplay difference
+- Stable system behavior
+- Data-driven architecture working
+
+Status:
+
+Enemy AI Layer 1.0 COMPLETE

@@ -1,90 +1,74 @@
-# AI Development Rules
+# AI RULES
 
-Project
-Power Prank 3D
+## Core Principle
 
-Engine
-Unity 6.3 LTS
-
-Language
-C#
+AI is predictive, not reactive
 
 ---
 
-# Naming Rules
+## Observation
 
-Files
+AI tracks:
 
-lowercase_with_underscore
-
-example
-
-enemy_meeting_tyrant
-enemy_narcissist_boss
-enemy_defense_system
-
-Scripts
-
-PascalCase
-
-example
-
-EnemyDefenseSystem
-ThrowController
-GameplayManager
+- hit timestamps
+- interval consistency
 
 ---
 
-# Architecture Rules
+## Decision Conditions
 
-Never mix systems.
+Defense triggers when:
 
-Each system must be isolated.
-
-Example
-
-ThrowSystem
-EnemySystem
-CombatSystem
-UISystem
+- sufficient samples collected
+- predicted next hit exists
+- threat exceeds threshold
 
 ---
 
-# Unity Rules
+## Defense Flow
 
-Scripts must not exceed 300 lines.
-
-Separate logic and visuals.
-
-Example
-
-EnemyDefenseSystem
-EnemyDefenseVisual
+Observe
+→ PrepareDefense
+→ Guard
+→ Recover
 
 ---
 
-# Gameplay Rules
+## Important Constraints
 
-Body Hit
-+10 breakdown
+### 1. AI owns defense start
 
-Head Hit
-+20 breakdown
+NOT allowed:
 
-BLOCK state
+- DefenseWindow auto cycle
 
-Breakdown must not increase.
+### 2. Data controls behavior
+
+DO NOT:
+
+- hardcode behavior in controller
+
+### 3. No randomness-first design
+
+Random is secondary modifier
 
 ---
 
-# AI Development Rules
+## Break Behavior
 
-Before writing code
+On break:
 
-1 analyze existing system
-2 propose plan
-3 wait for approval
+- enter recover lock
+- clear observation memory
+- reset prediction
 
-Never modify unrelated files.
+---
 
-Always explain changes.
+## Design Goal
+
+Enemy feels:
+
+- readable
+- fair
+- reactive
+- different per archetype
