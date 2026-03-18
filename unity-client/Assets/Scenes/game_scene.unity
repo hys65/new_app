@@ -1726,7 +1726,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1220c1117d2b5e14b81d57ba19ed914b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyReactionLayerController
-  enemyArchetype: {fileID: 11400000, guid: c91f654b40d8b13499a037860b435ab1, type: 2}
+  enemyArchetype: {fileID: 11400000, guid: 9c3d6871c41803c4ab5d6db73bb0ed56, type: 2}
   useArchetype: 1
   bodyVisual: {fileID: 324402295}
   headVisual: {fileID: 1294028790}
@@ -1797,7 +1797,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cfd0d2474865b347985de99a5947b93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyDefenseController
-  defensePattern: {fileID: 11400000, guid: e31ccb6b18ec3744286b0b7d4164bc3b, type: 2}
+  defensePattern: {fileID: 11400000, guid: b96d381afacc0ba4799eee280cec0620, type: 2}
   useDefensePattern: 1
   defenseActive: 0
   defenseTimer: 0
@@ -1837,7 +1837,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 898a7dcd47bcad2448168596d74bbb75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyDefenseStateWindowController
-  stateProfile: {fileID: 11400000, guid: f26baf1d44d44f74fa04615a806eabd7, type: 2}
+  stateProfile: {fileID: 11400000, guid: 21f767d0b50ac9449a21f6248c68b8b3, type: 2}
   defenseVisualLayer: {fileID: 1310628147}
   defenseController: {fileID: 1310628146}
   currentState: 0
@@ -1856,7 +1856,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20e1c25d6b7d61e42bc10e29572ecb7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyAiLayerController
-  aiProfile: {fileID: 11400000, guid: 6efa4cef62e518442a763378068cdcb7, type: 2}
+  aiProfile: {fileID: 11400000, guid: 9fc947fe1c2081a4d90e964b213905d8, type: 2}
   reactionLayer: {fileID: 1310628145}
   defenseController: {fileID: 1310628146}
   defenseVisualLayer: {fileID: 1310628147}
@@ -1883,7 +1883,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73aa5b298a9a38b498f9d00411aa4399, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyPresetApplicator
-  preset: {fileID: 11400000, guid: bc0df5fa7e58c9d479c85586f88c36c0, type: 2}
+  preset: {fileID: 11400000, guid: bbabed984c0e37a4e84f9617ee66732e, type: 2}
   reactionLayer: {fileID: 1310628145}
   defenseController: {fileID: 1310628146}
   aiLayer: {fileID: 1310628149}

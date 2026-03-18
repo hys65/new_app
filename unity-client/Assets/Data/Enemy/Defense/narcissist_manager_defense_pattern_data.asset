@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be0abebe2f093f745a1704086c0a0b6d, type: 3}
   m_Name: narcissist_manager_defense_pattern_data
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyDefensePatternData
-  defenseId: defense_none
-  displayName: No Defense
-  patternType: 0
+  defenseId: defense_narcissist_manager
+  displayName: Narcissist Manager Defense
+  patternType: 2
   canBlockBody: 1
   canBlockHead: 0
   randomBlockChance: 0.05
