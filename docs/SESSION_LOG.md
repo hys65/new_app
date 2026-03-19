@@ -19,78 +19,68 @@ Enemy behavior definition stack reached a stable data-driven state.
 
 ---
 
-## Session: Enemy Switching System 1.0
+## Session: Enemy Switching System 1.0 Completion
 
 ### Goal
-Implement runtime enemy switching without breaking current enemy architecture.
+Validate runtime enemy switching without breaking existing hit / defense / AI flow.
 
-### Work completed
+### Result
+Completed Enemy Switching System 1.0.
 
-Implemented:
-
+### Implemented
 - EnemyRuntimePresetController
 - EnemySwitchingManager
-- GameplayManager runtime active reaction layer switching
+- GameplayManager runtime active reaction target switching
 
-Validation steps completed:
+### Confirmed behavior
+- runtime preset switching works on the same enemy object
+- switching works between two real enemy objects in scene
+- only one enemy remains active during play
+- active enemy reaction layer is synchronized into GameplayManager
+- preset application remains routed through EnemyPresetApplicator
 
-1. Single-slot setup validated
-2. Same-enemy dual-preset switching validated
-3. Two real enemy objects in scene validated
-4. Single active enemy switching validated
-5. Runtime slot switching validated
-6. Preset application logs confirmed
-
----
-
-### Scene validation result
-
-Runtime scene setup used:
-
-- EnemyRoot_MeetingTyrant
-- EnemyRoot_NarcissistManager
-- EnemySwitchingManager with two slots
-
-Observed results:
-
-- before play, both enemy objects exist in scene
-- after play, only the active enemy remains enabled
-- switching slot changes the active enemy correctly
-- Current Slot Index updates correctly
-- preset apply logs confirm correct runtime application
+### Outcome
+Scene-level enemy switching became stable and reusable.
 
 ---
 
-### Architectural result
+## Session: Enemy Roster / Level Enemy Selection 1.0 Completion
 
-Confirmed layering:
+### Goal
+Move enemy startup selection from manual scene test wiring into reusable level content flow.
 
-Data
-→ EnemyPresetData
+### Result
+Completed Enemy Roster / Level Enemy Selection 1.0.
+
+### Implemented
+- EnemyRosterData
+- LevelEnemySelectionData
+- LevelEnemySelectionController
+- EnemySwitchingManager startup configuration extension
+- EnemyPresetApplicator startup cleanup and idempotent preset application protection
+
+### Debugging findings
+- startup preset application was initially polluted by legacy `LevelEnemyController`
+- the legacy component was not on enemy roots; it was still attached to `Systems`
+- this created a competing startup preset injection path for Meeting Tyrant
+- removing the old scene `LevelEnemyController` hookup resolved the conflict
+
+### Confirmed behavior
+- roster entries correctly map into scene enemy slots
+- level selection correctly resolves startup slot
+- `startupSelectionIndex = 0` starts with Meeting Tyrant
+- `startupSelectionIndex = 1` starts with Narcissist Manager
+- in both cases only one enemy remains active during play
+- only the selected startup preset is applied
+- preset injection flow is clean and single-owned
+
+### Final validated startup flow
+EnemyRosterData  
+→ LevelEnemySelectionData  
+→ LevelEnemySelectionController  
+→ EnemySwitchingManager  
+→ EnemyRuntimePresetController  
 → EnemyPresetApplicator
-→ EnemyRuntimePresetController
-→ EnemySwitchingManager
 
-Gameplay sync:
-
-EnemySwitchingManager
-→ GameplayManager.SetActiveEnemyReactionLayer(...)
-
----
-
-### Important notes
-
-- EnemyPresetApplicator remains the single preset injection point
-- Scene switching is orchestration logic, not AI logic
-- Current implementation supports multiple scene enemies but only one active enemy at a time
-- This is not yet a full multi-enemy combat system
-- Enemy Switching System 1.0 is complete
-- Next work should move toward content scaling, not more low-level switching rewrites
-
----
-
-### Recommended next step
-
-- Enemy Roster / Level Enemy Selection 1.0
-- Enemy Content Expansion 1.0
-- Runtime Debug Switching UI
+### Outcome
+The project moved from scene test switching into reusable level-driven startup enemy selection.

@@ -5,7 +5,6 @@
 Power Prank 3D is built around a layered, data-driven runtime architecture.
 
 Rules:
-
 1. Prefer data over hardcoded enemy-specific logic
 2. Keep single responsibility per runtime layer
 3. Preserve readable inspector workflows
@@ -18,7 +17,6 @@ Rules:
 
 ### 1. Gameplay Layer
 Handles:
-
 - throw input
 - projectile spawning
 - hit resolution
@@ -27,7 +25,6 @@ Handles:
 - gameplay loop state
 
 Representative systems:
-
 - ThrowController
 - ProjectileBehavior
 - GameplayManager
@@ -40,7 +37,6 @@ Representative systems:
 Handles runtime enemy behavior and presentation.
 
 Representative systems:
-
 - EnemyReactionLayerController
 - EnemyDefenseController
 - EnemyDefenseVisualLayerController
@@ -54,14 +50,15 @@ Representative systems:
 Defines reusable behavior data assets.
 
 Current enemy data assets:
-
 - EnemyArchetypeData
 - EnemyDefensePatternData
 - EnemyAiProfileData
 - EnemyDefenseStateWindowProfileData
 - EnemyPresetData
+- EnemyRosterData
+- LevelEnemySelectionData
 
-This layer defines behavior.
+This layer defines behavior and selection content.  
 It does not execute behavior.
 
 ---
@@ -72,7 +69,6 @@ It does not execute behavior.
 EnemyPresetData is the combined configuration object for one enemy setup.
 
 It references:
-
 - archetype data
 - defense pattern data
 - AI profile data
@@ -86,7 +82,6 @@ This allows multiple enemy personas to be built by combining reusable data asset
 EnemyPresetApplicator is the preset injection layer.
 
 Responsibilities:
-
 - receive EnemyPresetData
 - distribute preset references to runtime enemy controllers
 - remain the single source of preset application
@@ -104,16 +99,23 @@ Do not:
 
 ## Enemy Runtime Architecture
 
-Enemy runtime architecture is now split into four layers:
+Enemy runtime architecture is now split into five layers:
 
 ### 1. Data Layer
-Defines enemy behavior data assets.
+Defines enemy behavior and level selection assets.
 
+Behavior assets:
 - EnemyArchetypeData
 - EnemyDefensePatternData
 - EnemyAiProfileData
 - EnemyDefenseStateWindowProfileData
 - EnemyPresetData
+
+Selection assets:
+- EnemyRosterData
+- LevelEnemySelectionData
+
+---
 
 ### 2. Preset Application Layer
 Applies combined preset data to runtime controllers.
@@ -124,6 +126,8 @@ Responsibility:
 - distribute preset data to runtime enemy controllers
 - remain the single source of preset application
 
+---
+
 ### 3. Single Enemy Runtime Layer
 Handles runtime preset control for one enemy instance.
 
@@ -133,6 +137,8 @@ Responsibility:
 - own runtime preset switching entry for one enemy
 - forward preset application to EnemyPresetApplicator
 - avoid duplicate preset injection logic elsewhere
+
+---
 
 ### 4. Scene Enemy Switching Layer
 Handles active enemy selection at scene level.
@@ -147,20 +153,50 @@ Responsibility:
 
 ---
 
+### 5. Level Enemy Selection Layer
+Handles reusable content-driven startup selection.
+
+- LevelEnemySelectionController
+- LevelEnemySelectionData
+- EnemyRosterData
+
+Responsibility:
+- define a reusable enemy catalog
+- define which roster entries are used by a level
+- resolve startup enemy from level content
+- configure EnemySwitchingManager without bypassing runtime switching architecture
+
+---
+
 ## Enemy Switching Flow
 
 ### Runtime Preset Flow
-
-EnemySwitchingManager
-→ EnemyRuntimePresetController
-→ EnemyPresetApplicator
+EnemySwitchingManager  
+→ EnemyRuntimePresetController  
+→ EnemyPresetApplicator  
 → EnemyReactionLayerController / EnemyDefenseController / EnemyAiLayerController / EnemyDefenseStateWindowController
 
 ### Gameplay Sync Flow
-
-EnemySwitchingManager
-→ GameplayManager.SetActiveEnemyReactionLayer(...)
+EnemySwitchingManager  
+→ GameplayManager.SetActiveEnemyReactionLayer(...)  
 → active EnemyReactionLayerController
+
+---
+
+## Level Enemy Selection Flow
+
+Startup flow:
+
+EnemyRosterData  
+→ LevelEnemySelectionData  
+→ LevelEnemySelectionController  
+→ EnemySwitchingManager.ConfigureSlotDefaultPreset(...)  
+→ EnemySwitchingManager.ConfigureStartupSlot(...)  
+→ EnemySwitchingManager.Start()  
+→ EnemyRuntimePresetController  
+→ EnemyPresetApplicator
+
+This keeps level content selection above the scene switching layer, while preserving a single preset injection point.
 
 ---
 
@@ -169,7 +205,6 @@ EnemySwitchingManager
 GameplayManager remains the gameplay-side owner of current breakdown state and reaction stage refresh.
 
 Runtime switching support is handled by:
-
 - replacing the active EnemyReactionLayerController reference
 - immediately refreshing reaction stage after switching target
 
@@ -180,12 +215,11 @@ This keeps gameplay state centralized while allowing the active enemy target to 
 ## Current Runtime Model
 
 Current model is:
-
 - multiple enemy roots may exist in scene
 - only one enemy is active at a time
 - switching occurs at scene orchestration level
 - AI remains per-enemy and does not manage scene switching
-- defense window autoCycle must remain FALSE
+- defense window `autoCycle` must remain FALSE
 - AI still controls defense timing
 
 ---
@@ -193,42 +227,43 @@ Current model is:
 ## Legacy Compatibility
 
 ### LevelEnemyController
-LevelEnemyController remains available as the older scene/level setup entry.
+`LevelEnemyController` is now considered a legacy startup setup path.
 
-Its role is still:
-
+Historical role:
 - read EnemyLevelConfig
 - assign preset to EnemyPresetApplicator
 - apply preset on startup
 
-This is valid for older scenes.
+Current rule:
+- it may exist only for older scenes if explicitly needed
+- it must not run in scenes that use `EnemySwitchingManager`
+- it must not coexist with `LevelEnemySelectionController` in the same scene
 
-However, new switching-oriented scenes should prefer:
+Reason:
+- this would create competing preset setup paths
+- it breaks clean startup ownership
+- it causes duplicate or incorrect preset application during scene startup
 
-- EnemyRuntimePresetController
-- EnemySwitchingManager
-
-This avoids having two competing preset setup paths in the same scene.
+The current validated switching scene has removed the old `LevelEnemyController` hookup.
 
 ---
 
 ## Important Boundary
 
-Enemy Switching System 1.0 is not a multi-enemy combat system.
+Enemy Switching System 1.0 + Enemy Roster / Level Enemy Selection 1.0 is not a multi-enemy combat system.
 
 It supports:
-
 - multiple enemy objects in scene
 - single active enemy switching
 - runtime preset switching
 - slot-based inspector setup
+- level-driven startup enemy selection
 
 It does not yet support:
-
 - multiple active enemies at the same time
 - separate breakdown values per enemy
 - wave spawning
-- enemy roster driven level loading
+- roster-driven runtime enemy loading
 - full combat ownership transfer per enemy instance
 
 ---
@@ -237,13 +272,14 @@ It does not yet support:
 
 Next clean extension point:
 
-### Enemy Roster / Level Enemy Selection 1.0
+### Level Content / Encounter Configuration 1.0
 
 Goal:
-Move from scene test wiring into reusable content selection flow.
+Move from enemy-only startup selection into reusable level encounter authoring.
 
 Expected outcome:
-- reusable enemy catalog
-- level-driven startup selection
-- less manual scene-only setup
-- easier enemy content scaling
+- level-driven enemy startup selection
+- level-driven gameplay targets
+- level-driven time limit settings
+- cleaner content authoring per stage
+- less manual scene-only configuration
