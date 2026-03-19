@@ -3,17 +3,17 @@
 ## Current Position
 
 Enemy AI Layer 1.0 is complete.  
-Enemy Switching System 1.0 is complete.
+Enemy Switching System 1.0 is complete.  
+Enemy Roster / Level Enemy Selection 1.0 is complete.
 
 The project is no longer blocked by core enemy architecture.
 
 Current priority is to move from:
-
 - system validation
 
 to:
-
-- scalable enemy content flow
+- scalable content flow
+- reusable level authoring
 
 ---
 
@@ -28,9 +28,9 @@ to:
 - Meeting Tyrant preset ✅
 - Narcissist Manager preset ✅
 - Enemy Switching System 1.0 ✅
+- Enemy Roster / Level Enemy Selection 1.0 ✅
 
 ### Enemy Switching System 1.0 completed scope
-
 - Added EnemyRuntimePresetController
 - Added EnemySwitchingManager
 - Added GameplayManager runtime active reaction target switching
@@ -39,24 +39,36 @@ to:
 - Validated single active enemy workflow
 - Validated inspector slot setup flow
 
+### Enemy Roster / Level Enemy Selection 1.0 completed scope
+- Added EnemyRosterData
+- Added LevelEnemySelectionData
+- Added LevelEnemySelectionController
+- Extended EnemySwitchingManager startup configuration support
+- Validated reusable roster asset workflow
+- Validated level-driven startup enemy selection
+- Validated `startupSelectionIndex = 0`
+- Validated `startupSelectionIndex = 1`
+- Removed legacy `LevelEnemyController` scene hookup from current switching scene
+- Confirmed clean single startup preset application after removing old competing path
+
 ---
 
 ## Next Recommended Tasks
 
-### 1. Enemy Roster / Level Enemy Selection 1.0
+### 1. Level Content / Encounter Configuration 1.0
 Goal:
-Move enemy selection from manual scene test setup into reusable level content flow.
+Move from enemy-only startup selection into full level encounter content authoring.
 
 Suggested scope:
-- define reusable enemy roster data
-- bind enemy selection per level
-- choose startup enemy from level config
-- reduce manual test-scene-only setup
+- define per-level gameplay target values
+- define per-level time limit
+- bind startup enemy selection together with level gameplay settings
+- prepare cleaner reusable level config assets
 
 Expected result:
-- levels can declare which enemy or preset should appear
-- startup active enemy becomes content-driven
-- future enemy expansion becomes cleaner
+- a level defines both enemy and gameplay goals
+- scene setup becomes less inspector-manual
+- future level expansion becomes cleaner
 
 ---
 
@@ -85,6 +97,7 @@ Suggested scope:
 - next enemy button
 - current enemy label
 - current preset label
+- startup enemy label
 
 Expected result:
 - faster validation of enemy data tuning
@@ -92,14 +105,15 @@ Expected result:
 
 ---
 
-### 4. Level Integration Cleanup
+### 4. Legacy Scene Cleanup
 Goal:
-Reduce overlap between older setup path and new switching path.
+Prevent old setup paths from re-entering validated switching scenes.
 
 Suggested scope:
 - review LevelEnemyController usage
-- keep legacy compatibility where needed
+- keep legacy compatibility only where explicitly needed
 - avoid running LevelEnemyController and EnemySwitchingManager as competing setup paths in the same scene
+- document startup ownership rules clearly
 
 Expected result:
 - cleaner scene setup
@@ -118,9 +132,10 @@ Must remain true:
 4. AI controls defense timing, not the window system
 5. Prefer data tuning over script rewrites
 6. Do not collapse scene orchestration logic into AI logic
+7. Do not allow legacy LevelEnemyController to compete with level-driven switching flow in the same scene
 
 ---
 
 ## Recommended Immediate Next Milestone
 
-**Enemy Roster / Level Enemy Selection 1.0**
+**Level Content / Encounter Configuration 1.0**

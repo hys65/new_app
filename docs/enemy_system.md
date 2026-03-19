@@ -3,13 +3,13 @@
 ## Purpose
 
 The enemy system defines how enemy characters:
-
 - receive hits
 - accumulate breakdown pressure
 - react visually
 - defend against attacks
 - vary by enemy persona
 - switch between configured runtime enemy identities
+- be selected by reusable level content
 
 The system must remain readable, data-driven, and expandable.
 
@@ -60,7 +60,7 @@ Responsibilities:
 Important rule:
 - `autoCycle` must remain FALSE
 
-This system does not self-drive enemy defense timing.
+This system does not self-drive enemy defense timing.  
 It only provides the timing structure once activated.
 
 ---
@@ -94,10 +94,16 @@ Enemy behavior is fully data-driven.
 - EnemyAiProfileData
 - EnemyDefenseStateWindowProfileData
 
-### Combined data asset
+### Combined behavior data asset
 - EnemyPresetData
 
 EnemyPresetData combines the lower-level behavior assets into one playable enemy preset.
+
+### Content selection assets
+- EnemyRosterData
+- LevelEnemySelectionData
+
+These assets define which enemy presets are available and which ones are selected by a level.
 
 ---
 
@@ -122,10 +128,10 @@ Do not:
 
 Correct flow:
 
-EnemyPresetApplicator
-→ EnemyReactionLayerController
-→ EnemyDefenseController
-→ EnemyAiLayerController
+EnemyPresetApplicator  
+→ EnemyReactionLayerController  
+→ EnemyDefenseController  
+→ EnemyAiLayerController  
 → EnemyDefenseStateWindowController
 
 ---
@@ -157,7 +163,6 @@ Both archetypes have been runtime-tested and confirmed visually distinct.
 Status: completed.
 
 Validated behavior principles:
-
 - AI timing is data-driven
 - defense trigger timing differs between presets
 - defense window profile remains passive until AI triggers it
@@ -171,7 +176,7 @@ This confirms the enemy stack can scale through data expansion instead of custom
 
 Enemy Switching System 1.0 has been implemented as a scene-level orchestration layer above the preset system.
 
-### New Runtime Components
+### Runtime Components
 
 #### EnemyRuntimePresetController
 Single-enemy runtime preset entry.
@@ -196,7 +201,6 @@ Responsibilities:
 ## Runtime Enemy Slot Model
 
 Each slot contains:
-
 - slotId
 - displayName
 - enemyRoot
@@ -208,20 +212,57 @@ This makes the workflow inspector-friendly and future-ready for multiple scene e
 
 ---
 
-## Enemy Switching Flow
+## Enemy Roster / Level Enemy Selection 1.0
 
-Runtime flow:
+Enemy Roster / Level Enemy Selection 1.0 extends the switching layer into reusable level content flow.
 
-EnemySwitchingManager
-→ EnemyRuntimePresetController
-→ EnemyPresetApplicator
+### New Content Components
+
+#### EnemyRosterData
+Reusable enemy catalog asset.
+
+Each roster entry defines:
+- entryId
+- displayName
+- preset
+- recommendedSlotId
+- enabled
+
+#### LevelEnemySelectionData
+Level-specific enemy selection asset.
+
+Defines:
+- which roster is used
+- which roster entries are selected by the level
+- which selected entry is used at startup
+- whether slot defaults are cleared before assignment
+- whether startup default preset is automatically applied
+
+#### LevelEnemySelectionController
+Startup orchestration controller.
+
+Responsibilities:
+- read LevelEnemySelectionData
+- resolve selected roster entries into scene slot ids
+- configure EnemySwitchingManager slot default presets
+- configure startup slot index
+- avoid bypassing EnemySwitchingManager / EnemyRuntimePresetController / EnemyPresetApplicator
+
+---
+
+## Enemy Roster / Level Selection Flow
+
+Startup flow:
+
+EnemyRosterData  
+→ LevelEnemySelectionData  
+→ LevelEnemySelectionController  
+→ EnemySwitchingManager  
+→ EnemyRuntimePresetController  
+→ EnemyPresetApplicator  
 → enemy runtime controllers
 
-Gameplay sync flow:
-
-EnemySwitchingManager
-→ GameplayManager.SetActiveEnemyReactionLayer(...)
-→ active EnemyReactionLayerController
+This turns manual scene test wiring into reusable level-driven startup enemy selection.
 
 ---
 
@@ -247,33 +288,58 @@ Observed behavior:
 - runtime preset application logs confirm switching
 - existing hit / defense / AI flow remains intact
 
+### Use Case 3
+Level-driven startup enemy selection.
+
+Validated for:
+- `startupSelectionIndex = 0`
+- `startupSelectionIndex = 1`
+
+Observed behavior:
+- startup enemy is determined by LevelEnemySelectionData
+- only the selected startup enemy preset is applied
+- inactive enemy is disabled correctly
+- legacy startup preset conflicts are removed after removing scene `LevelEnemyController`
+
+---
+
+## Legacy Note
+
+### LevelEnemyController
+`LevelEnemyController` is now a legacy startup path.
+
+Current rule:
+- it is not part of the new validated startup flow
+- it must not be used in scenes driven by LevelEnemySelectionController
+- it must not compete with EnemySwitchingManager startup ownership
+
+The current validated scene has removed the old `LevelEnemyController` hookup from `Systems`.
+
 ---
 
 ## Current Boundary
 
-Enemy Switching System 1.0 supports:
-
+The current enemy system supports:
 - multiple enemy objects in scene
 - single active enemy selection
 - runtime preset switching
 - slot-based scene setup
+- level-driven startup enemy selection
 
 It does not yet support:
-
 - simultaneous active enemies
 - separate gameplay state per enemy
 - wave system
 - spawn pipeline
-- roster-driven level loading
+- roster-driven runtime loading
 
 ---
 
 ## Recommended Next Step
 
 Recommended next milestone:
-
-- Enemy Roster / Level Enemy Selection 1.0
+- Level Content / Encounter Configuration 1.0
 
 Reason:
-The switching system is now validated.
-The next step is to turn test-scene switching into reusable content flow.
+The switching system and level startup enemy selection are now validated.  
+The next step is to turn enemy-only startup selection into full level encounter content flow.
