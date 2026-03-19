@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8a24a089fb12502498da1879bf704c37, type: 3}
-  m_Name: level_enemy_selection_test
+  m_Name: level_enemy_selection_meeting_tyrant
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.LevelEnemySelectionData
   levelId: level_test
   displayName: Level Test Enemy Selection
@@ -22,6 +22,6 @@ MonoBehaviour:
   - rosterEntryId: narcissist_manager
     useRosterRecommendedSlot: 1
     overrideSlotId: 
-  startupSelectionIndex: 1
+  startupSelectionIndex: 0
   clearUnassignedSlotPresets: 1
   autoApplyDefaultPresetOnStart: 1

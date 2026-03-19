@@ -10,6 +10,9 @@ namespace PowerPrank3D.Gameplay
         [SerializeField] private int targetBreakdownValue = 100;
         [SerializeField] private float roundDurationSeconds = 45f;
 
+        [Header("Startup")]
+        [SerializeField] private bool autoStartOnStart = true;
+
         [Header("Items")]
         [SerializeField] private GameplayItemData[] itemList;
         [SerializeField] private int defaultItemIndex;
@@ -25,12 +28,19 @@ namespace PowerPrank3D.Gameplay
 
         public int CurrentBreakdownValue { get; private set; }
         public int TargetBreakdownValue => targetBreakdownValue;
+        public float RoundDurationSeconds => roundDurationSeconds;
         public float RemainingTimeSeconds { get; private set; }
         public bool IsRoundRunning { get; private set; }
-        public GameplayItemData CurrentItem => itemList != null && itemList.Length > 0 ? itemList[currentItemIndex] : null;
+
+        public GameplayItemData CurrentItem =>
+            itemList != null && itemList.Length > 0
+                ? itemList[currentItemIndex]
+                : null;
 
         public int ComboCount { get; private set; }
+
         public float CurrentComboMultiplier => GetComboMultiplier(ComboCount);
+
         public float ComboTimeRemaining
         {
             get
@@ -50,7 +60,10 @@ namespace PowerPrank3D.Gameplay
 
         private void Start()
         {
-            StartRound();
+            if (autoStartOnStart)
+            {
+                StartRound();
+            }
         }
 
         private void Update()
@@ -61,6 +74,7 @@ namespace PowerPrank3D.Gameplay
             }
 
             RemainingTimeSeconds -= Time.deltaTime;
+
             if (RemainingTimeSeconds <= 0f)
             {
                 RemainingTimeSeconds = 0f;
@@ -75,6 +89,24 @@ namespace PowerPrank3D.Gameplay
             }
 
             OnStateChanged?.Invoke();
+        }
+
+        public void ApplyEncounterSettings(int targetBreakdown, float roundDuration)
+        {
+            targetBreakdownValue = Mathf.Max(1, targetBreakdown);
+            roundDurationSeconds = Mathf.Max(1f, roundDuration);
+
+            if (enemyReactionLayer != null)
+            {
+                enemyReactionLayer.RefreshStage(CurrentBreakdownValue, TargetBreakdownValue);
+            }
+
+            OnStateChanged?.Invoke();
+        }
+
+        public void SetAutoStartOnStart(bool shouldAutoStart)
+        {
+            autoStartOnStart = shouldAutoStart;
         }
 
         public void SetActiveEnemyReactionLayer(EnemyReactionLayerController reactionLayer)
@@ -97,7 +129,10 @@ namespace PowerPrank3D.Gameplay
             ComboCount = 0;
             lastHitTime = -999f;
 
-            currentItemIndex = Mathf.Clamp(defaultItemIndex, 0, Mathf.Max(0, itemList != null ? itemList.Length - 1 : 0));
+            currentItemIndex = Mathf.Clamp(
+                defaultItemIndex,
+                0,
+                Mathf.Max(0, itemList != null ? itemList.Length - 1 : 0));
 
             if (enemyReactionLayer != null)
             {

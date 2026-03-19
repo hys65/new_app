@@ -4,17 +4,18 @@ namespace PowerPrank3D.Gameplay
 {
     public class LevelEnemySelectionController : MonoBehaviour
     {
-        [Header("Level Selection")]
-        [SerializeField] private LevelEnemySelectionData levelSelection;
-
         [Header("References")]
         [SerializeField] private EnemySwitchingManager enemySwitchingManager;
 
-        [Header("Startup")]
-        [SerializeField] private bool applyOnAwake = true;
+        [Header("Config")]
+        [SerializeField] private LevelEnemySelectionData selectionData;
 
-        [Header("Debug")]
-        [SerializeField] private bool debugLog = true;
+        [Header("Startup")]
+        [SerializeField] private bool applyOnAwake = false;
+
+        [Header("Runtime Debug")]
+        [SerializeField] private string lastAppliedLevelId;
+        [SerializeField] private int lastResolvedStartupSlotIndex = -1;
 
         private void Reset()
         {
@@ -26,20 +27,23 @@ namespace PowerPrank3D.Gameplay
 
         private void Awake()
         {
-            if (!applyOnAwake)
+            if (applyOnAwake && selectionData != null)
             {
-                return;
+                ApplySelection(selectionData);
             }
-
-            ApplyLevelSelection();
         }
 
-        [ContextMenu("Apply Level Selection")]
-        public void ApplyLevelSelection()
+        [ContextMenu("Apply Current Selection")]
+        public void ApplyCurrentSelection()
         {
-            if (levelSelection == null)
+            ApplySelection(selectionData);
+        }
+
+        public void ApplySelection(LevelEnemySelectionData data)
+        {
+            if (data == null)
             {
-                Debug.LogWarning("LevelEnemySelectionController: levelSelection is null", this);
+                Debug.LogWarning("LevelEnemySelectionController: selection data is null", this);
                 return;
             }
 
@@ -49,142 +53,92 @@ namespace PowerPrank3D.Gameplay
                 return;
             }
 
-            if (levelSelection.roster == null)
+            if (data.roster == null)
             {
                 Debug.LogWarning("LevelEnemySelectionController: roster is null", this);
                 return;
             }
 
-            if (levelSelection.clearUnassignedSlotPresets)
-            {
-                enemySwitchingManager.ClearAllSlotDefaultPresets();
-            }
-
-            LevelEnemySelectionEntry[] selections = levelSelection.selectedEnemies;
-            if (selections == null || selections.Length == 0)
+            if (data.selectedEnemies == null || data.selectedEnemies.Length == 0)
             {
                 Debug.LogWarning("LevelEnemySelectionController: selectedEnemies is empty", this);
                 return;
             }
 
+            if (data.clearUnassignedSlotPresets)
+            {
+                enemySwitchingManager.ClearAllSlotDefaultPresets();
+            }
+
+            int startupEntryIndex = Mathf.Clamp(
+                data.startupSelectionIndex,
+                0,
+                data.selectedEnemies.Length - 1);
+
             int resolvedStartupSlotIndex = -1;
 
-            for (int i = 0; i < selections.Length; i++)
+            for (int i = 0; i < data.selectedEnemies.Length; i++)
             {
-                LevelEnemySelectionEntry selection = selections[i];
-                if (selection == null)
+                LevelEnemySelectionEntry selectionEntry = data.selectedEnemies[i];
+                if (selectionEntry == null)
                 {
                     continue;
                 }
 
-                if (string.IsNullOrWhiteSpace(selection.rosterEntryId))
-                {
-                    Debug.LogWarning(
-                        $"LevelEnemySelectionController: rosterEntryId is empty at selection index {i}",
-                        this);
-                    continue;
-                }
-
-                EnemyRosterEntry rosterEntry = levelSelection.roster.GetEntryById(selection.rosterEntryId);
+                EnemyRosterEntry rosterEntry = data.roster.GetEntryById(selectionEntry.rosterEntryId);
                 if (rosterEntry == null)
                 {
                     Debug.LogWarning(
-                        $"LevelEnemySelectionController: roster entry not found: {selection.rosterEntryId}",
+                        "LevelEnemySelectionController: roster entry not found: " + selectionEntry.rosterEntryId,
                         this);
                     continue;
                 }
 
-                if (!rosterEntry.enabled)
+                string targetSlotId = selectionEntry.useRosterRecommendedSlot
+                    ? rosterEntry.recommendedSlotId
+                    : selectionEntry.overrideSlotId;
+
+                if (string.IsNullOrWhiteSpace(targetSlotId))
                 {
                     Debug.LogWarning(
-                        $"LevelEnemySelectionController: roster entry is disabled: {selection.rosterEntryId}",
+                        "LevelEnemySelectionController: targetSlotId is empty for roster entry: " + selectionEntry.rosterEntryId,
                         this);
                     continue;
                 }
 
-                if (rosterEntry.preset == null)
-                {
-                    Debug.LogWarning(
-                        $"LevelEnemySelectionController: preset is null on roster entry: {selection.rosterEntryId}",
-                        this);
-                    continue;
-                }
+                bool configured = enemySwitchingManager.ConfigureSlotDefaultPreset(
+                    targetSlotId,
+                    rosterEntry.preset);
 
-                string resolvedSlotId = ResolveSlotId(selection, rosterEntry);
-                if (string.IsNullOrWhiteSpace(resolvedSlotId))
-                {
-                    Debug.LogWarning(
-                        $"LevelEnemySelectionController: resolvedSlotId is empty for roster entry: {selection.rosterEntryId}",
-                        this);
-                    continue;
-                }
-
-                int slotIndex = enemySwitchingManager.FindSlotIndexBySlotId(resolvedSlotId);
-                if (slotIndex < 0)
-                {
-                    Debug.LogWarning(
-                        $"LevelEnemySelectionController: slot not found for slotId: {resolvedSlotId}",
-                        this);
-                    continue;
-                }
-
-                bool configured = enemySwitchingManager.ConfigureSlotDefaultPreset(slotIndex, rosterEntry.preset);
                 if (!configured)
                 {
-                    Debug.LogWarning(
-                        $"LevelEnemySelectionController: failed to configure slot {slotIndex} for roster entry: {selection.rosterEntryId}",
-                        this);
                     continue;
                 }
 
-                if (i == levelSelection.startupSelectionIndex)
+                if (i == startupEntryIndex)
                 {
-                    resolvedStartupSlotIndex = slotIndex;
-                }
-
-                if (debugLog)
-                {
-                    Debug.Log(
-                        $"LevelEnemySelectionController: assigned rosterEntry={selection.rosterEntryId} " +
-                        $"to slotId={resolvedSlotId} (slotIndex={slotIndex})",
-                        this);
+                    resolvedStartupSlotIndex = enemySwitchingManager.FindSlotIndexBySlotId(targetSlotId);
                 }
             }
 
-            if (resolvedStartupSlotIndex >= 0)
-            {
-                enemySwitchingManager.ConfigureStartupSlot(
-                    resolvedStartupSlotIndex,
-                    levelSelection.autoApplyDefaultPresetOnStart);
-
-                if (debugLog)
-                {
-                    Debug.Log(
-                        $"LevelEnemySelectionController: startup slot resolved to index {resolvedStartupSlotIndex}",
-                        this);
-                }
-            }
-            else
+            if (resolvedStartupSlotIndex < 0)
             {
                 Debug.LogWarning(
-                    "LevelEnemySelectionController: startup selection could not be resolved; keeping manager startup as-is",
+                    "LevelEnemySelectionController: could not resolve startup slot index for level: " + data.levelId,
                     this);
-            }
-        }
-
-        private string ResolveSlotId(LevelEnemySelectionEntry selection, EnemyRosterEntry rosterEntry)
-        {
-            if (selection.useRosterRecommendedSlot)
-            {
-                return rosterEntry.recommendedSlotId;
+                return;
             }
 
-            if (!string.IsNullOrWhiteSpace(selection.overrideSlotId))
-            {
-                return selection.overrideSlotId;
-            }
+            enemySwitchingManager.ConfigureStartupSlot(
+                resolvedStartupSlotIndex,
+                data.autoApplyDefaultPresetOnStart);
 
-            return rosterEntry.recommendedSlotId;
+            lastAppliedLevelId = data.levelId;
+            lastResolvedStartupSlotIndex = resolvedStartupSlotIndex;
+
+            Debug.Log(
+                "LevelEnemySelectionController: applied level selection: " + data.displayName,
+                this);
         }
     }
 }

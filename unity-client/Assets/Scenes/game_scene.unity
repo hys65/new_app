@@ -313,6 +313,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.GameplayManager
   targetBreakdownValue: 400
   roundDurationSeconds: 45
+  autoStartOnStart: 0
   itemList:
   - {fileID: 11400000, guid: f0aad0f66d85b2b4ba372a5103e2383b, type: 2}
   - {fileID: 11400000, guid: fc3b028b3787a4a4980c61b76bddaf1b, type: 2}
@@ -487,10 +488,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2ffa0bd8cee7e849af98d6a152100ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.LevelEnemySelectionController
-  levelSelection: {fileID: 11400000, guid: 7e5a6cfc5e297b548809b89a53c115d8, type: 2}
   enemySwitchingManager: {fileID: 1760690826}
+  selectionData: {fileID: 0}
   applyOnAwake: 1
-  debugLog: 1
+  lastAppliedLevelId: 
+  lastResolvedStartupSlotIndex: -1
 --- !u!1 &201078843
 GameObject:
   m_ObjectHideFlags: 0
@@ -1556,6 +1558,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 911491531}
+  - component: {fileID: 911491532}
+  - component: {fileID: 911491533}
   m_Layer: 0
   m_Name: Systems
   m_TagString: Untagged
@@ -1586,6 +1590,41 @@ Transform:
   - {fileID: 181399942}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &911491532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 911491530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fbe5bd71162d5948bf5c33dfd9ce8dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.LevelEncounterController
+  encounterConfig: {fileID: 11400000, guid: 11015be65ab525e46b461e092046dbf8, type: 2}
+  gameplayManager: {fileID: 97048587}
+  levelEnemySelectionController: {fileID: 181399943}
+  applyOnAwake: 0
+  startRoundOnStart: 1
+  encounterApplied: 0
+--- !u!114 &911491533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 911491530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 075dbda0a34fceb4ca983bdc407e4082, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.LevelProgressionController
+  progressionData: {fileID: 11400000, guid: d2c48ee6ccccb204cab7562337e56591, type: 2}
+  levelEncounterController: {fileID: 911491532}
+  applyOnAwake: 1
+  currentLevelIndex: -1
+  currentEncounterConfig: {fileID: 0}
 --- !u!1 &912459463
 GameObject:
   m_ObjectHideFlags: 0
