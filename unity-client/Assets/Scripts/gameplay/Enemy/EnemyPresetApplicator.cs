@@ -13,12 +13,22 @@ namespace PowerPrank3D.Gameplay
         public EnemyAiLayerController aiLayer;
         public EnemyDefenseStateWindowController defenseWindow;
 
+        [Header("Runtime Debug")]
+        [SerializeField] private EnemyPresetData lastAppliedPreset;
+
+        public EnemyPresetData LastAppliedPreset => lastAppliedPreset;
+
         [ContextMenu("Apply Preset")]
         public void ApplyPreset()
         {
             if (preset == null)
             {
-                Debug.LogWarning("EnemyPresetApplicator: preset is null");
+                Debug.LogWarning("EnemyPresetApplicator: preset is null", this);
+                return;
+            }
+
+            if (ReferenceEquals(lastAppliedPreset, preset))
+            {
                 return;
             }
 
@@ -42,12 +52,21 @@ namespace PowerPrank3D.Gameplay
                 defenseWindow.stateProfile = preset.defenseStateWindowProfile;
             }
 
-            Debug.Log("Enemy preset applied: " + preset.displayName);
+            lastAppliedPreset = preset;
+
+            Debug.Log("Enemy preset applied: " + preset.displayName, this);
         }
 
-        private void Awake()
+        [ContextMenu("Force Reapply Preset")]
+        public void ForceReapplyPreset()
         {
+            lastAppliedPreset = null;
             ApplyPreset();
+        }
+
+        public void ClearAppliedPresetCache()
+        {
+            lastAppliedPreset = null;
         }
     }
 }

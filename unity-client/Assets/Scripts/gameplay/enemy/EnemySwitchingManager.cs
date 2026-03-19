@@ -48,6 +48,14 @@ namespace PowerPrank3D.Gameplay
             }
         }
 
+        public int SlotCount
+        {
+            get
+            {
+                return enemySlots != null ? enemySlots.Length : 0;
+            }
+        }
+
         private void Start()
         {
             if (enemySlots == null || enemySlots.Length == 0)
@@ -89,6 +97,97 @@ namespace PowerPrank3D.Gameplay
             ApplyDefaultPresetToSlot(currentSlotIndex);
         }
 
+        public void ConfigureStartupSlot(int slotIndex, bool autoApplyDefaultPreset)
+        {
+            if (!IsValidIndex(slotIndex))
+            {
+                Debug.LogWarning("EnemySwitchingManager: startup slot index is invalid: " + slotIndex, this);
+                return;
+            }
+
+            startingSlotIndex = slotIndex;
+            autoApplyDefaultPresetOnStart = autoApplyDefaultPreset;
+        }
+
+        public int FindSlotIndexBySlotId(string slotId)
+        {
+            if (enemySlots == null || enemySlots.Length == 0)
+            {
+                return -1;
+            }
+
+            if (string.IsNullOrWhiteSpace(slotId))
+            {
+                return -1;
+            }
+
+            for (int i = 0; i < enemySlots.Length; i++)
+            {
+                EnemySlot slot = enemySlots[i];
+                if (slot == null)
+                {
+                    continue;
+                }
+
+                if (string.Equals(slot.slotId, slotId, System.StringComparison.Ordinal))
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        public void ClearAllSlotDefaultPresets()
+        {
+            if (enemySlots == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < enemySlots.Length; i++)
+            {
+                EnemySlot slot = enemySlots[i];
+                if (slot == null)
+                {
+                    continue;
+                }
+
+                slot.defaultPreset = null;
+            }
+        }
+
+        public bool ConfigureSlotDefaultPreset(string slotId, EnemyPresetData preset)
+        {
+            int slotIndex = FindSlotIndexBySlotId(slotId);
+            if (slotIndex < 0)
+            {
+                Debug.LogWarning("EnemySwitchingManager: slotId not found: " + slotId, this);
+                return false;
+            }
+
+            return ConfigureSlotDefaultPreset(slotIndex, preset);
+        }
+
+        public bool ConfigureSlotDefaultPreset(int slotIndex, EnemyPresetData preset)
+        {
+            if (!IsValidIndex(slotIndex))
+            {
+                Debug.LogWarning("EnemySwitchingManager: slot index is invalid: " + slotIndex, this);
+                return false;
+            }
+
+            EnemySlot slot = enemySlots[slotIndex];
+            if (slot == null)
+            {
+                Debug.LogWarning("EnemySwitchingManager: slot is null at index: " + slotIndex, this);
+                return false;
+            }
+
+            slot.defaultPreset = preset;
+            return true;
+        }
+
         public void SwitchToSlot(int slotIndex, bool applyDefaultPreset)
         {
             if (!IsValidIndex(slotIndex))
@@ -125,7 +224,7 @@ namespace PowerPrank3D.Gameplay
                 gameplayManager.SetActiveEnemyReactionLayer(currentSlot.reactionLayer);
             }
 
-            Debug.Log("EnemySwitchingManager: switched to slot: " + currentSlotIndex);
+            Debug.Log("EnemySwitchingManager: switched to slot: " + currentSlotIndex, this);
         }
 
         public void ApplyDefaultPresetToSlot(int slotIndex)

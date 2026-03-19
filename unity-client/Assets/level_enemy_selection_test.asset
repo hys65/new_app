@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a24a089fb12502498da1879bf704c37, type: 3}
+  m_Name: level_enemy_selection_test
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.LevelEnemySelectionData
+  levelId: level_test
+  displayName: Level Test Enemy Selection
+  roster: {fileID: 11400000, guid: a6a87e35948266f4cb29bd63e33ea176, type: 2}
+  selectedEnemies:
+  - rosterEntryId: meeting_tyrant
+    useRosterRecommendedSlot: 1
+    overrideSlotId: 
+  - rosterEntryId: narcissist_manager
+    useRosterRecommendedSlot: 1
+    overrideSlotId: 
+  startupSelectionIndex: 1
+  clearUnassignedSlotPresets: 1
+  autoApplyDefaultPresetOnStart: 1

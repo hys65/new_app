@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9608b65de27cb2a448c5c86f6f0112d8, type: 3}
+  m_Name: enemy_roster_main
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyRosterData
+  rosterId: main_enemy_roster
+  displayName: Main Enemy Roster
+  entries:
+  - entryId: meeting_tyrant
+    displayName: Meeting Tyrant
+    preset: {fileID: 11400000, guid: 7f15965a5d62773448fa1d24b4a8dbd8, type: 2}
+    recommendedSlotId: enemy_slot_01
+    enabled: 1
+  - entryId: narcissist_manager
+    displayName: Narcissist Manager
+    preset: {fileID: 11400000, guid: bc0df5fa7e58c9d479c85586f88c36c0, type: 2}
+    recommendedSlotId: enemy_slot_02
+    enabled: 1

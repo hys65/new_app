@@ -443,6 +443,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 172173061}
   m_CullTransparentMesh: 1
+--- !u!1 &181399941
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 181399942}
+  - component: {fileID: 181399943}
+  m_Layer: 0
+  m_Name: LevelEnemySelectionController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &181399942
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 181399941}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 911491531}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &181399943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 181399941}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2ffa0bd8cee7e849af98d6a152100ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.LevelEnemySelectionController
+  levelSelection: {fileID: 11400000, guid: 7e5a6cfc5e297b548809b89a53c115d8, type: 2}
+  enemySwitchingManager: {fileID: 1760690826}
+  applyOnAwake: 1
+  debugLog: 1
 --- !u!1 &201078843
 GameObject:
   m_ObjectHideFlags: 0
@@ -1508,7 +1556,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 911491531}
-  - component: {fileID: 911491532}
   m_Layer: 0
   m_Name: Systems
   m_TagString: Untagged
@@ -1536,22 +1583,9 @@ Transform:
   - {fileID: 2048788717}
   - {fileID: 1357602241}
   - {fileID: 1399453069}
+  - {fileID: 181399942}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &911491532
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 911491530}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba1a20d0f4756f7478d2282b4cbf14a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.LevelEnemyController
-  levelConfig: {fileID: 11400000, guid: e9f51db3514456645b9e1329580c4b09, type: 2}
-  presetApplicator: {fileID: 1310628150}
 --- !u!1 &912459463
 GameObject:
   m_ObjectHideFlags: 0
@@ -2574,11 +2608,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73aa5b298a9a38b498f9d00411aa4399, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyPresetApplicator
-  preset: {fileID: 11400000, guid: d396184f6097ec94da1479cf1b8f7d3b, type: 2}
+  preset: {fileID: 0}
   reactionLayer: {fileID: 1310628145}
   defenseController: {fileID: 1310628146}
   aiLayer: {fileID: 1310628149}
   defenseWindow: {fileID: 1310628148}
+  lastAppliedPreset: {fileID: 0}
 --- !u!114 &1310628151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3911,11 +3946,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73aa5b298a9a38b498f9d00411aa4399, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyPresetApplicator
-  preset: {fileID: 11400000, guid: bbabed984c0e37a4e84f9617ee66732e, type: 2}
+  preset: {fileID: 0}
   reactionLayer: {fileID: 1620351232}
   defenseController: {fileID: 1620351231}
   aiLayer: {fileID: 1620351228}
   defenseWindow: {fileID: 1620351229}
+  lastAppliedPreset: {fileID: 0}
 --- !u!114 &1620351228
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4274,13 +4310,13 @@ MonoBehaviour:
     enemyRoot: {fileID: 1310628143}
     runtimePresetController: {fileID: 1310628152}
     reactionLayer: {fileID: 1310628145}
-    defaultPreset: {fileID: 11400000, guid: d396184f6097ec94da1479cf1b8f7d3b, type: 2}
+    defaultPreset: {fileID: 0}
   - slotId: enemy_slot_02
     displayName: Narcissist Manager
     enemyRoot: {fileID: 1620351223}
     runtimePresetController: {fileID: 1620351225}
     reactionLayer: {fileID: 1620351232}
-    defaultPreset: {fileID: 11400000, guid: bbabed984c0e37a4e84f9617ee66732e, type: 2}
+    defaultPreset: {fileID: 0}
   startingSlotIndex: 0
   autoApplyDefaultPresetOnStart: 1
   deactivateNonActiveEnemiesOnStart: 1
