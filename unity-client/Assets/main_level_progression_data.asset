@@ -18,4 +18,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 11015be65ab525e46b461e092046dbf8, type: 2}
   - {fileID: 11400000, guid: b174bf8410281d342814475b08454c4b, type: 2}
   - {fileID: 11400000, guid: e7993a7d054232642abba933e43121df, type: 2}
-  startupLevelIndex: 1
+  startupLevelIndex: 0

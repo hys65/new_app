@@ -12,8 +12,7 @@ namespace PowerPrank3D.Gameplay
         [SerializeField] private LevelEnemySelectionController levelEnemySelectionController;
 
         [Header("Startup")]
-        [SerializeField] private bool applyOnAwake = true;
-        [SerializeField] private bool startRoundOnStart = true;
+        [SerializeField] private bool applyOnAwake = false;
 
         [Header("Runtime Debug")]
         [SerializeField] private bool encounterApplied;
@@ -39,26 +38,6 @@ namespace PowerPrank3D.Gameplay
             if (applyOnAwake)
             {
                 ApplyEncounter();
-            }
-        }
-
-        private void Start()
-        {
-            if (!encounterApplied)
-            {
-                return;
-            }
-
-            bool shouldStartRound =
-                startRoundOnStart &&
-                encounterConfig != null &&
-                encounterConfig.autoStartRound &&
-                gameplayManager != null &&
-                !gameplayManager.IsRoundRunning;
-
-            if (shouldStartRound)
-            {
-                gameplayManager.StartRound();
             }
         }
 

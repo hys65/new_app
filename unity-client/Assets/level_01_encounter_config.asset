@@ -15,6 +15,6 @@ MonoBehaviour:
   levelId: level_01
   displayName: Level 01 Encounter
   enemySelection: {fileID: 11400000, guid: 7e5a6cfc5e297b548809b89a53c115d8, type: 2}
-  targetBreakdownValue: 100
+  targetBreakdownValue: 10
   roundDurationSeconds: 45
   autoStartRound: 1

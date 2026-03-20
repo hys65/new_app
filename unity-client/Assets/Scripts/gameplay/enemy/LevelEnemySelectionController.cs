@@ -133,6 +133,10 @@ namespace PowerPrank3D.Gameplay
                 resolvedStartupSlotIndex,
                 data.autoApplyDefaultPresetOnStart);
 
+            enemySwitchingManager.SwitchToSlot(
+                resolvedStartupSlotIndex,
+                data.autoApplyDefaultPresetOnStart);
+
             lastAppliedLevelId = data.levelId;
             lastResolvedStartupSlotIndex = resolvedStartupSlotIndex;
 

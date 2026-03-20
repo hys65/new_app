@@ -33,16 +33,30 @@ namespace PowerPrank3D.Gameplay
 
         private void Awake()
         {
-            SetAimLineVisible(false);
-            SetTrajectoryVisible(false);
+            ResetDragState();
+        }
+
+        private void OnEnable()
+        {
+            if (gameplayManager != null)
+            {
+                gameplayManager.OnRoundFinished += OnRoundFinished;
+            }
+        }
+
+        private void OnDisable()
+        {
+            if (gameplayManager != null)
+            {
+                gameplayManager.OnRoundFinished -= OnRoundFinished;
+            }
         }
 
         private void Update()
         {
             if (gameplayManager == null || !gameplayManager.IsRoundRunning)
             {
-                SetAimLineVisible(false);
-                SetTrajectoryVisible(false);
+                ResetDragState();
                 return;
             }
 
@@ -56,9 +70,7 @@ namespace PowerPrank3D.Gameplay
             {
                 if (IsPointerOverUi())
                 {
-                    isDragging = false;
-                    SetAimLineVisible(false);
-                    SetTrajectoryVisible(false);
+                    ResetDragState();
                     return;
                 }
 
@@ -72,7 +84,6 @@ namespace PowerPrank3D.Gameplay
             {
                 Vector2 currentPos = Input.mousePosition;
                 Vector2 dragDelta = currentPos - dragStartPos;
-
                 UpdateAimPreview(dragDelta);
                 UpdateTrajectoryPreview(dragDelta);
             }
@@ -83,9 +94,7 @@ namespace PowerPrank3D.Gameplay
                 Vector2 dragDelta = dragEndPos - dragStartPos;
                 float dragDistance = dragDelta.magnitude;
 
-                isDragging = false;
-                SetAimLineVisible(false);
-                SetTrajectoryVisible(false);
+                ResetDragState();
 
                 if (dragDistance < minDragDistance)
                 {
@@ -94,7 +103,6 @@ namespace PowerPrank3D.Gameplay
 
                 Vector3 throwDirection = BuildThrowDirection(dragDelta);
                 float forceMultiplier = BuildForceMultiplier(dragDistance);
-
                 SpawnAndThrow(throwDirection, forceMultiplier);
             }
         }
@@ -133,12 +141,10 @@ namespace PowerPrank3D.Gameplay
             Vector3 screenDir = new Vector3(
                 -dragDelta.x,
                 -dragDelta.y,
-                gameplayCamera.pixelHeight * 0.35f
-            );
+                gameplayCamera.pixelHeight * 0.35f);
 
             Vector3 worldDir = gameplayCamera.transform.TransformDirection(screenDir.normalized);
             worldDir.y = Mathf.Abs(worldDir.y) + upwardFactor;
-
             return worldDir.normalized;
         }
 
@@ -159,8 +165,7 @@ namespace PowerPrank3D.Gameplay
             GameObject spawned = Instantiate(
                 itemData.projectilePrefab,
                 throwSpawnPoint.position,
-                Quaternion.identity
-            );
+                Quaternion.identity);
 
             ProjectileBehavior projectile = spawned.GetComponent<ProjectileBehavior>();
             if (projectile == null)
@@ -192,7 +197,6 @@ namespace PowerPrank3D.Gameplay
                             + gameplayCamera.transform.up * -0.15f;
 
             float dragDistance = dragDelta.magnitude;
-
             if (dragDistance < 1f)
             {
                 SetAimLineVisible(true);
@@ -202,7 +206,6 @@ namespace PowerPrank3D.Gameplay
             }
 
             Vector3 direction = BuildThrowDirection(dragDelta);
-
             float normalized = Mathf.InverseLerp(minDragDistance, maxDragDistance, dragDistance);
             float lineLength = Mathf.Lerp(aimLineMinLength, aimLineMaxLength, normalized);
 
@@ -245,14 +248,23 @@ namespace PowerPrank3D.Gameplay
             for (int i = 0; i < trajectoryPointCount; i++)
             {
                 float t = i * trajectoryTimeStep;
-                Vector3 point = startPosition
-                                + startVelocity * t
-                                + 0.5f * Physics.gravity * t * t;
-
+                Vector3 point = startPosition + startVelocity * t + 0.5f * Physics.gravity * t * t;
                 trajectoryLine.SetPosition(i, point);
             }
 
             SetTrajectoryVisible(true);
+        }
+
+        private void OnRoundFinished(bool _)
+        {
+            ResetDragState();
+        }
+
+        private void ResetDragState()
+        {
+            isDragging = false;
+            SetAimLineVisible(false);
+            SetTrajectoryVisible(false);
         }
 
         private void SetAimLineVisible(bool visible)

@@ -9,6 +9,7 @@ namespace PowerPrank3D.Gameplay
     {
         [SerializeField] private GameplayManager gameplayManager;
         [SerializeField] private LocalizationManager localizationManager;
+        [SerializeField] private LevelProgressionController levelProgressionController;
 
         [Header("HUD")]
         [SerializeField] private TextMeshProUGUI currentBreakdownText;
@@ -25,19 +26,25 @@ namespace PowerPrank3D.Gameplay
         [SerializeField] private GameObject resultPanel;
         [SerializeField] private TextMeshProUGUI resultTitleText;
         [SerializeField] private Button retryButton;
+        [SerializeField] private Button nextLevelButton;
+        [SerializeField] private TextMeshProUGUI nextLevelButtonText;
+        [SerializeField] private TextMeshProUGUI retryButtonText;
 
         private void Awake()
         {
             if (retryButton != null)
             {
+                retryButton.onClick.RemoveAllListeners();
                 retryButton.onClick.AddListener(OnRetryClicked);
             }
 
-            if (resultPanel != null)
+            if (nextLevelButton != null)
             {
-                resultPanel.SetActive(false);
+                nextLevelButton.onClick.RemoveAllListeners();
+                nextLevelButton.onClick.AddListener(OnNextLevelClicked);
             }
 
+            HideResultPanel();
             SetComboVisible(false);
         }
 
@@ -81,6 +88,11 @@ namespace PowerPrank3D.Gameplay
                 return;
             }
 
+            if (gameplayManager.IsRoundRunning)
+            {
+                HideResultPanel();
+            }
+
             SetText(currentBreakdownText, "ui_breakdown_current", gameplayManager.CurrentBreakdownValue.ToString());
             SetText(targetBreakdownText, "ui_breakdown_target", gameplayManager.TargetBreakdownValue.ToString());
             SetText(timerText, "ui_time_left", Mathf.CeilToInt(gameplayManager.RemainingTimeSeconds).ToString());
@@ -103,7 +115,6 @@ namespace PowerPrank3D.Gameplay
             }
 
             int comboCount = gameplayManager.ComboCount;
-
             if (comboCount < 2)
             {
                 SetComboVisible(false);
@@ -175,6 +186,39 @@ namespace PowerPrank3D.Gameplay
                 resultTitleText.text = GetText(key);
             }
 
+            if (retryButton != null)
+            {
+                retryButton.gameObject.SetActive(true);
+            }
+
+            if (retryButtonText != null)
+            {
+                retryButtonText.text = GetText("ui_retry");
+            }
+
+            if (isWin)
+            {
+                bool hasNextLevel = levelProgressionController != null &&
+                                    levelProgressionController.HasNextLevel();
+
+                if (nextLevelButton != null)
+                {
+                    nextLevelButton.gameObject.SetActive(hasNextLevel);
+                }
+
+                if (nextLevelButtonText != null)
+                {
+                    nextLevelButtonText.text = GetText("ui_next_level");
+                }
+            }
+            else
+            {
+                if (nextLevelButton != null)
+                {
+                    nextLevelButton.gameObject.SetActive(false);
+                }
+            }
+
             SetComboVisible(false);
         }
 
@@ -185,7 +229,31 @@ namespace PowerPrank3D.Gameplay
 
         private void OnRetryClicked()
         {
+            if (levelProgressionController != null)
+            {
+                levelProgressionController.RestartCurrentLevel();
+                return;
+            }
+
             gameplayManager?.RetryRound();
+        }
+
+        private void OnNextLevelClicked()
+        {
+            if (levelProgressionController == null)
+            {
+                return;
+            }
+
+            levelProgressionController.AdvanceToNextLevel();
+        }
+
+        private void HideResultPanel()
+        {
+            if (resultPanel != null)
+            {
+                resultPanel.SetActive(false);
+            }
         }
 
         private void SetText(TextMeshProUGUI textComponent, string labelKey, string value)
