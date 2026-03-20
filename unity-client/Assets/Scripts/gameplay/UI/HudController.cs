@@ -25,10 +25,17 @@ namespace PowerPrank3D.Gameplay
         [Header("Result")]
         [SerializeField] private GameObject resultPanel;
         [SerializeField] private TextMeshProUGUI resultTitleText;
+        [SerializeField] private TextMeshProUGUI resultSubtitleText;
+        [SerializeField] private TextMeshProUGUI levelInfoText;
+        [SerializeField] private TextMeshProUGUI goalSummaryText;
+        [SerializeField] private TextMeshProUGUI finalLevelNoticeText;
         [SerializeField] private Button retryButton;
         [SerializeField] private Button nextLevelButton;
         [SerializeField] private TextMeshProUGUI nextLevelButtonText;
         [SerializeField] private TextMeshProUGUI retryButtonText;
+
+        private bool lastRoundFinished;
+        private bool lastRoundWasWin;
 
         private void Awake()
         {
@@ -90,6 +97,7 @@ namespace PowerPrank3D.Gameplay
 
             if (gameplayManager.IsRoundRunning)
             {
+                lastRoundFinished = false;
                 HideResultPanel();
             }
 
@@ -104,6 +112,11 @@ namespace PowerPrank3D.Gameplay
             SetText(selectedItemText, "ui_selected_item", itemLabel);
 
             RefreshComboHud();
+
+            if (lastRoundFinished && resultPanel != null && resultPanel.activeSelf)
+            {
+                RefreshResultPanel(lastRoundWasWin);
+            }
         }
 
         private void RefreshComboHud()
@@ -175,15 +188,66 @@ namespace PowerPrank3D.Gameplay
 
         private void OnRoundFinished(bool isWin)
         {
+            lastRoundFinished = true;
+            lastRoundWasWin = isWin;
+
             if (resultPanel != null)
             {
                 resultPanel.SetActive(true);
             }
 
+            RefreshResultPanel(isWin);
+            SetComboVisible(false);
+        }
+
+        private void RefreshResultPanel(bool isWin)
+        {
+            bool hasNextLevel = isWin &&
+                                levelProgressionController != null &&
+                                levelProgressionController.HasNextLevel();
+
             if (resultTitleText != null)
             {
-                string key = isWin ? "result_victory" : "result_failed";
-                resultTitleText.text = GetText(key);
+                resultTitleText.text = GetText(isWin ? "result_victory" : "result_failed");
+            }
+
+            if (resultSubtitleText != null)
+            {
+                string subtitleKey;
+
+                if (isWin)
+                {
+                    subtitleKey = hasNextLevel
+                        ? "result_ready_for_next"
+                        : "result_all_levels_complete";
+                }
+                else
+                {
+                    subtitleKey = "result_try_again";
+                }
+
+                resultSubtitleText.text = GetText(subtitleKey);
+            }
+
+            if (levelInfoText != null)
+            {
+                levelInfoText.text = BuildLevelInfoText();
+            }
+
+            if (goalSummaryText != null)
+            {
+                goalSummaryText.text = BuildGoalSummaryText();
+            }
+
+            if (finalLevelNoticeText != null)
+            {
+                bool showFinalNotice = isWin && !hasNextLevel;
+                finalLevelNoticeText.gameObject.SetActive(showFinalNotice);
+
+                if (showFinalNotice)
+                {
+                    finalLevelNoticeText.text = GetText("ui_final_level_cleared");
+                }
             }
 
             if (retryButton != null)
@@ -196,30 +260,36 @@ namespace PowerPrank3D.Gameplay
                 retryButtonText.text = GetText("ui_retry");
             }
 
-            if (isWin)
+            if (nextLevelButton != null)
             {
-                bool hasNextLevel = levelProgressionController != null &&
-                                    levelProgressionController.HasNextLevel();
-
-                if (nextLevelButton != null)
-                {
-                    nextLevelButton.gameObject.SetActive(hasNextLevel);
-                }
-
-                if (nextLevelButtonText != null)
-                {
-                    nextLevelButtonText.text = GetText("ui_next_level");
-                }
-            }
-            else
-            {
-                if (nextLevelButton != null)
-                {
-                    nextLevelButton.gameObject.SetActive(false);
-                }
+                nextLevelButton.gameObject.SetActive(hasNextLevel);
             }
 
-            SetComboVisible(false);
+            if (nextLevelButtonText != null)
+            {
+                nextLevelButtonText.text = GetText("ui_next_level");
+            }
+        }
+
+        private string BuildLevelInfoText()
+        {
+            if (levelProgressionController == null)
+            {
+                return string.Empty;
+            }
+
+            int currentLevelNumber = levelProgressionController.CurrentLevelIndex + 1;
+            return $"{GetText("ui_level")} {currentLevelNumber}";
+        }
+
+        private string BuildGoalSummaryText()
+        {
+            if (gameplayManager == null)
+            {
+                return string.Empty;
+            }
+
+            return $"{GetText("ui_goal_progress")}: {gameplayManager.CurrentBreakdownValue} / {gameplayManager.TargetBreakdownValue}";
         }
 
         private void OnLocaleChanged(string _)
