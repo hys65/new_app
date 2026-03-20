@@ -23,6 +23,10 @@ Core fantasy:
 - Enemy AI Layer 1.0 ✅
 - Enemy Switching System 1.0 ✅
 - Enemy Roster / Level Enemy Selection 1.0 ✅
+- Level Content / Encounter Configuration 1.0 ✅
+- Level Progression / Multi-Level Content 1.0 ✅
+- Runtime Level Advance 1.0 ✅
+- Victory Choice Flow 1.0 ✅
 
 ---
 
@@ -127,6 +131,107 @@ Validated startup selection result:
 
 ---
 
+## Level Content / Encounter Configuration 1.0 Status
+
+Completed and validated.
+
+Implemented:
+- LevelEncounterConfigData
+- LevelEncounterController
+
+Capabilities:
+- bind LevelEnemySelectionData into encounter config
+- define target breakdown per level
+- define round duration / time limit per level
+- apply encounter config into runtime systems
+- reduce manual scene-only gameplay setup
+
+Validated encounter content:
+- `level_01_encounter_config`
+- `level_02_encounter_config`
+- `level_03_encounter_config`
+
+Validated runtime result:
+- target breakdown changes correctly per encounter
+- timer changes correctly per encounter
+- enemy selection is applied through encounter config
+- encounter application no longer relies on manual scene tweaking
+
+---
+
+## Level Progression / Multi-Level Content 1.0 Status
+
+Completed and validated.
+
+Implemented:
+- LevelProgressionData
+- LevelProgressionController
+
+Capabilities:
+1. Ordered multi-level encounter list
+2. Startup level index
+3. Single-scene multi-level runtime setup
+4. Runtime application of Level 01 / Level 02 / Level 03 encounter configs
+5. Runtime next-level progression
+6. Runtime current-level restart
+
+Validated runtime result:
+- `startupLevelIndex = 0` starts Level 01
+- `startupLevelIndex = 1` starts Level 02
+- `startupLevelIndex = 2` starts Level 03
+- target/time/enemy selection all refresh correctly when changing levels
+- runtime progression works without reloading the scene
+
+---
+
+## Runtime Level Advance 1.0 Status
+
+Completed and validated.
+
+Capabilities:
+- manual advance to next level
+- automatic runtime re-application of encounter config
+- runtime restart of current level
+- runtime enemy reselection
+- runtime timer reset
+- runtime target breakdown reset
+
+Transition stability fixes:
+- ThrowController resets drag / input transient state on round end
+- runtime level transition uses delayed progression to avoid same-frame end/start contamination
+- runtime enemy slot switches immediately during level application
+
+Validated result:
+- advancing from Level 01 to Level 02 works
+- advancing from Level 02 to Level 03 works
+- gameplay remains playable after level transition
+- no stuck drag state or central-screen projectile lock remains
+
+---
+
+## Victory Choice Flow 1.0 Status
+
+Completed and validated.
+
+Implemented through:
+- HudController
+- LevelProgressionController integration
+
+Capabilities:
+- victory result panel shown on win
+- retry current level
+- next level button shown only when next level exists
+- final level hides next-level option
+- auto-advance on win can be disabled for player-facing flow
+
+Validated result:
+- Level 01 victory stops and presents choice
+- player can click Retry to replay current level
+- player can click Next to enter Level 02
+- current runtime flow now waits for player decision instead of forcing auto-advance
+
+---
+
 ## Current Scene Validation Result
 
 Validated scene setup:
@@ -134,14 +239,19 @@ Validated scene setup:
 - EnemyRoot_NarcissistManager
 - EnemySwitchingManager with two enemy slots
 - LevelEnemySelectionController with LevelEnemySelectionData
+- LevelEncounterController
+- LevelProgressionController
+- multi-level progression asset
+- HUD result panel with Retry / Next flow
 
 Validated runtime result:
 - Before Play, both enemy objects exist in scene
-- After Play, only the active enemy remains enabled
-- Startup active slot works
-- `startupSelectionIndex = 0 / 1` both work
-- Inactive enemy is disabled correctly
-- Preset application logs confirm correct startup selection
+- During play, only the active enemy remains enabled
+- startup active slot works
+- level-driven enemy startup works
+- encounter-driven target/time works
+- progression-driven level switching works
+- victory choice flow works
 
 ---
 
@@ -153,21 +263,23 @@ The project has moved from:
 
 to:
 
-**level-driven enemy content selection**
+**level-driven multi-stage encounter flow in a single scene**
 
-The current enemy stack is now:
+The current stack is now:
 
 Data  
 → EnemyPresetData  
 → EnemyPresetApplicator  
 → EnemyRuntimePresetController  
 → EnemySwitchingManager  
-→ LevelEnemySelectionController / LevelEnemySelectionData
+→ LevelEnemySelectionController / LevelEnemySelectionData  
+→ LevelEncounterController / LevelEncounterConfigData  
+→ LevelProgressionController / LevelProgressionData
 
 Gameplay sync:
-
-EnemySwitchingManager  
-→ GameplayManager.SetActiveEnemyReactionLayer(...)
+- EnemySwitchingManager → GameplayManager.SetActiveEnemyReactionLayer(...)
+- LevelEncounterController → GameplayManager encounter values
+- HudController → Retry / Next button delegation into LevelProgressionController
 
 ---
 
@@ -180,12 +292,15 @@ Current model is:
 - AI remains per-enemy
 - EnemyDefenseStateWindowProfile.autoCycle must remain FALSE
 - AI controls defense timing, not the window system
+- one scene may host multiple level encounter configs
+- progression decides which encounter is active
+- HUD result flow decides whether player retries or advances
 
 Important boundary:
 - this is NOT a full multi-enemy combat system
 - this is NOT a wave spawning system
 - this is NOT a roster-driven runtime loading system
-- this is a reusable level startup enemy selection system built on top of the validated switching layer
+- this is a reusable level / encounter / progression system built on top of the validated switching layer
 
 ---
 
@@ -204,13 +319,14 @@ Current rule:
 
 The project is now ready to move from:
 
-**system validation**
+**multi-level runtime flow validation**
 
 into:
 
-**content scaling and level authoring**
+**UI polish + content expansion**
 
 Next recommended milestone:
-- Level Content / Encounter Configuration 1.0
-- Enemy Content Expansion 1.0
-- Runtime Debug Enemy Switching UI
+- Result Panel Polish 1.0
+- Level Goal Variety 1.0
+- Content Expansion toward 12 Levels
+- Enemy Visual Identity Upgrade
