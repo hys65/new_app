@@ -47,9 +47,9 @@ Representative systems:
 ---
 
 ### 3. Data Definition Layer
-Defines reusable behavior data assets.
+Defines reusable behavior and level content assets.
 
-Current enemy data assets:
+Current data assets:
 - EnemyArchetypeData
 - EnemyDefensePatternData
 - EnemyAiProfileData
@@ -57,9 +57,11 @@ Current enemy data assets:
 - EnemyPresetData
 - EnemyRosterData
 - LevelEnemySelectionData
+- LevelEncounterConfigData
+- LevelProgressionData
 
-This layer defines behavior and selection content.  
-It does not execute behavior.
+This layer defines reusable configuration content.  
+It does not execute runtime behavior.
 
 ---
 
@@ -99,10 +101,10 @@ Do not:
 
 ## Enemy Runtime Architecture
 
-Enemy runtime architecture is now split into five layers:
+Enemy runtime architecture is split into five layers:
 
 ### 1. Data Layer
-Defines enemy behavior and level selection assets.
+Defines enemy behavior and selection assets.
 
 Behavior assets:
 - EnemyArchetypeData
@@ -154,7 +156,7 @@ Responsibility:
 ---
 
 ### 5. Level Enemy Selection Layer
-Handles reusable content-driven startup selection.
+Handles reusable content-driven startup and runtime selection.
 
 - LevelEnemySelectionController
 - LevelEnemySelectionData
@@ -165,6 +167,7 @@ Responsibility:
 - define which roster entries are used by a level
 - resolve startup enemy from level content
 - configure EnemySwitchingManager without bypassing runtime switching architecture
+- switch to resolved active slot during runtime level application
 
 ---
 
@@ -185,14 +188,14 @@ EnemySwitchingManager
 
 ## Level Enemy Selection Flow
 
-Startup flow:
+Selection flow:
 
 EnemyRosterData  
 → LevelEnemySelectionData  
 → LevelEnemySelectionController  
 → EnemySwitchingManager.ConfigureSlotDefaultPreset(...)  
 → EnemySwitchingManager.ConfigureStartupSlot(...)  
-→ EnemySwitchingManager.Start()  
+→ EnemySwitchingManager.SwitchToSlot(...)  
 → EnemyRuntimePresetController  
 → EnemyPresetApplicator
 
@@ -200,15 +203,138 @@ This keeps level content selection above the scene switching layer, while preser
 
 ---
 
+## Encounter Architecture
+
+### LevelEncounterConfigData
+Defines the content of one playable encounter.
+
+Fields:
+- levelId
+- displayName
+- enemySelection : LevelEnemySelectionData
+- targetBreakdownValue
+- roundDurationSeconds
+- autoStartRound
+
+Purpose:
+- bind enemy startup selection together with gameplay target/time
+- move single-level gameplay authoring out of manual inspector-only scene setup
+
+### LevelEncounterController
+Applies a single encounter config into runtime systems.
+
+Responsibilities:
+- set target breakdown in GameplayManager
+- set round duration in GameplayManager
+- apply LevelEnemySelectionData through LevelEnemySelectionController
+
+Important boundary:
+- LevelEncounterController owns single-encounter application only
+- it must not own multi-level progression logic
+- it must not inject presets directly
+
+---
+
+## Progression Architecture
+
+### LevelProgressionData
+Defines:
+- progressionId
+- displayName
+- ordered encounter list
+- startupLevelIndex
+
+### LevelProgressionController
+Handles:
+- ApplyStartupLevel()
+- ApplyLevelByIndex(int)
+- AdvanceToNextLevel()
+- RestartCurrentLevel()
+- HasNextLevel()
+
+Responsibilities:
+- choose which encounter is active
+- apply startup level from progression asset
+- advance or restart at runtime
+- orchestrate single-scene multi-level flow
+
+Important boundary:
+- Progression owns level flow
+- it must not own HUD presentation
+- it must not bypass LevelEncounterController
+- it must not inject enemy preset data directly
+
+---
+
+## Result Flow Architecture
+
+Victory / failure UI is handled through HudController.
+
+Flow:
+GameplayManager.OnRoundFinished  
+→ HudController shows result panel  
+→ Retry button calls LevelProgressionController.RestartCurrentLevel()  
+→ Next button calls LevelProgressionController.AdvanceToNextLevel()
+
+Responsibilities:
+- HUD presents options
+- Progression executes level flow
+- GameplayManager owns round state
+
+Current player-facing result behavior:
+- victory shows Retry + Next when another level exists
+- failure shows Retry only
+- final level hides Next
+
+---
+
+## Full Runtime Level Flow
+
+Current level-flow stack:
+
+LevelProgressionData  
+→ LevelProgressionController  
+→ LevelEncounterController  
+→ GameplayManager + LevelEnemySelectionController  
+→ EnemySwitchingManager  
+→ EnemyRuntimePresetController  
+→ EnemyPresetApplicator
+
+This is now the main validated runtime architecture for the current scene.
+
+---
+
 ## GameplayManager Runtime Sync
 
-GameplayManager remains the gameplay-side owner of current breakdown state and reaction stage refresh.
+GameplayManager remains the gameplay-side owner of:
+- current breakdown state
+- target breakdown state
+- round duration / remaining time
+- selected item
+- round running state
+- reaction stage refresh
 
-Runtime switching support is handled by:
+Runtime support now includes:
 - replacing the active EnemyReactionLayerController reference
-- immediately refreshing reaction stage after switching target
+- applying encounter target/time values
+- starting fresh rounds after level application
 
-This keeps gameplay state centralized while allowing the active enemy target to change.
+This keeps gameplay state centralized while allowing both active enemy and current level to change.
+
+---
+
+## Runtime Transition Rules
+
+When switching or advancing levels at runtime:
+1. Apply next encounter config
+2. Apply next enemy selection
+3. Switch active enemy slot immediately
+4. Start a fresh round
+5. HUD refresh hides prior result panel when the next round starts
+
+To support stable transitions:
+- ThrowController resets drag / preview state on round finish
+- progression transitions may be delayed slightly to avoid same-frame end/start contamination
 
 ---
 
@@ -221,6 +347,9 @@ Current model is:
 - AI remains per-enemy and does not manage scene switching
 - defense window `autoCycle` must remain FALSE
 - AI still controls defense timing
+- one Unity scene can host multiple encounter configs
+- progression decides which encounter is active
+- HUD result flow decides whether player retries or advances
 
 ---
 
@@ -238,48 +367,31 @@ Current rule:
 - it may exist only for older scenes if explicitly needed
 - it must not run in scenes that use `EnemySwitchingManager`
 - it must not coexist with `LevelEnemySelectionController` in the same scene
+- it must not coexist with the new encounter / progression startup flow
 
 Reason:
-- this would create competing preset setup paths
+- this creates competing startup preset setup paths
 - it breaks clean startup ownership
 - it causes duplicate or incorrect preset application during scene startup
 
-The current validated switching scene has removed the old `LevelEnemyController` hookup.
+The current validated switching / progression scene has removed the old `LevelEnemyController` hookup.
 
 ---
 
 ## Important Boundary
 
-Enemy Switching System 1.0 + Enemy Roster / Level Enemy Selection 1.0 is not a multi-enemy combat system.
+Current architecture is not:
+- a multi-enemy combat system
+- a wave spawning system
+- a runtime enemy loading system
+- a separate per-enemy breakdown ownership model
 
-It supports:
+It currently supports:
 - multiple enemy objects in scene
 - single active enemy switching
 - runtime preset switching
 - slot-based inspector setup
 - level-driven startup enemy selection
-
-It does not yet support:
-- multiple active enemies at the same time
-- separate breakdown values per enemy
-- wave spawning
-- roster-driven runtime enemy loading
-- full combat ownership transfer per enemy instance
-
----
-
-## Recommended Next Architectural Step
-
-Next clean extension point:
-
-### Level Content / Encounter Configuration 1.0
-
-Goal:
-Move from enemy-only startup selection into reusable level encounter authoring.
-
-Expected outcome:
-- level-driven enemy startup selection
-- level-driven gameplay targets
-- level-driven time limit settings
-- cleaner content authoring per stage
-- less manual scene-only configuration
+- encounter-driven gameplay targets and time limits
+- ordered multi-level progression in one scene
+- player-controlled post-victory advancement
