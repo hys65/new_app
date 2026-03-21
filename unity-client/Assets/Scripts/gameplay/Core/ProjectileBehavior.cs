@@ -9,6 +9,7 @@ namespace PowerPrank3D.Gameplay
         private GameplayItemData itemData;
         private GameplayManager gameplayManager;
         private HitPopupSpawner popupSpawner;
+        private LevelGoalController levelGoalController;
         private Rigidbody rb;
         private bool hasHit;
 
@@ -21,14 +22,25 @@ namespace PowerPrank3D.Gameplay
             {
                 popupSpawner = FindFirstObjectByType<HitPopupSpawner>();
             }
+
+            if (levelGoalController == null)
+            {
+                levelGoalController = FindFirstObjectByType<LevelGoalController>();
+            }
         }
 
         private void Awake()
         {
             rb = GetComponent<Rigidbody>();
+
             if (popupSpawner == null)
             {
                 popupSpawner = FindFirstObjectByType<HitPopupSpawner>();
+            }
+
+            if (levelGoalController == null)
+            {
+                levelGoalController = FindFirstObjectByType<LevelGoalController>();
             }
         }
 
@@ -39,7 +51,6 @@ namespace PowerPrank3D.Gameplay
 
         private void Update()
         {
-            // 掉出世界底部再强制清理
             if (transform.position.y < -10f)
             {
                 Destroy(gameObject);
@@ -67,7 +78,6 @@ namespace PowerPrank3D.Gameplay
             {
                 hasHit = true;
 
-                // ★新增：命中粒子
                 if (collision.contacts.Length > 0)
                 {
                     ContactPoint contact = collision.contacts[0];
@@ -92,7 +102,6 @@ namespace PowerPrank3D.Gameplay
                     defenseResult = defenseController.EvaluateHit(itemData, isHeadHit);
                 }
 
-                // 根据防御倍率调整得分单位
                 int finalUnits = scoreUnits;
 
                 if (defenseResult.wasBlocked)
@@ -109,6 +118,17 @@ namespace PowerPrank3D.Gameplay
                 if (gameplayManager != null && finalUnits > 0)
                 {
                     gainedScore = gameplayManager.AddBreakdown(itemData, finalUnits);
+                }
+
+                // 关键新增：把命中结果送给关卡目标系统
+                if (levelGoalController != null)
+                {
+                    levelGoalController.NotifyHitResolved(new CombatHitInfo
+                    {
+                        isHeadHit = isHeadHit,
+                        itemId = itemData != null ? itemData.itemId : string.Empty,
+                        gainedScore = gainedScore
+                    });
                 }
 
                 EnemyReactionLayerController reactionLayer =
@@ -172,9 +192,8 @@ namespace PowerPrank3D.Gameplay
                 Destroy(gameObject);
                 return;
             }
-
-            // 非敌人、非地面：先不销毁，方便继续观察问题
         }
+
         private void SpawnImpactVfx(Vector3 position, Vector3 normal)
         {
             if (itemData == null)
@@ -188,7 +207,6 @@ namespace PowerPrank3D.Gameplay
             }
 
             Quaternion rotation = Quaternion.LookRotation(-normal);
-            // 随机旋转污渍
             rotation *= Quaternion.Euler(0f, 0f, Random.Range(0f, 360f));
             GameObject vfx = Instantiate(itemData.impactVfxPrefab, position + normal * 0.02f, rotation);
 

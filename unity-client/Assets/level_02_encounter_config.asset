@@ -15,6 +15,10 @@ MonoBehaviour:
   levelId: level_02
   displayName: Level 02 Encounter
   enemySelection: {fileID: 11400000, guid: ba75526b1e5da2244987bc3e9a8d7801, type: 2}
+  primaryGoal:
+    goalType: 2
+    targetCount: 10
+    requiredItemId: item_egg
   targetBreakdownValue: 120
   roundDurationSeconds: 40
   autoStartRound: 1

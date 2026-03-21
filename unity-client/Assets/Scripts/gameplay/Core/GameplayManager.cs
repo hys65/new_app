@@ -13,6 +13,9 @@ namespace PowerPrank3D.Gameplay
         [Header("Startup")]
         [SerializeField] private bool autoStartOnStart = true;
 
+        [Header("Win Condition")]
+        [SerializeField] private bool useBreakdownAsWinCondition = true;
+
         [Header("Items")]
         [SerializeField] private GameplayItemData[] itemList;
         [SerializeField] private int defaultItemIndex;
@@ -109,6 +112,12 @@ namespace PowerPrank3D.Gameplay
             autoStartOnStart = shouldAutoStart;
         }
 
+        public void ConfigureBreakdownWinCondition(bool enabled)
+        {
+            useBreakdownAsWinCondition = enabled;
+            OnStateChanged?.Invoke();
+        }
+
         public void SetActiveEnemyReactionLayer(EnemyReactionLayerController reactionLayer)
         {
             enemyReactionLayer = reactionLayer;
@@ -177,7 +186,7 @@ namespace PowerPrank3D.Gameplay
                 enemyReactionLayer.RefreshStage(CurrentBreakdownValue, TargetBreakdownValue);
             }
 
-            if (CurrentBreakdownValue >= TargetBreakdownValue)
+            if (useBreakdownAsWinCondition && CurrentBreakdownValue >= TargetBreakdownValue)
             {
                 ResetCombo();
                 FinishRound(true);
@@ -186,6 +195,17 @@ namespace PowerPrank3D.Gameplay
 
             OnStateChanged?.Invoke();
             return finalScore;
+        }
+
+        public void ForceFinishRound(bool isWin)
+        {
+            if (!IsRoundRunning)
+            {
+                return;
+            }
+
+            ResetCombo();
+            FinishRound(isWin);
         }
 
         public void SelectItemByIndex(int index)

@@ -10,6 +10,7 @@ namespace PowerPrank3D.Gameplay
         [SerializeField] private GameplayManager gameplayManager;
         [SerializeField] private LocalizationManager localizationManager;
         [SerializeField] private LevelProgressionController levelProgressionController;
+        [SerializeField] private LevelGoalController levelGoalController;
 
         [Header("HUD")]
         [SerializeField] private TextMeshProUGUI currentBreakdownText;
@@ -284,6 +285,11 @@ namespace PowerPrank3D.Gameplay
 
         private string BuildGoalSummaryText()
         {
+            if (levelGoalController != null)
+            {
+                return levelGoalController.GetGoalSummaryText();
+            }
+
             if (gameplayManager == null)
             {
                 return string.Empty;

@@ -10,6 +10,7 @@ namespace PowerPrank3D.Gameplay
         [Header("References")]
         [SerializeField] private GameplayManager gameplayManager;
         [SerializeField] private LevelEnemySelectionController levelEnemySelectionController;
+        [SerializeField] private LevelGoalController levelGoalController;
 
         [Header("Startup")]
         [SerializeField] private bool applyOnAwake = false;
@@ -30,6 +31,11 @@ namespace PowerPrank3D.Gameplay
             if (levelEnemySelectionController == null)
             {
                 levelEnemySelectionController = FindFirstObjectByType<LevelEnemySelectionController>();
+            }
+
+            if (levelGoalController == null)
+            {
+                levelGoalController = FindFirstObjectByType<LevelGoalController>();
             }
         }
 
@@ -67,9 +73,20 @@ namespace PowerPrank3D.Gameplay
                 encounterConfig.targetBreakdownValue,
                 encounterConfig.roundDurationSeconds);
 
+            bool useBreakdownWinCondition =
+                encounterConfig.primaryGoal == null ||
+                encounterConfig.primaryGoal.goalType == LevelGoalType.BreakdownTarget;
+
+            gameplayManager.ConfigureBreakdownWinCondition(useBreakdownWinCondition);
+
             if (levelEnemySelectionController != null && encounterConfig.enemySelection != null)
             {
                 levelEnemySelectionController.ApplySelection(encounterConfig.enemySelection);
+            }
+
+            if (levelGoalController != null)
+            {
+                levelGoalController.ApplyGoal(encounterConfig);
             }
 
             encounterApplied = true;

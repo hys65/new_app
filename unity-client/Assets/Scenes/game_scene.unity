@@ -314,6 +314,7 @@ MonoBehaviour:
   targetBreakdownValue: 100
   roundDurationSeconds: 45
   autoStartOnStart: 0
+  useBreakdownAsWinCondition: 1
   itemList:
   - {fileID: 11400000, guid: f0aad0f66d85b2b4ba372a5103e2383b, type: 2}
   - {fileID: 11400000, guid: fc3b028b3787a4a4980c61b76bddaf1b, type: 2}
@@ -2041,6 +2042,7 @@ MonoBehaviour:
   encounterConfig: {fileID: 11400000, guid: 11015be65ab525e46b461e092046dbf8, type: 2}
   gameplayManager: {fileID: 97048587}
   levelEnemySelectionController: {fileID: 181399943}
+  levelGoalController: {fileID: 1218487272}
   applyOnAwake: 0
   encounterApplied: 1
 --- !u!114 &911491533
@@ -2895,6 +2897,57 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1188046503}
   m_CullTransparentMesh: 1
+--- !u!1 &1218487271
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1218487273}
+  - component: {fileID: 1218487272}
+  m_Layer: 0
+  m_Name: LevelGoalController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1218487272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1218487271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec1699a654121854286c9de2c17a3268, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.LevelGoalController
+  gameplayManager: {fileID: 97048587}
+  currentGoal:
+    goalType: 0
+    targetCount: 100
+    requiredItemId: item_egg
+  currentProgress: 0
+  goalCompleted: 0
+--- !u!4 &1218487273
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1218487271}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 735.705, y: 2156.0283, z: 10063.257}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1224865016
 GameObject:
   m_ObjectHideFlags: 0
@@ -4777,6 +4830,7 @@ MonoBehaviour:
   gameplayManager: {fileID: 97048587}
   localizationManager: {fileID: 1890895310}
   levelProgressionController: {fileID: 0}
+  levelGoalController: {fileID: 0}
   currentBreakdownText: {fileID: 0}
   targetBreakdownText: {fileID: 0}
   timerText: {fileID: 0}
@@ -6086,6 +6140,7 @@ MonoBehaviour:
   gameplayManager: {fileID: 97048587}
   localizationManager: {fileID: 1890895310}
   levelProgressionController: {fileID: 911491533}
+  levelGoalController: {fileID: 1218487272}
   currentBreakdownText: {fileID: 2073382666}
   targetBreakdownText: {fileID: 373985995}
   timerText: {fileID: 1990344612}
@@ -6461,3 +6516,4 @@ SceneRoots:
   - {fileID: 874180854}
   - {fileID: 1583500402}
   - {fileID: 1760690827}
+  - {fileID: 1218487273}

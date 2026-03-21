@@ -14,6 +14,13 @@ namespace PowerPrank3D.Gameplay
         [Header("Enemy")]
         public LevelEnemySelectionData enemySelection;
 
+        [Header("Goal")]
+        public LevelGoalDefinition primaryGoal = new LevelGoalDefinition
+        {
+            goalType = LevelGoalType.BreakdownTarget,
+            targetCount = 100
+        };
+
         [Header("Round")]
         [Min(1)]
         public int targetBreakdownValue = 100;
