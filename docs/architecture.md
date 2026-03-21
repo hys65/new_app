@@ -31,8 +31,6 @@ Representative systems:
 - HudController
 - HitPopupSpawner
 
----
-
 ### 2. Enemy Runtime Layer
 Handles runtime enemy behavior and presentation.
 
@@ -43,8 +41,6 @@ Representative systems:
 - EnemyDefenseStateWindowController
 - EnemyAiLayerController
 - EnemyVisualProxyController
-
----
 
 ### 3. Data Definition Layer
 Defines reusable behavior and level content assets.
@@ -60,8 +56,7 @@ Current data assets:
 - LevelEncounterConfigData
 - LevelProgressionData
 
-This layer defines reusable configuration content.  
-It does not execute runtime behavior.
+This layer defines reusable configuration content. It does not execute runtime behavior.
 
 ---
 
@@ -78,8 +73,6 @@ It references:
 
 This allows multiple enemy personas to be built by combining reusable data assets.
 
----
-
 ### EnemyPresetApplicator
 EnemyPresetApplicator is the preset injection layer.
 
@@ -89,7 +82,6 @@ Responsibilities:
 - remain the single source of preset application
 
 Important rule:
-
 **EnemyPresetApplicator must remain the only preset injection point.**
 
 Do not:
@@ -101,7 +93,7 @@ Do not:
 
 ## Enemy Runtime Architecture
 
-Enemy runtime architecture is split into five layers:
+Enemy runtime architecture is split into five layers.
 
 ### 1. Data Layer
 Defines enemy behavior and selection assets.
@@ -117,8 +109,6 @@ Selection assets:
 - EnemyRosterData
 - LevelEnemySelectionData
 
----
-
 ### 2. Preset Application Layer
 Applies combined preset data to runtime controllers.
 
@@ -127,8 +117,6 @@ Applies combined preset data to runtime controllers.
 Responsibility:
 - distribute preset data to runtime enemy controllers
 - remain the single source of preset application
-
----
 
 ### 3. Single Enemy Runtime Layer
 Handles runtime preset control for one enemy instance.
@@ -140,8 +128,6 @@ Responsibility:
 - forward preset application to EnemyPresetApplicator
 - avoid duplicate preset injection logic elsewhere
 
----
-
 ### 4. Scene Enemy Switching Layer
 Handles active enemy selection at scene level.
 
@@ -152,8 +138,6 @@ Responsibility:
 - switch active enemy at runtime
 - apply default preset per slot
 - sync active enemy reaction layer into GameplayManager
-
----
 
 ### 5. Level Enemy Selection Layer
 Handles reusable content-driven startup and runtime selection.
@@ -288,6 +272,48 @@ Current player-facing result behavior:
 
 ---
 
+## Result Panel Polish 1.0 Architecture
+
+Result Panel Polish 1.0 extends presentation only.
+It does not change ownership boundaries.
+
+Implemented result hierarchy:
+- ResultPanel
+- Dimmer
+- SafeArea
+- ResultCard
+- Header
+  - ResultTitleText
+  - ResultSubtitleText
+- Body
+  - LevelInfoText
+  - GoalSummaryText
+  - FinalLevelNoticeText
+- Actions
+  - RetryButton
+  - NextLevelButton
+
+HudController presentation responsibilities now include:
+- localized result title
+- localized subtitle
+- localized retry / next button labels
+- level info text
+- goal progress text
+- final-level notice visibility
+- result panel hide/show state during round transitions
+
+Important rules:
+- HudController may present result UI, but must not own level progression logic
+- LevelProgressionController must remain the executor of Retry / Next actions
+- GameplayManager must remain the owner of round finish state
+- LocalizationManager remains the text source through CSV-driven key lookup
+- result panel polish must not create a new orchestration layer
+
+Current known limitation:
+- Result Panel Polish 1.0 is prototype-quality UI polish, not final production UI styling
+
+---
+
 ## Full Runtime Level Flow
 
 Current level-flow stack:
@@ -298,7 +324,8 @@ LevelProgressionData
 → GameplayManager + LevelEnemySelectionController  
 → EnemySwitchingManager  
 → EnemyRuntimePresetController  
-→ EnemyPresetApplicator
+→ EnemyPresetApplicator  
+→ HudController result presentation
 
 This is now the main validated runtime architecture for the current scene.
 
@@ -358,40 +385,7 @@ Current model is:
 ### LevelEnemyController
 `LevelEnemyController` is now considered a legacy startup setup path.
 
-Historical role:
-- read EnemyLevelConfig
-- assign preset to EnemyPresetApplicator
-- apply preset on startup
-
-Current rule:
-- it may exist only for older scenes if explicitly needed
-- it must not run in scenes that use `EnemySwitchingManager`
-- it must not coexist with `LevelEnemySelectionController` in the same scene
-- it must not coexist with the new encounter / progression startup flow
-
-Reason:
-- this creates competing startup preset setup paths
-- it breaks clean startup ownership
-- it causes duplicate or incorrect preset application during scene startup
-
-The current validated switching / progression scene has removed the old `LevelEnemyController` hookup.
-
----
-
-## Important Boundary
-
-Current architecture is not:
-- a multi-enemy combat system
-- a wave spawning system
-- a runtime enemy loading system
-- a separate per-enemy breakdown ownership model
-
-It currently supports:
-- multiple enemy objects in scene
-- single active enemy switching
-- runtime preset switching
-- slot-based inspector setup
-- level-driven startup enemy selection
-- encounter-driven gameplay targets and time limits
-- ordered multi-level progression in one scene
-- player-controlled post-victory advancement
+Rules:
+- do not use it in switching-oriented scenes
+- do not let it coexist with `LevelEnemySelectionController`
+- do not reintroduce competing startup preset paths into the same scene

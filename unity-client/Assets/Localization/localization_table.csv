@@ -1,4 +1,4 @@
-key,module,zh-CN,zh-TW,en,ja,ko,de,fr,es,pt-BR,ru,comment
+﻿key,module,zh-CN,zh-TW,en,ja,ko,de,fr,es,pt-BR,ru,comment
 ui_start_game,UI,开始游戏,開始遊戲,Start Game,ゲーム開始,게임 시작,Spiel starten,Démarrer,Iniciar juego,Iniciar jogo,Начать игру,主入口按钮
 ui_continue_game,UI,继续游戏,繼續遊戲,Continue,続ける,계속하기,Fortsetzen,Continuer,Continuar,Continuar,Продолжить,继续按钮
 ui_back,UI,返回,返回,Back,戻る,뒤로,Zurück,Retour,Atrás,Voltar,Назад,通用返回
@@ -47,3 +47,11 @@ ui_breakdown_current,UI,当前崩坏值,當前崩壞值,Current Breakdown,現在
 ui_breakdown_target,UI,目标崩坏值,目標崩壞值,Target Breakdown,目標崩壊値,목표 붕괴값,Ziel-Breakdown,Objectif d'effondrement,Ruptura objetivo,Ruptura alvo,Целевой уровень срыва,步骤3 HUD标签
 ui_time_left,UI,倒计时,倒計時,Time Left,残り時間,남은 시간,Verbleibende Zeit,Temps restant,Tiempo restante,Tempo restante,Оставшееся время,步骤3 HUD标签
 ui_selected_item,UI,当前道具,當前道具,Selected Item,選択中アイテム,선택한 아이템,Ausgewählter Gegenstand,Objet sélectionné,Ítem seleccionado,Item selecionado,Выбранный предмет,步骤3 HUD标签
+ui_retry,UI,重试,重試,Retry,リトライ,재시도,Erneut,Réessayer,Reintentar,Tentar novamente,Повторить,结果面板按钮
+ui_next_level,UI,下一关,下一關,Next,次へ,다음,Weiter,Suivant,Siguiente,Próximo,Далее,结果面板按钮
+result_ready_for_next,RESULT,准备进入下一关,準備進入下一關,Ready for next level,次のレベルへ進む準備完了,다음 레벨로 진행할 준비 완료,Bereit für das nächste Level,Prêt pour le niveau suivant,Listo para el siguiente nivel,Pronto para o próximo nível,Готово к следующему уровню,结果副标题
+result_all_levels_complete,RESULT,已完成全部关卡,已完成全部關卡,All levels completed,すべてのレベルをクリア,모든 레벨 완료,Alle Level abgeschlossen,Tous les niveaux terminés,Todos los niveles completados,Todos os níveis concluídos,Все уровни пройдены,最终关胜利副标题
+result_try_again,RESULT,再试一次,再試一次,Try again,もう一度挑戦,다시 시도,Erneut versuchen,Réessayer,Intentar de nuevo,Tentar novamente,Попробовать снова,失败副标题
+ui_level,UI,关卡,關卡,Level,レベル,레벨,Level,Niveau,Nivel,Nível,Уровень,结果面板标签
+ui_goal_progress,UI,目标进度,目標進度,Goal Progress,目標進行度,목표 진행도,Zielfortschritt,Progression de l’objectif,Progreso del objetivo,Progresso do objetivo,Прогресс цели,结果面板标签
+ui_final_level_cleared,UI,最终关已完成,最終關已完成,Final stage cleared,最終ステージクリア,최종 스테이지 클리어,Letztes Level abgeschlossen,Dernier niveau terminé,Nivel final completado,Fase final concluída,Финальный уровень пройден,最终关提示

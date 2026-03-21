@@ -1,246 +1,180 @@
 # GAMEPLAY SYSTEMS
 
-## Core Loop
+## Gameplay Loop
 
-Throw  
-→ Hit  
-→ Defense Evaluation  
-→ Breakdown / Block / Break Result  
-→ Reaction  
-→ HUD Update  
-→ Round Result  
-→ Retry or Next Level
+Power Prank 3D currently runs on a single-scene, multi-level gameplay loop.
+
+Core loop:
+1. Start encounter
+2. Throw prank item
+3. Register hit
+4. Apply breakdown pressure
+5. Trigger enemy reactions / defense behavior
+6. Reach target or run out of time
+7. Show result panel
+8. Player chooses Retry or Next
+9. Restart current level or advance to next level
 
 ---
 
 ## Core Gameplay Systems
 
+### GameplayManager
+Owns core runtime gameplay state.
+
+Responsibilities:
+- current breakdown value
+- target breakdown value
+- round duration / remaining time
+- current selected item
+- round running / round finished state
+- active enemy reaction layer reference
+- round finish event dispatch
+
+Important boundary:
+- GameplayManager owns gameplay state
+- it does not own level progression
+- it does not own result button execution logic
+
 ### ThrowController
-Handles:
-- mouse drag input
-- drag distance based throw force
-- aim preview
-- trajectory preview
-- projectile spawn and throw
+Owns throw input and projectile launch flow.
 
-Current rules:
-- click alone does not throw
-- dragging below minimum threshold does not throw
-- throw input is disabled when round is not running
-- drag / preview state resets on round finish
+Responsibilities:
+- drag / aim input
+- projectile launch request
+- preview / drag reset on round transitions
 
----
+Important runtime rule:
+- transient drag state must reset when rounds finish or levels restart
 
 ### ProjectileBehavior
-Handles:
-- projectile collision
-- item-based hit resolution
-- interaction with enemy defense system
-- ground hit behavior
-- impact VFX / stain / popup spawning hooks
+Owns projectile movement and hit delivery.
 
-Supports:
-- body hit
-- head hit
-- ground hit
+Responsibilities:
+- movement
+- collision
+- hit payload application
 
----
+### HitPopupSpawner
+Owns floating hit feedback text.
 
-### GameplayManager
-Gameplay-side owner of:
-- CurrentBreakdownValue
-- TargetBreakdownValue
-- RemainingTimeSeconds
-- round running state
-- current selected item
-- combo state
-
-Current responsibilities:
-- apply encounter settings
-- start round
-- finish round
-- add breakdown
-- restart round
-- update active enemy reaction layer
-
----
+Responsibilities:
+- score popup spawning
+- visual gameplay feedback for successful hits
 
 ### HudController
-Handles:
+Owns player-facing HUD and result presentation.
+
+Responsibilities:
 - current breakdown text
 - target breakdown text
 - timer text
 - selected item text
 - combo display
-- result panel display
-- Retry / Next button delegation
+- result panel visibility
+- result title / subtitle text
+- level info text
+- goal progress text
+- final-level notice text
+- Retry / Next button text refresh
+- button click delegation into LevelProgressionController
+
+Important boundary:
+- HudController presents UI only
+- it must not own multi-level progression logic
+- it must not directly apply encounter data
+- it must not replace GameplayManager as round-state owner
+
+---
+
+## Result Panel Polish 1.0
+
+Result Panel Polish 1.0 upgrades the functional result screen into a readable prototype UI.
+
+Implemented scene hierarchy:
+- HUDCanvas
+  - HudPanel
+  - ResultPanel
+    - Dimmer
+    - SafeArea
+      - ResultCard
+        - Header
+          - ResultTitleText
+          - ResultSubtitleText
+        - Body
+          - LevelInfoText
+          - GoalSummaryText
+          - FinalLevelNoticeText
+        - Actions
+          - RetryButton
+            - RetryButtonText
+          - NextLevelButton
+            - NextLevelButtonText
+
+Implemented runtime presentation:
+- startup scene keeps result panel hidden
+- round finish shows localized title
+- subtitle changes based on win/final-state condition
+- level info text is shown on result panel
+- goal progress text is shown on result panel
+- final-level notice is supported
+- Retry and Next use localized labels
+- next button visibility depends on LevelProgressionController.HasNextLevel()
+
+Localization keys required by result panel:
+- `ui_retry`
+- `ui_next_level`
+- `result_victory`
+- `result_failed`
+- `result_ready_for_next`
+- `result_all_levels_complete`
+- `result_try_again`
+- `ui_level`
+- `ui_goal_progress`
+- `ui_final_level_cleared`
+
+Validation result:
+- no placeholder `New Text` remains after proper inspector hookup
+- no raw localization keys remain after CSV update
+- result panel only appears after round finish
+- button flow remains functional
+
+Known current quality note:
+- panel styling is prototype-level
+- future polish may improve dimmer strength, button style, card styling, and HUD suppression during result display
+
+---
+
+## Current Multi-Level Runtime Flow
+
+Encounter application flow:
+LevelProgressionController  
+→ LevelEncounterController  
+→ GameplayManager target/time refresh  
+→ LevelEnemySelectionController  
+→ EnemySwitchingManager  
+→ active enemy slot selected
 
 Result flow:
-- on victory: show Retry + Next if another level exists
-- on failure: show Retry only
+GameplayManager.OnRoundFinished  
+→ HudController.ShowResultPanel  
+→ Retry / Next button click  
+→ LevelProgressionController.RestartCurrentLevel / AdvanceToNextLevel
 
 ---
 
-## Hit Result Types
+## Current Gameplay Boundaries
 
-1. Normal Hit
-2. Block
-3. Break
-4. Weak Hit
-5. Ground Hit
+Do:
+- keep gameplay state in GameplayManager
+- keep level flow in LevelProgressionController
+- keep encounter application in LevelEncounterController
+- keep enemy startup selection in LevelEnemySelectionController
+- keep result presentation in HudController
 
----
-
-## Breakdown Rules
-
-- Breakdown increases on successful hits
-- Breakdown pauses during Block
-- Breakdown accelerates on weakness hits
-- Breakdown target is level-driven through encounter config
-- Round ends in victory when breakdown reaches target
-
----
-
-## Interaction with Enemy Systems
-
-### Reaction Layer
-Controls visual feedback.
-
-### Defense Pattern
-Controls whether hit is blocked / weak / broken.
-
-### Defense Window
-Controls when block is valid.
-
-### AI Layer
-Controls when defense starts.
-
-### Key Rule
-Block is only valid during:
-
-Defense Window  
-→ Active
-
-### Weak Window
-Inside Active state:
-- vulnerable timing window
-- allows skilled hits
-- rewards timing instead of spam
-
----
-
-## Player Skill Expression
-
-Player can:
-- read telegraph
-- time attacks
-- exploit weak window
-- break defense
-- choose Retry / Next after victory
-
-Gameplay is not spam.  
-Gameplay = timing + rhythm + reading enemy state.
-
----
-
-## Enemy Selection System
-
-### EnemyRosterData
-Defines reusable enemy catalog entries.
-
-### LevelEnemySelectionData
-Defines:
-- roster source
-- selected roster entries
-- startupSelectionIndex
-- startup preset / slot application rules
-
-### LevelEnemySelectionController
-Resolves a level enemy selection asset into:
-- slot default preset setup
-- startup slot selection
-- immediate runtime active enemy switching
-
----
-
-## Encounter System
-
-### LevelEncounterConfigData
-Defines a single playable level encounter.
-
-Fields:
-- levelId
-- displayName
-- enemySelection
-- targetBreakdownValue
-- roundDurationSeconds
-- autoStartRound
-
-This is the asset that defines:
-- which enemy selection this level uses
-- how much breakdown is required
-- how much time the round gives
-
-### LevelEncounterController
-Applies encounter config into runtime systems:
-- gameplay target breakdown
-- round duration
-- level enemy selection
-
----
-
-## Progression System
-
-### LevelProgressionData
-Defines:
-- ordered list of encounter configs
-- startup level index
-
-### LevelProgressionController
-Handles:
-- startup level application
-- apply level by index
-- next level
-- restart current level
-- next-level availability check
-
-This enables:
-- one scene
-- multiple authored level configs
-- runtime progression across multiple encounters
-
----
-
-## Runtime Level Transition Behavior
-
-Current runtime transition supports:
-- changing target breakdown between levels
-- changing timer between levels
-- changing active enemy between levels
-- reapplying enemy preset at runtime
-- starting a fresh round after level change
-
-Stability rules:
-- drag state is reset on round finish
-- runtime transitions avoid carrying old throw state forward
-- result panel must disappear when a new round starts
-
----
-
-## Current Authored Level Content
-
-Current validated content includes:
-- Level 01 encounter
-- Level 02 encounter
-- Level 03 encounter
-
-Current validated enemy selection assets include:
-- Meeting Tyrant startup selection
-- Narcissist Manager startup selection
-
-Current validated progression behaviors include:
-- startup level selection
-- manual next level
-- runtime next level
-- retry current level
-- victory-choice driven next / retry flow
+Do not:
+- move level progression into HUD
+- move result UI ownership into GameplayManager
+- bypass LevelEncounterController for runtime level application
+- bypass EnemyPresetApplicator for preset injection
+- enable defense window auto-cycle

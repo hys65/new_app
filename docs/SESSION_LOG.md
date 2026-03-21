@@ -1,244 +1,136 @@
 # SESSION LOG
 
-## Session: Enemy AI Layer 1.0 Completion
+## Session Summary
 
-### Goal
-Complete the data-driven enemy AI timing layer.
+This session completed **Result Panel Polish 1.0** on top of the already validated multi-level runtime flow.
 
-### Result
-Completed Enemy AI Layer 1.0.
-
-### Confirmed behavior
-- AI controls defense timing
-- EnemyDefenseStateWindowProfile.autoCycle remains FALSE
-- Different presets produce different defense timing behavior
-- Meeting Tyrant and Narcissist Manager are both runtime-validated
-
-### Outcome
-Enemy behavior definition stack reached a stable data-driven state.
+Work focused on turning the previously functional but debug-looking victory choice UI into a cleaner, localized prototype result panel without breaking runtime ownership boundaries.
 
 ---
 
-## Session: Enemy Switching System 1.0 Completion
+## Starting State
 
-### Goal
-Validate runtime enemy switching without breaking existing hit / defense / AI flow.
-
-### Result
-Completed Enemy Switching System 1.0.
-
-### Implemented
-- EnemyRuntimePresetController
-- EnemySwitchingManager
-- GameplayManager runtime active reaction target switching
-
-### Confirmed behavior
-- runtime preset switching works on the same enemy object
-- switching works between two real enemy objects in scene
-- only one enemy remains active during play
-- active enemy reaction layer is synchronized into GameplayManager
-- preset application remains routed through EnemyPresetApplicator
-
-### Outcome
-Scene-level enemy switching became stable and reusable.
+Before this session:
+- Core throw / hit / breakdown gameplay loop was already complete
+- Enemy switching, level selection, encounter config, progression, runtime next-level flow, and victory choice flow were already validated
+- Retry / Next button flow already existed in HudController / LevelProgressionController integration
+- result panel functionality existed, but UI structure and text presentation were still rough
+- localizable labels for the expanded result panel were incomplete
+- several new result text references were not yet wired in Inspector
+- temporary placeholder text and raw localization keys were still visible during testing
 
 ---
 
-## Session: Enemy Roster / Level Enemy Selection 1.0 Completion
+## Main Changes
 
-### Goal
-Move enemy startup selection from manual scene test wiring into reusable level content flow.
+### 1. Result panel structure was expanded
+Result panel hierarchy was cleaned into a more readable structure:
 
-### Result
-Completed Enemy Roster / Level Enemy Selection 1.0.
+- ResultPanel
+- Dimmer
+- SafeArea
+- ResultCard
+- Header
+  - ResultTitleText
+  - ResultSubtitleText
+- Body
+  - LevelInfoText
+  - GoalSummaryText
+  - FinalLevelNoticeText
+- Actions
+  - RetryButton
+  - NextLevelButton
 
-### Implemented
-- EnemyRosterData
-- LevelEnemySelectionData
-- LevelEnemySelectionController
-- EnemySwitchingManager startup configuration extension
-- EnemyPresetApplicator startup cleanup and idempotent preset application protection
+### 2. HudController result presentation was extended
+HudController was expanded to support:
+- subtitle text
+- level info text
+- goal summary text
+- final level notice text
+- localized Retry / Next button text refresh
 
-### Debugging findings
-- startup preset application was initially polluted by legacy `LevelEnemyController`
-- the legacy component was not on enemy roots; it was still attached to `Systems`
-- this created a competing startup preset injection path for Meeting Tyrant
-- removing the old scene `LevelEnemyController` hookup resolved the conflict
+Important boundary remained unchanged:
+- HudController presents result UI only
+- LevelProgressionController still owns Retry / Next execution
+- GameplayManager still owns round state
 
-### Confirmed behavior
-- roster entries correctly map into scene enemy slots
-- level selection correctly resolves startup slot
-- `startupSelectionIndex = 0` starts with Meeting Tyrant
-- `startupSelectionIndex = 1` starts with Narcissist Manager
-- in both cases only one enemy remains active during play
-- only the selected startup preset is applied
-- preset injection flow is clean and single-owned
+### 3. Inspector hookup issues were fixed
+New result text references were added to HudController and correctly bound in Inspector:
+- Result Subtitle Text
+- Level Info Text
+- Goal Summary Text
+- Final Level Notice Text
 
-### Final validated startup flow
-EnemyRosterData  
-→ LevelEnemySelectionData  
-→ LevelEnemySelectionController  
-→ EnemySwitchingManager  
-→ EnemyRuntimePresetController  
-→ EnemyPresetApplicator
+This removed TMP placeholder `New Text` from runtime result display.
 
-### Outcome
-The project moved from scene test switching into reusable level-driven startup enemy selection.
+### 4. Localization CSV was expanded
+Result Panel Polish 1.0 required new localization keys.
+These were added into `Assets/Localization/localization_table.csv`:
 
----
+- `ui_retry`
+- `ui_next_level`
+- `result_ready_for_next`
+- `result_all_levels_complete`
+- `result_try_again`
+- `ui_level`
+- `ui_goal_progress`
+- `ui_final_level_cleared`
 
-## Session: Level Content / Encounter Configuration 1.0 Completion
+This removed raw key output from runtime result display.
 
-### Goal
-Move from enemy-only startup selection into full single-level encounter configuration.
-
-### Result
-Completed Level Content / Encounter Configuration 1.0.
-
-### Implemented
-- LevelEncounterConfigData
-- LevelEncounterController
-- encounter-driven target breakdown
-- encounter-driven round duration
-- encounter binding to LevelEnemySelectionData
-
-### Confirmed behavior
-- Level 01 / Level 02 / Level 03 encounter configs can be authored as assets
-- target breakdown changes correctly per encounter
-- timer changes correctly per encounter
-- enemy selection is applied through encounter config
-- scene setup is less inspector-manual than before
-
-### Outcome
-The project moved from enemy-only startup setup into reusable single-level encounter authoring.
+### 5. TMP input issue was identified and resolved
+A TMP warning was traced to an invalid punctuation character in manual text input.
+The issue was not in the CSV.
+It was caused by a text field content entry using an incompatible character variant.
+After cleanup, TMP warning was removed.
 
 ---
 
-## Session: Level Progression / Multi-Level Content 1.0 Completion
+## Validation Result
 
-### Goal
-Upgrade single-encounter setup into ordered multi-level progression flow in one scene.
+Validated runtime behavior after fixes:
+- startup scene keeps result panel hidden
+- result panel only appears after round end
+- victory result shows proper title
+- subtitle text now resolves through localization
+- level info text displays correctly
+- goal progress text displays correctly
+- Retry and Next labels display correctly
+- Retry and Next remain fully functional
+- current prototype visual quality is acceptable for milestone completion
 
-### Result
-Completed Level Progression / Multi-Level Content 1.0.
-
-### Implemented
-- LevelProgressionData
-- LevelProgressionController
-- startup level index
-- ordered encounter list
-- single-scene multi-level runtime setup
-
-### Confirmed behavior
-- `startupLevelIndex = 0` starts Level 01
-- `startupLevelIndex = 1` starts Level 02
-- `startupLevelIndex = 2` starts Level 03
-- progression asset correctly applies different encounter configs at startup
-- one scene now hosts multiple authored levels
-
-### Outcome
-The project moved from single-level encounter authoring into reusable multi-level runtime progression.
+Known current note:
+- result panel is functionally complete for prototype use
+- future polish may still improve dimmer strength, card styling, typography hierarchy, and HUD suppression while result panel is active
 
 ---
 
-## Session: Runtime Level Advance 1.0 Completion
+## Architecture Status After Session
 
-### Goal
-Support level-to-level runtime progression without scene reload.
+The validated runtime stack is now:
 
-### Result
-Completed Runtime Level Advance 1.0.
-
-### Implemented
-- AdvanceToNextLevel()
-- RestartCurrentLevel()
-- runtime encounter reapplication
-- runtime enemy reselection
-- runtime round restart
-- transition delay handling
-- throw drag state reset on round finish
-
-### Debugging findings
-- initial runtime level switching changed target values without always refreshing active enemy state correctly
-- initial runtime transition allowed transient throw input state to leak across levels
-- immediate same-frame end/start transitions could contaminate the next round state
-
-### Fixes
-- LevelEnemySelectionController now switches to resolved slot during runtime application
-- LevelProgressionController uses delayed transition instead of same-frame forced progression
-- ThrowController resets transient drag / preview state on round finish
-
-### Confirmed behavior
-- advancing from Level 01 to Level 02 works
-- advancing from Level 02 to Level 03 works
-- target/time/enemy all refresh correctly
-- gameplay remains playable after runtime transition
-- no stuck central-screen projectile state remains
-
-### Outcome
-The project now supports stable runtime level transitions in one scene.
-
----
-
-## Session: Victory Choice Flow 1.0 Completion
-
-### Goal
-Replace forced post-victory auto-advance with explicit player choice.
-
-### Result
-Completed Victory Choice Flow 1.0.
-
-### Implemented
-- result panel Retry / Next behavior
-- next-level visibility check
-- Retry delegates to LevelProgressionController.RestartCurrentLevel()
-- Next delegates to LevelProgressionController.AdvanceToNextLevel()
-- auto-advance on win can be disabled for player-facing flow
-
-### Debugging findings
-- result panel initially disappeared too quickly because auto-advance was still enabled in the serialized Inspector state
-- result panel initially blocked next-round interaction during auto-advance work because HUD did not yet own the player-facing choice flow cleanly
-
-### Confirmed behavior
-- Level 01 victory stops and presents choice
-- Retry replays current level
-- Next advances to Level 02
-- final level can hide next-level option through `HasNextLevel()`
-- progression no longer needs to auto-jump after every victory
-
-### Outcome
-The project moved from technical runtime progression into player-controlled post-victory flow.
-
----
-
-## Current Validated Runtime Stack
-
-EnemyPresetData  
+Data  
+→ EnemyPresetData  
 → EnemyPresetApplicator  
 → EnemyRuntimePresetController  
 → EnemySwitchingManager  
 → LevelEnemySelectionController / LevelEnemySelectionData  
 → LevelEncounterController / LevelEncounterConfigData  
 → LevelProgressionController / LevelProgressionData  
-→ HudController result flow
+→ HudController result presentation
+
+This session did not change core runtime ownership.
+It only improved player-facing result presentation and localization completeness.
 
 ---
 
-## Current State Summary
+## Recommended Next Step
 
-The project now supports:
-- data-driven enemy behavior
-- runtime enemy switching
-- reusable enemy roster selection
-- single-level encounter configuration
-- multi-level progression in one scene
-- runtime next-level transition
-- runtime current-level restart
-- player-controlled Retry / Next result flow
+Next recommended milestone:
 
-Important boundary reminders:
-- EnemyPresetApplicator remains the only preset injection layer
-- EnemySwitchingManager remains active-enemy orchestration only
-- LevelEncounterController remains single-encounter application only
-- LevelProgressionController remains multi-level flow orchestration only
-- HudController handles result display and button delegation only
+**Level Goal Variety 1.0**
+
+Reason:
+- multi-level runtime flow is already validated
+- result presentation is now good enough for prototype use
+- the next best leverage is adding more varied level goals before large-scale content expansion

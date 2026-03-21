@@ -1,7 +1,6 @@
 # PROJECT STATE
 
 ## Project
-
 **Power Prank 3D**  
 Unity 6.3 LTS small-scale prototype game.
 
@@ -27,6 +26,7 @@ Core fantasy:
 - Level Progression / Multi-Level Content 1.0 ✅
 - Runtime Level Advance 1.0 ✅
 - Victory Choice Flow 1.0 ✅
+- Result Panel Polish 1.0 ✅
 
 ---
 
@@ -222,13 +222,75 @@ Capabilities:
 - retry current level
 - next level button shown only when next level exists
 - final level hides next-level option
-- auto-advance on win can be disabled for player-facing flow
+- auto-advance on win disabled for player-facing flow
 
 Validated result:
 - Level 01 victory stops and presents choice
 - player can click Retry to replay current level
 - player can click Next to enter Level 02
 - current runtime flow now waits for player decision instead of forcing auto-advance
+
+---
+
+## Result Panel Polish 1.0 Status
+
+Completed and validated.
+
+Implemented through:
+- HudController result panel expansion
+- LocalizationManager CSV update
+- Result panel hierarchy cleanup in scene
+
+Implemented result UI structure:
+- ResultPanel
+- Dimmer
+- SafeArea
+- ResultCard
+- Header
+  - ResultTitleText
+  - ResultSubtitleText
+- Body
+  - LevelInfoText
+  - GoalSummaryText
+  - FinalLevelNoticeText
+- Actions
+  - RetryButton
+  - NextLevelButton
+
+Implemented presentation behavior:
+- cleaner centered result card
+- Retry / Next button row
+- localized title / subtitle / button labels
+- localized level label and goal progress label
+- final-level-only notice support
+- result panel remains hidden before round end
+- result panel appears only after round finish
+- startup scene no longer shows placeholder texts after proper binding cleanup
+
+Localization updates added:
+- `ui_retry`
+- `ui_next_level`
+- `result_ready_for_next`
+- `result_all_levels_complete`
+- `result_try_again`
+- `ui_level`
+- `ui_goal_progress`
+- `ui_final_level_cleared`
+
+Validated runtime result:
+- startup scene keeps result panel hidden
+- win result shows proper Victory title
+- subtitle now displays localized ready-for-next text
+- level info and goal progress text display correctly
+- Retry and Next labels localize correctly
+- no raw localization keys remain on the result panel after CSV update
+- no TMP placeholder `New Text` remains after proper inspector hookup
+- button flow remains delegated through LevelProgressionController
+
+Known current quality note:
+- Result Panel Polish 1.0 is functionally complete
+- visual quality is now acceptable for prototype validation
+- future polish may still improve dimmer strength, card styling, button styling, and HUD suppression during result display
 
 ---
 
@@ -243,6 +305,7 @@ Validated scene setup:
 - LevelProgressionController
 - multi-level progression asset
 - HUD result panel with Retry / Next flow
+- expanded ResultPanel hierarchy with localized text fields
 
 Validated runtime result:
 - Before Play, both enemy objects exist in scene
@@ -252,6 +315,7 @@ Validated runtime result:
 - encounter-driven target/time works
 - progression-driven level switching works
 - victory choice flow works
+- polished result panel works
 
 ---
 
@@ -263,7 +327,7 @@ The project has moved from:
 
 to:
 
-**level-driven multi-stage encounter flow in a single scene**
+**level-driven multi-stage encounter flow in a single scene with player-facing result UI**
 
 The current stack is now:
 
@@ -274,7 +338,8 @@ Data
 → EnemySwitchingManager  
 → LevelEnemySelectionController / LevelEnemySelectionData  
 → LevelEncounterController / LevelEncounterConfigData  
-→ LevelProgressionController / LevelProgressionData
+→ LevelProgressionController / LevelProgressionData  
+→ HudController result presentation
 
 Gameplay sync:
 - EnemySwitchingManager → GameplayManager.SetActiveEnemyReactionLayer(...)
@@ -319,14 +384,14 @@ Current rule:
 
 The project is now ready to move from:
 
-**multi-level runtime flow validation**
+**UI polish + result flow validation**
 
 into:
 
-**UI polish + content expansion**
+**level goal variety + content expansion + enemy visual identity upgrade**
 
 Next recommended milestone:
-- Result Panel Polish 1.0
 - Level Goal Variety 1.0
 - Content Expansion toward 12 Levels
 - Enemy Visual Identity Upgrade
+- Optional Result Panel Polish 1.1
