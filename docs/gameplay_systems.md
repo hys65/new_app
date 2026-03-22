@@ -10,10 +10,11 @@ Core loop:
 3. Register hit
 4. Apply breakdown pressure
 5. Trigger enemy reactions / defense behavior
-6. Reach target or run out of time
-7. Show result panel
-8. Player chooses Retry or Next
-9. Restart current level or advance to next level
+6. Advance goal progress
+7. Reach encounter goal or run out of time
+8. Show result panel
+9. Player chooses Retry or Next
+10. Restart current level or advance to next level
 
 ---
 
@@ -30,11 +31,14 @@ Responsibilities:
 - round running / round finished state
 - active enemy reaction layer reference
 - round finish event dispatch
+- breakdown-based win condition enable / disable
+- force-finish support for non-breakdown goals
 
 Important boundary:
 - GameplayManager owns gameplay state
 - it does not own level progression
 - it does not own result button execution logic
+- it does not decide encounter goal definitions
 
 ### ThrowController
 Owns throw input and projectile launch flow.
@@ -54,6 +58,31 @@ Responsibilities:
 - movement
 - collision
 - hit payload application
+- impact VFX / SFX
+- stain spawn
+- report resolved hit data into LevelGoalController
+
+Current hit payload report:
+- `isHeadHit`
+- `itemId`
+- `gainedScore`
+
+### LevelGoalController
+Owns current encounter goal runtime progress.
+
+Responsibilities:
+- apply encounter primary goal
+- reset goal progress when encounter starts
+- consume resolved hit events
+- evaluate current goal completion
+- finish round for non-breakdown goals
+- provide readable goal summary text for UI
+
+Important boundary:
+- LevelGoalController does not own level progression
+- it does not select encounters
+- it does not own raw gameplay state like timer or breakdown
+- it consumes runtime hit results and converts them into encounter objective progress
 
 ### HitPopupSpawner
 Owns floating hit feedback text.
@@ -84,6 +113,124 @@ Important boundary:
 - it must not own multi-level progression logic
 - it must not directly apply encounter data
 - it must not replace GameplayManager as round-state owner
+
+---
+
+## Level Goal Variety 1.0
+
+Level Goal Variety 1.0 is now implemented and runtime-validated.
+
+Each encounter may define one primary goal through:
+- `LevelEncounterConfigData.primaryGoal`
+
+### Supported goal types
+
+#### 1. BreakdownTarget
+Legacy breakdown-based win condition.
+
+Behavior:
+- round wins when breakdown reaches target breakdown value
+- goal summary displays breakdown progress
+
+#### 2. HeadHitCount
+Precision goal.
+
+Behavior:
+- only hits resolved through collider Tag = `Head` advance progress
+- body hits do not count
+- round wins when head-hit target is reached
+
+#### 3. SpecificItemHitCount
+Item-restricted goal.
+
+Behavior:
+- only hits whose `itemId` matches `primaryGoal.requiredItemId` advance progress
+- round wins when target count is reached
+
+---
+
+## Runtime Goal Flow
+
+Encounter application flow:
+LevelProgressionController  
+→ LevelEncounterController  
+→ GameplayManager target/time refresh  
+→ GameplayManager breakdown-win-condition refresh  
+→ LevelEnemySelectionController  
+→ EnemySwitchingManager  
+→ LevelGoalController.ApplyGoal(...)
+
+Hit resolution flow:
+ProjectileBehavior  
+→ resolve collision / defense / score  
+→ build `CombatHitInfo`  
+→ LevelGoalController.NotifyHitResolved(...)
+
+Victory flow:
+- `BreakdownTarget` → GameplayManager wins from breakdown reaching target
+- `HeadHitCount` → LevelGoalController calls GameplayManager.ForceFinishRound(true)
+- `SpecificItemHitCount` → LevelGoalController calls GameplayManager.ForceFinishRound(true)
+
+Result flow:
+GameplayManager.OnRoundFinished  
+→ HudController.ShowResultPanel  
+→ Retry / Next button click  
+→ LevelProgressionController.RestartCurrentLevel / AdvanceToNextLevel
+
+---
+
+## Enemy Gameplay Hitbox Structure
+
+A repaired hitbox structure is now required.
+
+### Valid structure
+- `EnemyVisual` → visual-only
+- `Torso` → body collider
+- `HeadCollider` → dedicated head collider, Tag = `Head`
+- `EnemyHitReaction` → shared gameplay parent (`DefenseBodyPivot`)
+
+### Invalid structure
+- using `EnemyVisual` collider as the main gameplay collider
+- attaching `EnemyHitReaction` to a node that head/body hitboxes cannot resolve through `GetComponentInParent(...)`
+
+### Why this matters
+This prevents:
+- visual-shell collider stealing hits before gameplay hitboxes
+- head-hit goals never progressing
+- body / head reactions resolving inconsistently
+
+---
+
+## Head Hit Detection Notes
+
+Current runtime head-hit detection is collider-based.
+
+Head hit is resolved by:
+- projectile collision target tag
+- `collision.collider.CompareTag("Head")`
+
+Current validated setup:
+- `HeadCollider` positioned and sized to cover upper-head gameplay space
+- `HeadCollider` enlarged relative to early setup to avoid top-of-head miss cases
+
+---
+
+## Enemy Stain Attachment Behavior
+
+Enemy hit stains are now handled differently from ground stains.
+
+### Enemy hit stain behavior
+- spawn on enemy hit
+- parent to enemy hit target hierarchy
+- rigidbody gravity / motion disabled on spawn
+- remain attached after impact
+
+### Ground stain behavior
+- spawn on ground hit
+- parent to world `Stains` root
+- remain world-rooted
+
+This prevents enemy hit stains from falling out of the scene after collision.
 
 ---
 
@@ -145,32 +292,16 @@ Known current quality note:
 
 ---
 
-## Current Multi-Level Runtime Flow
-
-Encounter application flow:
-LevelProgressionController  
-→ LevelEncounterController  
-→ GameplayManager target/time refresh  
-→ LevelEnemySelectionController  
-→ EnemySwitchingManager  
-→ active enemy slot selected
-
-Result flow:
-GameplayManager.OnRoundFinished  
-→ HudController.ShowResultPanel  
-→ Retry / Next button click  
-→ LevelProgressionController.RestartCurrentLevel / AdvanceToNextLevel
-
----
-
 ## Current Gameplay Boundaries
 
 Do:
 - keep gameplay state in GameplayManager
 - keep level flow in LevelProgressionController
 - keep encounter application in LevelEncounterController
+- keep goal runtime progress in LevelGoalController
 - keep enemy startup selection in LevelEnemySelectionController
 - keep result presentation in HudController
+- keep gameplay colliders separate from visual shell colliders
 
 Do not:
 - move level progression into HUD
@@ -178,3 +309,4 @@ Do not:
 - bypass LevelEncounterController for runtime level application
 - bypass EnemyPresetApplicator for preset injection
 - enable defense window auto-cycle
+- use EnemyVisual as the main gameplay hitbox

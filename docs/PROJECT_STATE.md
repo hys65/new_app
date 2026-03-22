@@ -9,6 +9,7 @@ Core fantasy:
 - Build breakdown pressure
 - Trigger defensive behaviors
 - Create readable, funny, character-specific enemy reactions
+- Progress through level-driven encounter goals
 
 ---
 
@@ -27,6 +28,9 @@ Core fantasy:
 - Runtime Level Advance 1.0 ✅
 - Victory Choice Flow 1.0 ✅
 - Result Panel Polish 1.0 ✅
+- Level Goal Variety 1.0 ✅
+- Enemy Hitbox Structure Repair ✅
+- Enemy Stain Attachment Repair ✅
 
 ---
 
@@ -143,6 +147,7 @@ Capabilities:
 - bind LevelEnemySelectionData into encounter config
 - define target breakdown per level
 - define round duration / time limit per level
+- define encounter primary goal per level
 - apply encounter config into runtime systems
 - reduce manual scene-only gameplay setup
 
@@ -265,32 +270,91 @@ Implemented presentation behavior:
 - final-level-only notice support
 - result panel remains hidden before round end
 - result panel appears only after round finish
-- startup scene no longer shows placeholder texts after proper binding cleanup
-
-Localization updates added:
-- `ui_retry`
-- `ui_next_level`
-- `result_ready_for_next`
-- `result_all_levels_complete`
-- `result_try_again`
-- `ui_level`
-- `ui_goal_progress`
-- `ui_final_level_cleared`
 
 Validated runtime result:
 - startup scene keeps result panel hidden
 - win result shows proper Victory title
-- subtitle now displays localized ready-for-next text
+- subtitle displays localized state text
 - level info and goal progress text display correctly
 - Retry and Next labels localize correctly
 - no raw localization keys remain on the result panel after CSV update
-- no TMP placeholder `New Text` remains after proper inspector hookup
-- button flow remains delegated through LevelProgressionController
 
-Known current quality note:
-- Result Panel Polish 1.0 is functionally complete
-- visual quality is now acceptable for prototype validation
-- future polish may still improve dimmer strength, card styling, button styling, and HUD suppression during result display
+---
+
+## Level Goal Variety 1.0 Status
+
+Completed and runtime-validated.
+
+Implemented:
+- `LevelGoalType`
+- `LevelGoalDefinition`
+- `CombatHitInfo`
+- `LevelGoalController`
+- `LevelEncounterConfigData.primaryGoal`
+- `GameplayManager.ConfigureBreakdownWinCondition(...)`
+- `GameplayManager.ForceFinishRound(true)`
+- `ProjectileBehavior` hit reporting into `LevelGoalController`
+
+Validated supported goal types:
+1. `BreakdownTarget`
+2. `HeadHitCount`
+3. `SpecificItemHitCount`
+
+Validated runtime behavior:
+- Level 1 can still run as standard breakdown-based encounter
+- Head-hit-only goals now resolve correctly and finish the round on completion
+- Item-specific hit goals now resolve correctly and finish the round on completion
+- Result panel displays runtime goal summary correctly
+- Non-breakdown goal victory no longer depends on reaching target breakdown
+
+Validated content examples:
+- `level_01_encounter_config` → `BreakdownTarget`
+- `level_02_encounter_config` → `HeadHitCount`
+- `level_03_encounter_config` → `SpecificItemHitCount(item_egg)`
+
+---
+
+## Enemy Hitbox Structure Status
+
+Repaired and validated.
+
+Previous issue:
+- `EnemyVisual` collider intercepted projectile hits before dedicated head hitboxes
+- disabling `EnemyVisual` collider revealed missing gameplay body collider coverage
+- `EnemyHitReaction` was attached to the visual node instead of the shared gameplay parent
+
+Validated working structure:
+- `EnemyVisual` is visual-only
+- `Torso` owns body collider
+- `HeadCollider` owns head hit detection and uses Tag = `Head`
+- `EnemyHitReaction` is attached to the shared gameplay parent (`DefenseBodyPivot`)
+
+Validated result:
+- body hits register correctly
+- head hits register correctly
+- head-hit goals now advance correctly
+- upper-head coverage was improved by enlarging / repositioning `HeadCollider`
+- visual shell no longer steals collision from gameplay hitboxes
+
+---
+
+## Enemy Stain Attachment Status
+
+Repaired and validated.
+
+Previous issue:
+- enemy-hit stains were instantiated without being properly attached to the enemy target hierarchy
+- stain rigidbody / gravity caused spawned decals to fall out of the screen
+
+Implemented fix:
+- enemy-hit stains now parent to the enemy hit target hierarchy
+- stain rigidbody gravity / motion is disabled on spawn
+- ground stains remain world-rooted under `Stains`
+
+Validated result:
+- enemy hit stains remain attached after impact
+- enemy hit stains no longer fall away
+- ground stain behavior remains valid
 
 ---
 
@@ -303,19 +367,20 @@ Validated scene setup:
 - LevelEnemySelectionController with LevelEnemySelectionData
 - LevelEncounterController
 - LevelProgressionController
+- LevelGoalController
 - multi-level progression asset
 - HUD result panel with Retry / Next flow
-- expanded ResultPanel hierarchy with localized text fields
 
 Validated runtime result:
-- Before Play, both enemy objects exist in scene
-- During play, only the active enemy remains enabled
-- startup active slot works
+- before play, both enemy objects exist in scene
+- during play, only the active enemy remains enabled
 - level-driven enemy startup works
 - encounter-driven target/time works
 - progression-driven level switching works
-- victory choice flow works
-- polished result panel works
+- result panel works
+- three validated goal types work
+- repaired hitbox structure works
+- repaired stain attachment works
 
 ---
 
@@ -323,11 +388,11 @@ Validated runtime result:
 
 The project has moved from:
 
-**enemy behavior definition and scene test switching**
+**multi-level runtime flow + result panel validation**
 
 to:
 
-**level-driven multi-stage encounter flow in a single scene with player-facing result UI**
+**runtime-validated goal-driven encounter flow with repaired enemy gameplay hitboxes**
 
 The current stack is now:
 
@@ -338,12 +403,15 @@ Data
 → EnemySwitchingManager  
 → LevelEnemySelectionController / LevelEnemySelectionData  
 → LevelEncounterController / LevelEncounterConfigData  
+→ LevelGoalController  
 → LevelProgressionController / LevelProgressionData  
 → HudController result presentation
 
 Gameplay sync:
 - EnemySwitchingManager → GameplayManager.SetActiveEnemyReactionLayer(...)
 - LevelEncounterController → GameplayManager encounter values
+- LevelEncounterController → LevelGoalController goal setup
+- ProjectileBehavior → LevelGoalController hit reporting
 - HudController → Retry / Next button delegation into LevelProgressionController
 
 ---
@@ -353,30 +421,30 @@ Gameplay sync:
 Current model is:
 - multiple enemy roots may exist in scene
 - only one enemy is active at a time
-- scene switching is orchestration logic
-- AI remains per-enemy
-- EnemyDefenseStateWindowProfile.autoCycle must remain FALSE
-- AI controls defense timing, not the window system
 - one scene may host multiple level encounter configs
 - progression decides which encounter is active
+- encounter decides which primary goal is active
 - HUD result flow decides whether player retries or advances
 
 Important boundary:
 - this is NOT a full multi-enemy combat system
 - this is NOT a wave spawning system
 - this is NOT a roster-driven runtime loading system
-- this is a reusable level / encounter / progression system built on top of the validated switching layer
+- this is a reusable level / encounter / progression / goal system built on top of the validated switching layer
 
 ---
 
 ## Legacy Status
 
-`LevelEnemyController` is now treated as a legacy setup path.
+`LevelEnemyController` is treated as a legacy setup path.
 
 Current rule:
-- It must not be used in switching-oriented scenes
-- It must not coexist with `LevelEnemySelectionController` in the same scene
-- The current validated scene has removed the old `LevelEnemyController` hookup from `Systems`
+- it must not be used in switching-oriented scenes
+- it must not coexist with `LevelEnemySelectionController` in the same scene
+
+Also obsolete:
+- using `EnemyVisual` collider as the main gameplay hitbox is no longer valid
+- gameplay hit detection must use dedicated body / head colliders
 
 ---
 
@@ -384,14 +452,14 @@ Current rule:
 
 The project is now ready to move from:
 
-**UI polish + result flow validation**
+**goal system validation + hitbox repair**
 
 into:
 
-**level goal variety + content expansion + enemy visual identity upgrade**
+**content expansion + enemy visual identity upgrade + more encounter variety**
 
 Next recommended milestone:
-- Level Goal Variety 1.0
 - Content Expansion toward 12 Levels
 - Enemy Visual Identity Upgrade
+- Additional Goal Types after current baseline stabilization
 - Optional Result Panel Polish 1.1

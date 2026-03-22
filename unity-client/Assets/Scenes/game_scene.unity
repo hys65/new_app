@@ -588,6 +588,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 201078844}
+  - component: {fileID: 201078845}
   m_Layer: 0
   m_Name: DefenseBodyPivot
   m_TagString: Untagged
@@ -616,6 +617,33 @@ Transform:
   - {fileID: 572992033}
   m_Father: {fileID: 1162658682}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &201078845
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 201078843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afbf1c01aca88434491ed21bd1fa0604, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyHitReaction
+  visualRoot: {fileID: 324402295}
+  targetRenderers:
+  - {fileID: 324402297}
+  defaultHitStopDuration: 0.05
+  heavyHitStopDuration: 0.07
+  scalePunchAmount: 0.12
+  scalePunchDuration: 0.12
+  flashColor: {r: 1, g: 0.65, b: 0.65, a: 1}
+  flashDuration: 0.1
+  knockbackOffset: {x: 0, y: 0, z: -0.18}
+  knockbackDuration: 0.12
+  foamTintColor: {r: 0.8, g: 0.95, b: 1, a: 1}
+  foamTintDuration: 0.6
+  wiggleAngle: 8
+  wiggleDuration: 0.16
 --- !u!1 &240443086
 GameObject:
   m_ObjectHideFlags: 0
@@ -665,7 +693,6 @@ GameObject:
   - component: {fileID: 324402298}
   - component: {fileID: 324402297}
   - component: {fileID: 324402296}
-  - component: {fileID: 324402299}
   m_Layer: 0
   m_Name: EnemyVisual
   m_TagString: Untagged
@@ -705,7 +732,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.32
   m_Height: 1.35
@@ -768,33 +795,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 324402294}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &324402299
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 324402294}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: afbf1c01aca88434491ed21bd1fa0604, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyHitReaction
-  visualRoot: {fileID: 324402295}
-  targetRenderers:
-  - {fileID: 0}
-  defaultHitStopDuration: 0.05
-  heavyHitStopDuration: 0.07
-  scalePunchAmount: 0.12
-  scalePunchDuration: 0.12
-  flashColor: {r: 1, g: 0.65, b: 0.65, a: 1}
-  flashDuration: 0.1
-  knockbackOffset: {x: 0, y: 0, z: -0.18}
-  knockbackDuration: 0.12
-  foamTintColor: {r: 0.8, g: 0.95, b: 1, a: 1}
-  foamTintDuration: 0.6
-  wiggleAngle: 8
-  wiggleDuration: 0.16
 --- !u!1 &373985993
 GameObject:
   m_ObjectHideFlags: 0
@@ -1078,6 +1078,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 459262858}
+  - component: {fileID: 459262859}
   m_Layer: 0
   m_Name: DefenseBodyPivot
   m_TagString: Untagged
@@ -1106,6 +1107,33 @@ Transform:
   - {fileID: 1237582975}
   m_Father: {fileID: 1526905272}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &459262859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 459262857}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afbf1c01aca88434491ed21bd1fa0604, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyHitReaction
+  visualRoot: {fileID: 948574321}
+  targetRenderers:
+  - {fileID: 948574324}
+  defaultHitStopDuration: 0.05
+  heavyHitStopDuration: 0.07
+  scalePunchAmount: 0.12
+  scalePunchDuration: 0.12
+  flashColor: {r: 1, g: 0.65, b: 0.65, a: 1}
+  flashDuration: 0.1
+  knockbackOffset: {x: 0, y: 0, z: -0.18}
+  knockbackDuration: 0.12
+  foamTintColor: {r: 0.8, g: 0.95, b: 1, a: 1}
+  foamTintDuration: 0.6
+  wiggleAngle: 8
+  wiggleDuration: 0.16
 --- !u!1 &489098068
 GameObject:
   m_ObjectHideFlags: 0
@@ -1362,6 +1390,7 @@ GameObject:
   - component: {fileID: 508866360}
   - component: {fileID: 508866362}
   - component: {fileID: 508866361}
+  - component: {fileID: 508866363}
   m_Layer: 0
   m_Name: Torso
   m_TagString: Untagged
@@ -1441,6 +1470,29 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 508866359}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!136 &508866363
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 508866359}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.28
+  m_Height: 1.1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &551986031
 GameObject:
   m_ObjectHideFlags: 0
@@ -2093,7 +2145,7 @@ Transform:
   m_GameObject: {fileID: 912459463}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.12, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2118,7 +2170,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.22
+  m_Radius: 0.3
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &948574320
 GameObject:
@@ -2132,7 +2184,6 @@ GameObject:
   - component: {fileID: 948574325}
   - component: {fileID: 948574324}
   - component: {fileID: 948574323}
-  - component: {fileID: 948574322}
   m_Layer: 0
   m_Name: EnemyVisual
   m_TagString: Untagged
@@ -2155,33 +2206,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 459262858}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &948574322
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 948574320}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: afbf1c01aca88434491ed21bd1fa0604, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyHitReaction
-  visualRoot: {fileID: 948574321}
-  targetRenderers:
-  - {fileID: 0}
-  defaultHitStopDuration: 0.05
-  heavyHitStopDuration: 0.07
-  scalePunchAmount: 0.12
-  scalePunchDuration: 0.12
-  flashColor: {r: 1, g: 0.65, b: 0.65, a: 1}
-  flashDuration: 0.1
-  knockbackOffset: {x: 0, y: 0, z: -0.18}
-  knockbackDuration: 0.12
-  foamTintColor: {r: 0.8, g: 0.95, b: 1, a: 1}
-  foamTintDuration: 0.6
-  wiggleAngle: 8
-  wiggleDuration: 0.16
 --- !u!136 &948574323
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2199,7 +2223,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.32
   m_Height: 1.35
@@ -3216,7 +3240,7 @@ Transform:
   m_GameObject: {fileID: 1294028789}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.12, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3241,7 +3265,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.22
+  m_Radius: 0.3
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1301856301
 GameObject:
@@ -5802,6 +5826,7 @@ GameObject:
   - component: {fileID: 1918835430}
   - component: {fileID: 1918835433}
   - component: {fileID: 1918835432}
+  - component: {fileID: 1918835434}
   m_Layer: 0
   m_Name: Torso
   m_TagString: Untagged
@@ -5881,6 +5906,29 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1918835429}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!136 &1918835434
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1918835429}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.28
+  m_Height: 1.1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1956699976
 GameObject:
   m_ObjectHideFlags: 0

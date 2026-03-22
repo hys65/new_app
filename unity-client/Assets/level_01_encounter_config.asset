@@ -16,9 +16,9 @@ MonoBehaviour:
   displayName: Level 01 Encounter
   enemySelection: {fileID: 11400000, guid: 7e5a6cfc5e297b548809b89a53c115d8, type: 2}
   primaryGoal:
-    goalType: 1
-    targetCount: 3
+    goalType: 0
+    targetCount: 100
     requiredItemId: item_egg
-  targetBreakdownValue: 1000
+  targetBreakdownValue: 100
   roundDurationSeconds: 45
   autoStartRound: 1

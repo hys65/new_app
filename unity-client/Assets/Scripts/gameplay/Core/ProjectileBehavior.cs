@@ -64,12 +64,6 @@ namespace PowerPrank3D.Gameplay
                 return;
             }
 
-            Debug.Log(
-                "Projectile hit -> name: " + collision.collider.name +
-                " | tag: " + collision.collider.tag +
-                " | layer: " + LayerMask.LayerToName(collision.collider.gameObject.layer)
-            );
-
             var receiver = collision.collider.GetComponentInParent<EnemyHitReaction>();
             bool hitEnemy = receiver != null;
             bool hitGround = collision.collider.CompareTag("Ground");
@@ -90,6 +84,13 @@ namespace PowerPrank3D.Gameplay
                 receiver.PlayHitFeedback(itemData != null ? itemData.feedbackType : HitFeedbackType.ScalePunch);
 
                 bool isHeadHit = collision.collider.CompareTag("Head");
+
+                Debug.Log(
+                    "[HeadCheck] collider=" + collision.collider.name +
+                    " | tag=" + collision.collider.tag +
+                    " | isHeadHit=" + isHeadHit
+                );
+
                 int scoreUnits = isHeadHit ? 2 : 1;
 
                 EnemyDefenseController defenseController =
@@ -120,7 +121,6 @@ namespace PowerPrank3D.Gameplay
                     gainedScore = gameplayManager.AddBreakdown(itemData, finalUnits);
                 }
 
-                // 关键新增：把命中结果送给关卡目标系统
                 if (levelGoalController != null)
                 {
                     levelGoalController.NotifyHitResolved(new CombatHitInfo
@@ -187,6 +187,7 @@ namespace PowerPrank3D.Gameplay
                     ContactPoint contact = collision.contacts[0];
                     SpawnImpactVfx(contact.point, contact.normal);
                     PlayImpactSfx(contact.point);
+                    SpawnImpactStain(contact.point, contact.normal, null, false, true);
                 }
 
                 Destroy(gameObject);
@@ -196,18 +197,14 @@ namespace PowerPrank3D.Gameplay
 
         private void SpawnImpactVfx(Vector3 position, Vector3 normal)
         {
-            if (itemData == null)
-            {
-                return;
-            }
-
-            if (itemData.impactVfxPrefab == null)
+            if (itemData == null || itemData.impactVfxPrefab == null)
             {
                 return;
             }
 
             Quaternion rotation = Quaternion.LookRotation(-normal);
             rotation *= Quaternion.Euler(0f, 0f, Random.Range(0f, 360f));
+
             GameObject vfx = Instantiate(itemData.impactVfxPrefab, position + normal * 0.02f, rotation);
 
             ParticleSystem[] particleSystems = vfx.GetComponentsInChildren<ParticleSystem>();
@@ -247,12 +244,7 @@ namespace PowerPrank3D.Gameplay
 
         private void PlayImpactSfx(Vector3 position)
         {
-            if (itemData == null)
-            {
-                return;
-            }
-
-            if (itemData.impactSfx == null)
+            if (itemData == null || itemData.impactSfx == null)
             {
                 return;
             }
@@ -267,12 +259,7 @@ namespace PowerPrank3D.Gameplay
 
         private void SpawnImpactStain(Vector3 position, Vector3 normal, Transform hitParent, bool isEnemyHit, bool isGroundHit)
         {
-            if (itemData == null)
-            {
-                return;
-            }
-
-            if (itemData.impactStainPrefab == null)
+            if (itemData == null || itemData.impactStainPrefab == null)
             {
                 return;
             }
@@ -287,14 +274,20 @@ namespace PowerPrank3D.Gameplay
                 return;
             }
 
-            Transform stainsRoot = GameObject.Find("Stains")?.transform;
-
             Vector3 spawnPos = position + normal * 0.02f;
-
             Quaternion rotation = Quaternion.LookRotation(-normal);
             rotation *= Quaternion.Euler(0f, 0f, Random.Range(0f, 360f));
 
-            Transform parentToUse = stainsRoot != null ? stainsRoot : null;
+            Transform parentToUse = null;
+
+            if (isEnemyHit && hitParent != null)
+            {
+                parentToUse = hitParent;
+            }
+            else
+            {
+                parentToUse = GameObject.Find("Stains")?.transform;
+            }
 
             GameObject stain = Instantiate(itemData.impactStainPrefab, spawnPos, rotation, parentToUse);
 
@@ -305,6 +298,15 @@ namespace PowerPrank3D.Gameplay
             if (stainCollider != null)
             {
                 stainCollider.enabled = false;
+            }
+
+            Rigidbody stainRb = stain.GetComponent<Rigidbody>();
+            if (stainRb != null)
+            {
+                stainRb.linearVelocity = Vector3.zero;
+                stainRb.angularVelocity = Vector3.zero;
+                stainRb.useGravity = false;
+                stainRb.isKinematic = true;
             }
         }
     }
