@@ -25,3 +25,8 @@ MonoBehaviour:
     preset: {fileID: 11400000, guid: bc0df5fa7e58c9d479c85586f88c36c0, type: 2}
     recommendedSlotId: enemy_slot_02
     enabled: 1
+  - entryId: meeting_tyrant_briefcase_boss
+    displayName: Meeting Tyrant
+    preset: {fileID: 11400000, guid: 8ef3d4c13a3789b4da797011a91be528, type: 2}
+    recommendedSlotId: enemy_slot_03
+    enabled: 1

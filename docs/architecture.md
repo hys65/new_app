@@ -1,391 +1,201 @@
 # ARCHITECTURE
 
-## Core Design Philosophy
+## Architectural Summary
 
-Power Prank 3D is built around a layered, data-driven runtime architecture.
+`Power Prank 3D` is a single-scene, data-driven Unity prototype.
 
-Rules:
-1. Prefer data over hardcoded enemy-specific logic
-2. Keep single responsibility per runtime layer
-3. Preserve readable inspector workflows
-4. Do not duplicate preset injection logic
-5. Extend systems by adding orchestration layers, not by collapsing responsibilities
+Its current architecture is built around:
 
----
-
-## High-Level Runtime Layers
-
-### 1. Gameplay Layer
-Handles:
-- throw input
-- projectile spawning
-- hit resolution
-- breakdown accumulation
-- HUD updates
-- gameplay loop state
-
-Representative systems:
-- ThrowController
-- ProjectileBehavior
-- GameplayManager
-- HudController
-- HitPopupSpawner
-
-### 2. Enemy Runtime Layer
-Handles runtime enemy behavior and presentation.
-
-Representative systems:
-- EnemyReactionLayerController
-- EnemyDefenseController
-- EnemyDefenseVisualLayerController
-- EnemyDefenseStateWindowController
-- EnemyAiLayerController
-- EnemyVisualProxyController
-
-### 3. Data Definition Layer
-Defines reusable behavior and level content assets.
-
-Current data assets:
-- EnemyArchetypeData
-- EnemyDefensePatternData
-- EnemyAiProfileData
-- EnemyDefenseStateWindowProfileData
-- EnemyPresetData
-- EnemyRosterData
-- LevelEnemySelectionData
-- LevelEncounterConfigData
-- LevelProgressionData
-
-This layer defines reusable configuration content. It does not execute runtime behavior.
+- one active enemy at runtime
+- multiple enemy roots existing in one scene
+- level-driven encounter configuration
+- progression-driven multi-level flow
+- preset-driven enemy behavior injection
+- HUD-driven player-facing feedback
 
 ---
 
-## Enemy Preset Architecture
+## High-Level Runtime Flow
 
-### EnemyPresetData
-EnemyPresetData is the combined configuration object for one enemy setup.
+### Enemy data layer
+- `EnemyArchetypeData`
+- `EnemyDefensePatternData`
+- `EnemyAiProfileData`
+- `EnemyDefenseStateWindowProfileData`
 
-It references:
-- archetype data
-- defense pattern data
-- AI profile data
-- defense state window profile data
+### Enemy preset layer
+- `EnemyPresetData`
+- `EnemyPresetApplicator`
+- `EnemyRuntimePresetController`
 
-This allows multiple enemy personas to be built by combining reusable data assets.
+### Enemy switching / level selection layer
+- `EnemyRosterData`
+- `LevelEnemySelectionData`
+- `LevelEnemySelectionController`
+- `EnemySwitchingManager`
 
-### EnemyPresetApplicator
-EnemyPresetApplicator is the preset injection layer.
+### Encounter layer
+- `LevelEncounterConfigData`
+- `LevelEncounterController`
+- `LevelGoalController`
+- `GameplayManager`
 
-Responsibilities:
-- receive EnemyPresetData
-- distribute preset references to runtime enemy controllers
-- remain the single source of preset application
-
-Important rule:
-**EnemyPresetApplicator must remain the only preset injection point.**
-
-Do not:
-- push preset data directly from manager scripts into multiple controllers
-- duplicate preset application logic elsewhere
-- bypass this layer for convenience
-
----
-
-## Enemy Runtime Architecture
-
-Enemy runtime architecture is split into five layers.
-
-### 1. Data Layer
-Defines enemy behavior and selection assets.
-
-Behavior assets:
-- EnemyArchetypeData
-- EnemyDefensePatternData
-- EnemyAiProfileData
-- EnemyDefenseStateWindowProfileData
-- EnemyPresetData
-
-Selection assets:
-- EnemyRosterData
-- LevelEnemySelectionData
-
-### 2. Preset Application Layer
-Applies combined preset data to runtime controllers.
-
-- EnemyPresetApplicator
-
-Responsibility:
-- distribute preset data to runtime enemy controllers
-- remain the single source of preset application
-
-### 3. Single Enemy Runtime Layer
-Handles runtime preset control for one enemy instance.
-
-- EnemyRuntimePresetController
-
-Responsibility:
-- own runtime preset switching entry for one enemy
-- forward preset application to EnemyPresetApplicator
-- avoid duplicate preset injection logic elsewhere
-
-### 4. Scene Enemy Switching Layer
-Handles active enemy selection at scene level.
-
-- EnemySwitchingManager
-
-Responsibility:
-- maintain enemy slots
-- switch active enemy at runtime
-- apply default preset per slot
-- sync active enemy reaction layer into GameplayManager
-
-### 5. Level Enemy Selection Layer
-Handles reusable content-driven startup and runtime selection.
-
-- LevelEnemySelectionController
-- LevelEnemySelectionData
-- EnemyRosterData
-
-Responsibility:
-- define a reusable enemy catalog
-- define which roster entries are used by a level
-- resolve startup enemy from level content
-- configure EnemySwitchingManager without bypassing runtime switching architecture
-- switch to resolved active slot during runtime level application
+### Progression / presentation layer
+- `LevelProgressionData`
+- `LevelProgressionController`
+- `HudController`
 
 ---
 
-## Enemy Switching Flow
+## Ownership Boundaries
 
-### Runtime Preset Flow
-EnemySwitchingManager  
-→ EnemyRuntimePresetController  
-→ EnemyPresetApplicator  
-→ EnemyReactionLayerController / EnemyDefenseController / EnemyAiLayerController / EnemyDefenseStateWindowController
+### `EnemyPresetApplicator`
+Owns:
+- writing preset data into runtime enemy components
 
-### Gameplay Sync Flow
-EnemySwitchingManager  
-→ GameplayManager.SetActiveEnemyReactionLayer(...)  
-→ active EnemyReactionLayerController
+Must:
+- remain the only preset injection layer
 
----
-
-## Level Enemy Selection Flow
-
-Selection flow:
-
-EnemyRosterData  
-→ LevelEnemySelectionData  
-→ LevelEnemySelectionController  
-→ EnemySwitchingManager.ConfigureSlotDefaultPreset(...)  
-→ EnemySwitchingManager.ConfigureStartupSlot(...)  
-→ EnemySwitchingManager.SwitchToSlot(...)  
-→ EnemyRuntimePresetController  
-→ EnemyPresetApplicator
-
-This keeps level content selection above the scene switching layer, while preserving a single preset injection point.
+Must not:
+- be bypassed by direct runtime scene-field assignment hacks
 
 ---
 
-## Encounter Architecture
+### `EnemySwitchingManager`
+Owns:
+- choosing which scene enemy root is active
 
-### LevelEncounterConfigData
-Defines the content of one playable encounter.
-
-Fields:
-- levelId
-- displayName
-- enemySelection : LevelEnemySelectionData
-- targetBreakdownValue
-- roundDurationSeconds
-- autoStartRound
-
-Purpose:
-- bind enemy startup selection together with gameplay target/time
-- move single-level gameplay authoring out of manual inspector-only scene setup
-
-### LevelEncounterController
-Applies a single encounter config into runtime systems.
-
-Responsibilities:
-- set target breakdown in GameplayManager
-- set round duration in GameplayManager
-- apply LevelEnemySelectionData through LevelEnemySelectionController
-
-Important boundary:
-- LevelEncounterController owns single-encounter application only
-- it must not own multi-level progression logic
-- it must not inject presets directly
+Must not:
+- own encounter rules
+- own progression logic
 
 ---
 
-## Progression Architecture
+### `LevelEnemySelectionController`
+Owns:
+- applying enemy selection content for a level
+- mapping roster entry → slot / preset chain
 
-### LevelProgressionData
-Defines:
-- progressionId
-- displayName
-- ordered encounter list
-- startupLevelIndex
-
-### LevelProgressionController
-Handles:
-- ApplyStartupLevel()
-- ApplyLevelByIndex(int)
-- AdvanceToNextLevel()
-- RestartCurrentLevel()
-- HasNextLevel()
-
-Responsibilities:
-- choose which encounter is active
-- apply startup level from progression asset
-- advance or restart at runtime
-- orchestrate single-scene multi-level flow
-
-Important boundary:
-- Progression owns level flow
-- it must not own HUD presentation
-- it must not bypass LevelEncounterController
-- it must not inject enemy preset data directly
+Must not:
+- own progression
+- own round state
 
 ---
 
-## Result Flow Architecture
+### `LevelEncounterController`
+Owns:
+- applying one encounter’s time / goal / enemy selection content
 
-Victory / failure UI is handled through HudController.
-
-Flow:
-GameplayManager.OnRoundFinished  
-→ HudController shows result panel  
-→ Retry button calls LevelProgressionController.RestartCurrentLevel()  
-→ Next button calls LevelProgressionController.AdvanceToNextLevel()
-
-Responsibilities:
-- HUD presents options
-- Progression executes level flow
-- GameplayManager owns round state
-
-Current player-facing result behavior:
-- victory shows Retry + Next when another level exists
-- failure shows Retry only
-- final level hides Next
+Must not:
+- own multi-level progression
+- own result UI
 
 ---
 
-## Result Panel Polish 1.0 Architecture
+### `LevelProgressionController`
+Owns:
+- current level index
+- startup level application
+- retry current level
+- advance to next level
 
-Result Panel Polish 1.0 extends presentation only.
-It does not change ownership boundaries.
-
-Implemented result hierarchy:
-- ResultPanel
-- Dimmer
-- SafeArea
-- ResultCard
-- Header
-  - ResultTitleText
-  - ResultSubtitleText
-- Body
-  - LevelInfoText
-  - GoalSummaryText
-  - FinalLevelNoticeText
-- Actions
-  - RetryButton
-  - NextLevelButton
-
-HudController presentation responsibilities now include:
-- localized result title
-- localized subtitle
-- localized retry / next button labels
-- level info text
-- goal progress text
-- final-level notice visibility
-- result panel hide/show state during round transitions
-
-Important rules:
-- HudController may present result UI, but must not own level progression logic
-- LevelProgressionController must remain the executor of Retry / Next actions
-- GameplayManager must remain the owner of round finish state
-- LocalizationManager remains the text source through CSV-driven key lookup
-- result panel polish must not create a new orchestration layer
-
-Current known limitation:
-- Result Panel Polish 1.0 is prototype-quality UI polish, not final production UI styling
+Must not:
+- absorb encounter-application logic
+- absorb HUD ownership
 
 ---
 
-## Full Runtime Level Flow
+### `GameplayManager`
+Owns:
+- round start / running / finish state
+- breakdown state
+- selected item state
+- combo state
 
-Current level-flow stack:
-
-LevelProgressionData  
-→ LevelProgressionController  
-→ LevelEncounterController  
-→ GameplayManager + LevelEnemySelectionController  
-→ EnemySwitchingManager  
-→ EnemyRuntimePresetController  
-→ EnemyPresetApplicator  
-→ HudController result presentation
-
-This is now the main validated runtime architecture for the current scene.
+Must not:
+- become the executor of retry / next scene-like progression flow
 
 ---
 
-## GameplayManager Runtime Sync
+### `HudController`
+Owns:
+- result panel display
+- current live HUD display
+- goal-aware top-left HUD text
+- player-facing Retry / Next button presentation
 
-GameplayManager remains the gameplay-side owner of:
-- current breakdown state
-- target breakdown state
-- round duration / remaining time
-- selected item
-- round running state
-- reaction stage refresh
-
-Runtime support now includes:
-- replacing the active EnemyReactionLayerController reference
-- applying encounter target/time values
-- starting fresh rounds after level application
-
-This keeps gameplay state centralized while allowing both active enemy and current level to change.
+Must not:
+- become the progression system itself
 
 ---
 
-## Runtime Transition Rules
+## Current Content Architecture
 
-When switching or advancing levels at runtime:
-1. Apply next encounter config
-2. Apply next enemy selection
-3. Switch active enemy slot immediately
-4. Start a fresh round
-5. HUD refresh hides prior result panel when the next round starts
+The project now has two content blocks:
 
-To support stable transitions:
-- ThrowController resets drag / preview state on round finish
-- progression transitions may be delayed slightly to avoid same-frame end/start contamination
+### Teaching block
+Levels 01–03
 
----
+Characteristics:
+- explain goal types
+- low confusion
+- low boss identity complexity
 
-## Current Runtime Model
+### Boss-content block
+Level 04+
 
-Current model is:
-- multiple enemy roots may exist in scene
-- only one enemy is active at a time
-- switching occurs at scene orchestration level
-- AI remains per-enemy and does not manage scene switching
-- defense window `autoCycle` must remain FALSE
-- AI still controls defense timing
-- one Unity scene can host multiple encounter configs
-- progression decides which encounter is active
-- HUD result flow decides whether player retries or advances
+Characteristics:
+- each level should add a new boss read or break rule
+- repeated generic encounters are not acceptable as “content expansion”
 
 ---
 
-## Legacy Compatibility
+## Boss Prototype Architecture Rule
 
-### LevelEnemyController
-`LevelEnemyController` is now considered a legacy startup setup path.
+Level 04 established a critical architectural rule:
 
-Rules:
-- do not use it in switching-oriented scenes
-- do not let it coexist with `LevelEnemySelectionController`
-- do not reintroduce competing startup preset paths into the same scene
+Boss-specific behavior must be introduced through:
+
+1. dedicated `EnemyDefensePatternData`
+2. dedicated `EnemyPresetData`
+3. dedicated roster entry
+4. level enemy selection pointing to that roster entry
+
+Not through:
+- scene-only manual component edits
+- pre-Play inspector values that are overwritten at runtime
+
+This rule exists because runtime preset application overwrites defense-related references.
+
+---
+
+## Current Data Authoring Principle
+
+When adding a new boss-style enemy variant:
+
+1. create or duplicate a dedicated `EnemyDefensePatternData`
+2. create or duplicate a dedicated `EnemyPresetData`
+3. add a new roster entry
+4. point the level selection asset to that roster entry
+5. verify runtime active enemy root, not inactive scene roots
+
+---
+
+## Legacy Rule
+
+`LevelEnemyController` is legacy.
+
+It must not coexist with the current selection/switching/progression path in the same scene-driven flow.
+
+---
+
+## Current Recommended Architectural Direction
+
+Do not introduce broad new architecture before content demands it.
+
+Current best leverage is:
+
+- more boss identity through data
+- clearer weapon-counter rules
+- clean roster/preset authoring
+- minimal system expansion only when content truly requires it

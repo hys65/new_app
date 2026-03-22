@@ -14,6 +14,8 @@ namespace PowerPrank3D.Gameplay
         [SerializeField] private float defenseCooldownTimer;
         [SerializeField] private int recentHitCount;
         [SerializeField] private float repeatedHitWindowTimer;
+        [SerializeField] private float runtimeElapsed;
+        [SerializeField] private float nextTimedActivationAt;
         [SerializeField] private EnemyDefenseStateWindowController defenseStateWindow;
 
         [SerializeField] private EnemyAiLayerController enemyAiLayer;
@@ -32,6 +34,21 @@ namespace PowerPrank3D.Gameplay
             {
                 enemyAiLayer = GetComponent<EnemyAiLayerController>();
             }
+
+            ResetTimedActivationSchedule();
+        }
+
+        private void OnEnable()
+        {
+            ResetTimedActivationSchedule();
+        }
+
+        private void ResetTimedActivationSchedule()
+        {
+            runtimeElapsed = 0f;
+            nextTimedActivationAt = defensePattern != null
+                ? Mathf.Max(0f, defensePattern.firstActivationDelay)
+                : 0f;
         }
 
         private DefenseHitResult FinalizeResult(GameplayItemData itemData, bool isHeadHit, DefenseHitResult result)
@@ -47,6 +64,13 @@ namespace PowerPrank3D.Gameplay
 
         private void Update()
         {
+            if (!HasPattern())
+            {
+                return;
+            }
+
+            runtimeElapsed += Time.deltaTime;
+
             if (defenseTimer > 0f)
             {
                 defenseTimer -= Time.deltaTime;
@@ -75,18 +99,57 @@ namespace PowerPrank3D.Gameplay
                     recentHitCount = 0;
                 }
             }
+
+            TryActivateTimedDefense();
         }
 
         public DefenseHitResult EvaluateHit(GameplayItemData itemData, bool isHeadHit)
         {
             DefenseHitResult result = DefenseHitResult.Default();
 
-            if (defenseStateWindow != null && !defenseStateWindow.CanUseDefenseLogic())
+            if (!HasPattern())
             {
                 return FinalizeResult(itemData, isHeadHit, result);
             }
 
-            if (!HasPattern())
+            // --------------------------------------------------
+            // Level 4 hard-rule path:
+            // BriefcaseBlock must behave deterministically.
+            // When active:
+            // - Hammer always BREAKS
+            // - Everything else always BLOCKS
+            // No state-window short-circuit here.
+            // --------------------------------------------------
+            if (defensePattern.patternType == EnemyDefensePatternType.BriefcaseBlock && defenseActive)
+            {
+                if (CanBreakDefense(itemData))
+                {
+                    defenseActive = false;
+                    defenseTimer = 0f;
+                    defenseCooldownTimer = Mathf.Max(0f, defensePattern.blockCooldown);
+
+                    result.brokeDefense = true;
+                    result.breakdownMultiplier = 1.15f;
+                    result.reactionMultiplier = 1.25f;
+                    result.popupText = "BREAK";
+
+                    Debug.Log("[DefenseEval] BRIEFCASE BREAK by item=" + SafeItemId(itemData));
+                    return FinalizeResult(itemData, isHeadHit, result);
+                }
+
+                result.wasBlocked = true;
+                result.breakdownMultiplier = 0f;
+                result.reactionMultiplier = Mathf.Max(0f, defensePattern.blockedReactionMultiplier);
+                result.popupText = "BLOCK";
+
+                Debug.Log("[DefenseEval] BRIEFCASE BLOCK item=" + SafeItemId(itemData) + " head=" + isHeadHit);
+                return FinalizeResult(itemData, isHeadHit, result);
+            }
+
+            // 通用窗口逻辑只留给非 BriefcaseBlock 的普通通用防御
+            if (defenseStateWindow != null &&
+                defensePattern.patternType != EnemyDefensePatternType.BriefcaseBlock &&
+                !defenseStateWindow.CanUseDefenseLogic())
             {
                 return FinalizeResult(itemData, isHeadHit, result);
             }
@@ -95,7 +158,6 @@ namespace PowerPrank3D.Gameplay
 
             if (defenseActive)
             {
-
                 if (CanBreakDefense(itemData))
                 {
                     defenseActive = false;
@@ -106,6 +168,8 @@ namespace PowerPrank3D.Gameplay
                     result.breakdownMultiplier = 1.15f;
                     result.reactionMultiplier = 1.25f;
                     result.popupText = "BREAK";
+
+                    Debug.Log("[DefenseEval] BREAK item=" + SafeItemId(itemData));
                     return FinalizeResult(itemData, isHeadHit, result);
                 }
 
@@ -115,6 +179,8 @@ namespace PowerPrank3D.Gameplay
                     result.breakdownMultiplier = defensePattern.blockedBreakdownMultiplier;
                     result.reactionMultiplier = defensePattern.blockedReactionMultiplier;
                     result.popupText = "BLOCK";
+
+                    Debug.Log("[DefenseEval] BLOCK item=" + SafeItemId(itemData) + " head=" + isHeadHit);
                     return FinalizeResult(itemData, isHeadHit, result);
                 }
             }
@@ -124,6 +190,7 @@ namespace PowerPrank3D.Gameplay
             {
                 result.activatedDefense = true;
                 result.popupText = "GUARD";
+                Debug.Log("[DefenseEval] GUARD activated");
             }
 
             if (defensePattern.weakToHeadHits &&
@@ -139,6 +206,7 @@ namespace PowerPrank3D.Gameplay
                 {
                     result.popupText = "WEAK";
                 }
+
                 Debug.Log("[DefenseEval] WEAK triggered");
             }
 
@@ -150,11 +218,52 @@ namespace PowerPrank3D.Gameplay
                     result.breakdownMultiplier *= defensePattern.blockedBreakdownMultiplier;
                     result.reactionMultiplier *= defensePattern.blockedReactionMultiplier;
                     result.popupText = "FACE GUARD";
+
+                    Debug.Log("[DefenseEval] FACE GUARD block");
                     return FinalizeResult(itemData, isHeadHit, result);
                 }
             }
 
             return FinalizeResult(itemData, isHeadHit, result);
+        }
+
+        private void TryActivateTimedDefense()
+        {
+            if (!HasPattern())
+            {
+                return;
+            }
+
+            if (!defensePattern.useTimedActivation)
+            {
+                return;
+            }
+
+            if (defenseActive || defenseCooldownTimer > 0f)
+            {
+                return;
+            }
+
+            if (runtimeElapsed < nextTimedActivationAt)
+            {
+                return;
+            }
+
+            ActivateDefense();
+            ScheduleNextTimedActivation();
+
+            Debug.Log("[DefenseEval] Timed defense activated");
+        }
+
+        private void ScheduleNextTimedActivation()
+        {
+            if (!HasPattern())
+            {
+                return;
+            }
+
+            float interval = Mathf.Max(0.1f, defensePattern.timedActivationInterval);
+            nextTimedActivationAt = runtimeElapsed + interval;
         }
 
         private void CountRepeatedHit()
@@ -238,7 +347,7 @@ namespace PowerPrank3D.Gameplay
                 return false;
             }
 
-            string id = itemData.itemId == null ? string.Empty : itemData.itemId.ToLowerInvariant();
+            string id = SafeItemId(itemData);
 
             if (defensePattern.breakByHammer && id.Contains("hammer"))
             {
@@ -270,13 +379,15 @@ namespace PowerPrank3D.Gameplay
 
         private bool IsPaintBall(GameplayItemData itemData)
         {
-            if (itemData == null || string.IsNullOrEmpty(itemData.itemId))
-            {
-                return false;
-            }
-
-            string id = itemData.itemId.ToLowerInvariant();
+            string id = SafeItemId(itemData);
             return id.Contains("paint");
+        }
+
+        private string SafeItemId(GameplayItemData itemData)
+        {
+            return itemData == null || string.IsNullOrEmpty(itemData.itemId)
+                ? string.Empty
+                : itemData.itemId.ToLowerInvariant();
         }
     }
 }

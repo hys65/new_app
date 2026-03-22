@@ -34,7 +34,7 @@ Do not assume docs are fully up to date unless repository scripts and scene wiri
 
 ## Current Project Status Summary
 
-The following milestones are completed and validated:
+The following milestones are completed and runtime-validated:
 
 - Core throw / hit / breakdown gameplay loop
 - Enemy Reaction Layer 1.0
@@ -48,23 +48,38 @@ The following milestones are completed and validated:
 - Runtime Level Advance 1.0
 - Victory Choice Flow 1.0
 - Result Panel Polish 1.0
+- Level Goal Variety 1.0
+- Enemy gameplay hitbox structure repair
+- Enemy stain attachment repair
+- Goal-aware HUD readability update
+- Level 4 Briefcase Boss foundation
 
-The current project is no longer at the “single enemy prototype only” stage.
-
-It already supports:
-- multiple enemy roots in one scene
-- only one active enemy at a time
-- roster-driven level enemy selection
-- encounter config driven target/time/enemy setup
-- progression-driven multi-level flow in one scene
-- player-facing result panel with Retry / Next flow
-- localized result panel labels and supporting text
+The project is no longer a single-enemy prototype.
+It already supports same-scene multi-level runtime flow and goal-driven encounters.
 
 ---
 
-## Current Enemy Architecture
+## Current Goal System Status
 
-Enemy behavior is fully data-driven.
+The following goal types are implemented and validated:
+
+- `BreakdownTarget`
+- `HeadHitCount`
+- `SpecificItemHitCount`
+
+Validated example progression:
+
+- Level 1 -> BreakdownTarget
+- Level 2 -> HeadHitCount
+- Level 3 -> SpecificItemHitCount(item_egg)
+
+Levels 4-9 content assets also exist and are wired into progression.
+
+---
+
+## Current Enemy Runtime Architecture
+
+Enemy behavior remains data-driven.
 
 Behavior definition stack:
 
@@ -88,132 +103,106 @@ Do not create parallel preset injection paths.
 
 ---
 
-## Implemented Enemy Archetypes
+## Important New Runtime Fact
 
-### Meeting Tyrant
-- Early defense trigger
-- Strong guard
-- Short recover
-- Stable and hard to break
+For boss-pattern work, changing `EnemyDefenseController.defensePattern` directly on the scene object is NOT sufficient if runtime preset application is active.
 
-### Narcissist Manager
-- Late defense trigger
-- Long telegraph
-- Short guard
-- Long recover
-- High head weakness
-- Easy to break
+Runtime preset application will overwrite scene-level defense pattern values through:
 
-Both are validated and intentionally different.
+- `EnemyPresetApplicator.ApplyPreset(...)`
+
+If a boss defense pattern must survive runtime startup, it must be assigned through the actual `EnemyPresetData` used by the runtime-selected roster entry.
 
 ---
 
-## Current Runtime Flow
+## Current Level Design Direction
 
-Current validated stack:
+Levels 1-3 are now treated as tutorial levels.
 
-Data  
-→ `EnemyPresetData`  
-→ `EnemyPresetApplicator`  
-→ `EnemyRuntimePresetController`  
-→ `EnemySwitchingManager`  
-→ `LevelEnemySelectionController` / `LevelEnemySelectionData`  
-→ `LevelEncounterController` / `LevelEncounterConfigData`  
-→ `LevelProgressionController` / `LevelProgressionData`  
-→ `HudController` result presentation
+From Level 4 onward, level design direction has changed:
 
-Gameplay sync:
-- `EnemySwitchingManager` updates active enemy reaction layer into `GameplayManager`
-- `LevelEncounterController` applies target/time/enemy content into runtime systems
-- `LevelProgressionController` owns level flow
-- `HudController` presents result UI and delegates Retry / Next into `LevelProgressionController`
+- each level should represent a distinct boss identity
+- each boss should have a distinct defense style
+- each boss should force different item usage or timing
+- avoid fake content expansion through repeated goal rotation only
 
----
+Do not continue building the project as simple repeated:
+- BreakdownTarget
+- HeadHitCount
+- SpecificItemHitCount
+loops with only numeric escalation.
 
-## Current Result Panel Status
-
-Result Panel Polish 1.0 is completed.
-
-Validated structure:
-
-- `ResultPanel`
-- `Dimmer`
-- `SafeArea`
-- `ResultCard`
-- `Header`
-  - `ResultTitleText`
-  - `ResultSubtitleText`
-- `Body`
-  - `LevelInfoText`
-  - `GoalSummaryText`
-  - `FinalLevelNoticeText`
-- `Actions`
-  - `RetryButton`
-    - `RetryButtonText`
-  - `NextLevelButton`
-    - `NextLevelButtonText`
-
-Validated behavior:
-- result panel hidden at startup
-- result panel shown after round finish
-- localized Victory / Failed / Retry / Next / subtitle / goal text
-- Retry restarts current level
-- Next advances only if another level exists
-- final-level notice is supported
-- no raw localization keys remain after CSV update
-- no TMP placeholder `New Text` remains after proper binding
+Boss identity now has higher priority than pure goal rotation.
 
 ---
 
-## Important Current Boundaries
+## Current Boss Progress
 
-These rules are mandatory:
+Level 4 has started transition into:
+
+**Briefcase Boss / Hammer Break rule**
+
+Validated implementation direction:
+
+- timed defense activation
+- briefcase-style guard state
+- runtime preset-specific boss defense pattern
+- scene-level manual defense pattern override is insufficient if preset overwrites it
+- boss-specific preset / roster entry path is now established
+
+This foundation exists for future boss identity work.
+
+---
+
+## Mandatory Current Boundaries
 
 1. Do not guess code structure
-2. Do not rewrite systems before inspecting repository code
-3. Keep all behavior data-driven
+2. Inspect real scripts before changing docs or architecture
+3. Keep enemy runtime data-driven
 4. `EnemyPresetApplicator` must remain the only preset injection layer
-5. `EnemyDefenseStateWindowProfile.autoCycle` must remain FALSE
-6. AI controls defense timing, not the defense window system
-7. Do not collapse scene orchestration into enemy AI
-8. Do not let competing startup preset setup paths coexist in the same scene
-9. `LevelEncounterController` owns single-encounter application only
-10. `LevelProgressionController` owns multi-level flow only
-11. `HudController` may present result UI, but must not own level progression logic
-12. `GameplayManager` owns round state, not result flow execution
-13. `LevelEnemyController` is legacy and must not coexist with `LevelEnemySelectionController` in the same switching-oriented scene
+5. `LevelEnemyController` remains legacy and must not re-enter the main scene flow
+6. `LevelEncounterController` owns encounter application only
+7. `LevelProgressionController` owns multi-level flow only
+8. `HudController` may display goal/status/result UI but must not own progression logic
+9. `GameplayManager` owns round state, not level progression flow
+10. Do not regress repaired hitbox structure
+11. Do not reintroduce `EnemyVisual` as gameplay collision root
+12. Do not attach boss-rule authoring only at scene-object level if preset application will overwrite it
 
 ---
 
 ## Current Development Position
 
 The project has already moved beyond:
-- single enemy prototype validation
-- defense timing validation
-- scene-only manual encounter setup
-- forced auto-advance after victory
 
-The project is currently at:
-- reusable multi-level runtime flow
-- player-facing result UI
-- content authoring expansion stage
+- single-enemy combat validation
+- result-panel-only polish
+- simple goal variety validation
+
+The project is now at:
+
+- tutorial-to-boss structure planning
+- boss identity implementation stage
+- preset-driven boss configuration stage
 
 ---
 
-## Next Recommended Milestone
+## Current Recommended Next Milestone
 
-**Level Goal Variety 1.0**
+**Level 5 Boss Identity: Sunglasses Boss**
 
 Suggested direction:
-- expand beyond pure breakdown-only goals
-- add level-specific goal variety
-- keep goals data-driven
-- extend encounter / progression content without breaking existing result flow
 
-Secondary options:
-- Content Expansion toward 12 Levels
-- Enemy Visual Identity Upgrade
-- Result Panel Polish 1.1
+- create boss-specific preset path, not scene-only patching
+- add paint immunity / pre-break condition behavior
+- preserve existing goal/runtime/progression structure
+- continue using data-driven preset + roster + selection stack
+
+Secondary follow-up:
+
+- update Levels 4-12 into tutorial + unique boss structure
+- add minimal boss-specific goal types only when required
+- avoid architecture churn
 
 ---
 
@@ -224,10 +213,11 @@ When answering:
 1. Read docs first
 2. Inspect real scripts second
 3. Respect current architecture
-4. Prefer extending cleanly over rewriting
-5. Give exact change points
-6. If code changes are needed, provide full direct replacement files when safer than partial patches
-7. If scene setup is needed, give exact hierarchy and inspector instructions
-8. Do not propose speculative architecture that ignores the repository state
-
-If repository state and prior summary conflict, trust the repository and explain the mismatch clearly.
+4. Prefer exact extensions over speculative rewrites
+5. If code changes are needed, provide full direct replacement files when safer
+6. If scene/data changes are needed, specify exact asset and inspector changes
+7. If runtime config is overwritten, trace the preset / roster / selection chain before changing code
+8. Distinguish clearly between:
+   - scene-level values
+   - preset-level values
+   - runtime-selected roster entry values

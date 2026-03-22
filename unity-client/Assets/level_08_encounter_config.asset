@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 646b1b3bee028404190f08eebe4b94e0, type: 3}
+  m_Name: level_08_encounter_config
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.LevelEncounterConfigData
+  levelId: level_08
+  displayName: Level 08 Encounter
+  enemySelection: {fileID: 11400000, guid: 6382b2e7f91fc524292398f9330bd1c3, type: 2}
+  primaryGoal:
+    goalType: 1
+    targetCount: 8
+    requiredItemId: 
+  targetBreakdownValue: 180
+  roundDurationSeconds: 40
+  autoStartRound: 1

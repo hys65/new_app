@@ -102,9 +102,13 @@ namespace PowerPrank3D.Gameplay
                 HideResultPanel();
             }
 
-            SetText(currentBreakdownText, "ui_breakdown_current", gameplayManager.CurrentBreakdownValue.ToString());
-            SetText(targetBreakdownText, "ui_breakdown_target", gameplayManager.TargetBreakdownValue.ToString());
-            SetText(timerText, "ui_time_left", Mathf.CeilToInt(gameplayManager.RemainingTimeSeconds).ToString());
+            RefreshGoalHud();
+
+            SetText(
+                timerText,
+                "ui_time_left",
+                Mathf.CeilToInt(gameplayManager.RemainingTimeSeconds).ToString()
+            );
 
             string itemLabel = gameplayManager.CurrentItem != null
                 ? GetText(gameplayManager.CurrentItem.displayKey)
@@ -117,6 +121,51 @@ namespace PowerPrank3D.Gameplay
             if (lastRoundFinished && resultPanel != null && resultPanel.activeSelf)
             {
                 RefreshResultPanel(lastRoundWasWin);
+            }
+        }
+
+        private void RefreshGoalHud()
+        {
+            if (gameplayManager == null)
+            {
+                return;
+            }
+
+            if (levelGoalController == null || levelGoalController.CurrentGoal == null)
+            {
+                SetText(currentBreakdownText, "ui_breakdown_current", gameplayManager.CurrentBreakdownValue.ToString());
+                SetText(targetBreakdownText, "ui_breakdown_target", gameplayManager.TargetBreakdownValue.ToString());
+                return;
+            }
+
+            LevelGoalDefinition goal = levelGoalController.CurrentGoal;
+            int progress = levelGoalController.CurrentProgress;
+            int target = Mathf.Max(1, goal.targetCount);
+
+            switch (goal.goalType)
+            {
+                case LevelGoalType.HeadHitCount:
+                    SetPlainText(currentBreakdownText, $"Head Hits: {progress} / {target}");
+                    SetPlainText(
+                        targetBreakdownText,
+                        $"Breakdown: {gameplayManager.CurrentBreakdownValue} / {gameplayManager.TargetBreakdownValue}"
+                    );
+                    break;
+
+                case LevelGoalType.SpecificItemHitCount:
+                    string itemLabel = GetGoalItemLabel(goal.requiredItemId);
+                    SetPlainText(currentBreakdownText, $"{itemLabel} Hits: {progress} / {target}");
+                    SetPlainText(
+                        targetBreakdownText,
+                        $"Breakdown: {gameplayManager.CurrentBreakdownValue} / {gameplayManager.TargetBreakdownValue}"
+                    );
+                    break;
+
+                case LevelGoalType.BreakdownTarget:
+                default:
+                    SetText(currentBreakdownText, "ui_breakdown_current", gameplayManager.CurrentBreakdownValue.ToString());
+                    SetText(targetBreakdownText, "ui_breakdown_target", gameplayManager.TargetBreakdownValue.ToString());
+                    break;
             }
         }
 
@@ -203,9 +252,7 @@ namespace PowerPrank3D.Gameplay
 
         private void RefreshResultPanel(bool isWin)
         {
-            bool hasNextLevel = isWin &&
-                                levelProgressionController != null &&
-                                levelProgressionController.HasNextLevel();
+            bool hasNextLevel = isWin && levelProgressionController != null && levelProgressionController.HasNextLevel();
 
             if (resultTitleText != null)
             {
@@ -215,12 +262,9 @@ namespace PowerPrank3D.Gameplay
             if (resultSubtitleText != null)
             {
                 string subtitleKey;
-
                 if (isWin)
                 {
-                    subtitleKey = hasNextLevel
-                        ? "result_ready_for_next"
-                        : "result_all_levels_complete";
+                    subtitleKey = hasNextLevel ? "result_ready_for_next" : "result_all_levels_complete";
                 }
                 else
                 {
@@ -340,6 +384,58 @@ namespace PowerPrank3D.Gameplay
             }
 
             textComponent.text = $"{GetText(labelKey)}: {value}";
+        }
+
+        private void SetPlainText(TextMeshProUGUI textComponent, string value)
+        {
+            if (textComponent == null)
+            {
+                return;
+            }
+
+            textComponent.text = value;
+        }
+
+        private string GetGoalItemLabel(string itemId)
+        {
+            if (string.IsNullOrWhiteSpace(itemId))
+            {
+                return "Item";
+            }
+
+            if (gameplayManager != null && gameplayManager.CurrentItem != null)
+            {
+                if (string.Equals(gameplayManager.CurrentItem.itemId, itemId, System.StringComparison.Ordinal))
+                {
+                    return GetText(gameplayManager.CurrentItem.displayKey);
+                }
+            }
+
+            if (itemId.StartsWith("item_", System.StringComparison.OrdinalIgnoreCase))
+            {
+                itemId = itemId.Substring(5);
+            }
+
+            itemId = itemId.Replace("_", " ").Trim();
+
+            if (string.IsNullOrEmpty(itemId))
+            {
+                return "Item";
+            }
+
+            string[] parts = itemId.Split(' ');
+            for (int i = 0; i < parts.Length; i++)
+            {
+                if (string.IsNullOrEmpty(parts[i]))
+                {
+                    continue;
+                }
+
+                string part = parts[i];
+                parts[i] = char.ToUpperInvariant(part[0]) + part.Substring(1).ToLowerInvariant();
+            }
+
+            return string.Join(" ", parts);
         }
 
         private string GetText(string key)

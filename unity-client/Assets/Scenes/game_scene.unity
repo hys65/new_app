@@ -3458,14 +3458,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cfd0d2474865b347985de99a5947b93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyDefenseController
-  defensePattern: {fileID: 11400000, guid: b96d381afacc0ba4799eee280cec0620, type: 2}
+  defensePattern: {fileID: 11400000, guid: a5f9f1783627bdd4db3887b10bacd26b, type: 2}
   useDefensePattern: 1
   defenseActive: 0
   defenseTimer: 0
   defenseCooldownTimer: 0
   recentHitCount: 0
   repeatedHitWindowTimer: 0
-  defenseStateWindow: {fileID: 1310628148}
+  runtimeElapsed: 0
+  nextTimedActivationAt: 0
+  defenseStateWindow: {fileID: 0}
   enemyAiLayer: {fileID: 1310628149}
 --- !u!114 &1310628147
 MonoBehaviour:
@@ -5111,13 +5113,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cfd0d2474865b347985de99a5947b93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyDefenseController
-  defensePattern: {fileID: 11400000, guid: 12993ee94253624479e4dc24bb917441, type: 2}
+  defensePattern: {fileID: 11400000, guid: a5f9f1783627bdd4db3887b10bacd26b, type: 2}
   useDefensePattern: 1
   defenseActive: 0
   defenseTimer: 0
   defenseCooldownTimer: 0
   recentHitCount: 0
   repeatedHitWindowTimer: 0
+  runtimeElapsed: 0
+  nextTimedActivationAt: 0
   defenseStateWindow: {fileID: 1620351229}
   enemyAiLayer: {fileID: 1620351228}
 --- !u!114 &1620351232

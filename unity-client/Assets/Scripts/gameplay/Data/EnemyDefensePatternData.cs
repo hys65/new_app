@@ -31,6 +31,11 @@ namespace PowerPrank3D.Gameplay
         public int repeatedHitCountThreshold = 2;
         public float repeatedHitWindow = 2.0f;
 
+        [Header("Timed Trigger")]
+        public bool useTimedActivation = false;
+        public float firstActivationDelay = 4.0f;
+        public float timedActivationInterval = 6.0f;
+
         [Header("Blocked Result")]
         [Range(0f, 1f)] public float blockedBreakdownMultiplier = 0.25f;
         [Range(0f, 1f)] public float blockedReactionMultiplier = 0.55f;

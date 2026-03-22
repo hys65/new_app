@@ -1,312 +1,137 @@
 # GAMEPLAY SYSTEMS
 
-## Gameplay Loop
+## Overview
 
-Power Prank 3D currently runs on a single-scene, multi-level gameplay loop.
+Gameplay is built around a prank-throwing core loop:
 
-Core loop:
-1. Start encounter
-2. Throw prank item
-3. Register hit
-4. Apply breakdown pressure
-5. Trigger enemy reactions / defense behavior
-6. Advance goal progress
-7. Reach encounter goal or run out of time
-8. Show result panel
-9. Player chooses Retry or Next
-10. Restart current level or advance to next level
+1. player selects / uses items
+2. projectile hits enemy or ground
+3. defense logic evaluates hit
+4. reaction / popup / breakdown updates apply
+5. goal progress updates
+6. round win/loss resolves
+7. result UI handles retry / next
 
 ---
 
 ## Core Gameplay Systems
 
-### GameplayManager
-Owns core runtime gameplay state.
-
-Responsibilities:
-- current breakdown value
-- target breakdown value
-- round duration / remaining time
-- current selected item
-- round running / round finished state
-- active enemy reaction layer reference
-- round finish event dispatch
-- breakdown-based win condition enable / disable
-- force-finish support for non-breakdown goals
-
-Important boundary:
-- GameplayManager owns gameplay state
-- it does not own level progression
-- it does not own result button execution logic
-- it does not decide encounter goal definitions
-
 ### ThrowController
-Owns throw input and projectile launch flow.
-
-Responsibilities:
-- drag / aim input
-- projectile launch request
-- preview / drag reset on round transitions
-
-Important runtime rule:
-- transient drag state must reset when rounds finish or levels restart
+Owns projectile launch input and spawn usage.
 
 ### ProjectileBehavior
-Owns projectile movement and hit delivery.
+Owns projectile hit handling.
 
-Responsibilities:
-- movement
-- collision
-- hit payload application
-- impact VFX / SFX
-- stain spawn
-- report resolved hit data into LevelGoalController
+Key responsibilities:
+- detect enemy vs ground hit
+- query `EnemyDefenseController`
+- convert defense result into breakdown contribution
+- spawn hit popup
+- report `CombatHitInfo` into `LevelGoalController`
+- handle stain placement
 
-Current hit payload report:
-- `isHeadHit`
-- `itemId`
-- `gainedScore`
+### GameplayManager
+Owns:
+- round state
+- breakdown values
+- selected item state
+- combo state
+- finish / retry behavior
 
 ### LevelGoalController
-Owns current encounter goal runtime progress.
-
-Responsibilities:
-- apply encounter primary goal
-- reset goal progress when encounter starts
-- consume resolved hit events
-- evaluate current goal completion
-- finish round for non-breakdown goals
-- provide readable goal summary text for UI
-
-Important boundary:
-- LevelGoalController does not own level progression
-- it does not select encounters
-- it does not own raw gameplay state like timer or breakdown
-- it consumes runtime hit results and converts them into encounter objective progress
-
-### HitPopupSpawner
-Owns floating hit feedback text.
-
-Responsibilities:
-- score popup spawning
-- visual gameplay feedback for successful hits
+Owns:
+- current goal definition
+- current progress
+- goal completion
+- summary text generation
 
 ### HudController
-Owns player-facing HUD and result presentation.
-
-Responsibilities:
-- current breakdown text
-- target breakdown text
-- timer text
-- selected item text
+Owns:
+- current top-left HUD state
+- timer display
+- selected item display
+- goal-aware primary line display
 - combo display
-- result panel visibility
-- result title / subtitle text
-- level info text
-- goal progress text
-- final-level notice text
-- Retry / Next button text refresh
-- button click delegation into LevelProgressionController
-
-Important boundary:
-- HudController presents UI only
-- it must not own multi-level progression logic
-- it must not directly apply encounter data
-- it must not replace GameplayManager as round-state owner
+- result panel display
 
 ---
 
-## Level Goal Variety 1.0
+## Current Goal HUD Rule
 
-Level Goal Variety 1.0 is now implemented and runtime-validated.
+HUD must reflect the real win condition.
 
-Each encounter may define one primary goal through:
-- `LevelEncounterConfigData.primaryGoal`
+### BreakdownTarget
+Show breakdown-oriented HUD lines.
 
-### Supported goal types
+### HeadHitCount
+Show `Head Hits: X / Y`
 
-#### 1. BreakdownTarget
-Legacy breakdown-based win condition.
+### SpecificItemHitCount
+Show item-specific line such as `Tomato Hits: X / Y`
 
-Behavior:
-- round wins when breakdown reaches target breakdown value
-- goal summary displays breakdown progress
+Breakdown may still be shown as secondary combat information.
 
-#### 2. HeadHitCount
-Precision goal.
-
-Behavior:
-- only hits resolved through collider Tag = `Head` advance progress
-- body hits do not count
-- round wins when head-hit target is reached
-
-#### 3. SpecificItemHitCount
-Item-restricted goal.
-
-Behavior:
-- only hits whose `itemId` matches `primaryGoal.requiredItemId` advance progress
-- round wins when target count is reached
+This change is complete and validated.
 
 ---
 
-## Runtime Goal Flow
+## Current Goal Types
 
-Encounter application flow:
-LevelProgressionController  
-→ LevelEncounterController  
-→ GameplayManager target/time refresh  
-→ GameplayManager breakdown-win-condition refresh  
-→ LevelEnemySelectionController  
-→ EnemySwitchingManager  
-→ LevelGoalController.ApplyGoal(...)
+### `BreakdownTarget`
+Win by reaching target breakdown.
 
-Hit resolution flow:
-ProjectileBehavior  
-→ resolve collision / defense / score  
-→ build `CombatHitInfo`  
-→ LevelGoalController.NotifyHitResolved(...)
+### `HeadHitCount`
+Win by reaching valid head-hit count.
 
-Victory flow:
-- `BreakdownTarget` → GameplayManager wins from breakdown reaching target
-- `HeadHitCount` → LevelGoalController calls GameplayManager.ForceFinishRound(true)
-- `SpecificItemHitCount` → LevelGoalController calls GameplayManager.ForceFinishRound(true)
+### `SpecificItemHitCount`
+Win by reaching valid hit count with required item.
 
-Result flow:
-GameplayManager.OnRoundFinished  
-→ HudController.ShowResultPanel  
-→ Retry / Next button click  
-→ LevelProgressionController.RestartCurrentLevel / AdvanceToNextLevel
+These three are implemented and working.
 
 ---
 
-## Enemy Gameplay Hitbox Structure
+## Current Content Rule
 
-A repaired hitbox structure is now required.
+Levels 01–03 are teaching levels.
 
-### Valid structure
-- `EnemyVisual` → visual-only
-- `Torso` → body collider
-- `HeadCollider` → dedicated head collider, Tag = `Head`
-- `EnemyHitReaction` → shared gameplay parent (`DefenseBodyPivot`)
-
-### Invalid structure
-- using `EnemyVisual` collider as the main gameplay collider
-- attaching `EnemyHitReaction` to a node that head/body hitboxes cannot resolve through `GetComponentInParent(...)`
-
-### Why this matters
-This prevents:
-- visual-shell collider stealing hits before gameplay hitboxes
-- head-hit goals never progressing
-- body / head reactions resolving inconsistently
+After that, gameplay content should not expand by simple number reuse alone.
+New levels must increasingly justify themselves through:
+- new boss behavior
+- new item relevance
+- new break logic
+- new player read
 
 ---
 
-## Head Hit Detection Notes
+## Level 04 Gameplay Rule
 
-Current runtime head-hit detection is collider-based.
+Level 04 introduced the first gameplay rule where item choice materially matters.
 
-Head hit is resolved by:
-- projectile collision target tag
-- `collision.collider.CompareTag("Head")`
+### Briefcase guard active
+- sponge hammer = break
+- other items = blocked
 
-Current validated setup:
-- `HeadCollider` positioned and sized to cover upper-head gameplay space
-- `HeadCollider` enlarged relative to early setup to avoid top-of-head miss cases
+This is the first real proof that weapons can have roles beyond raw hit score.
 
 ---
 
-## Enemy Stain Attachment Behavior
+## Known Gameplay-Side Debugging Lessons
 
-Enemy hit stains are now handled differently from ground stains.
-
-### Enemy hit stain behavior
-- spawn on enemy hit
-- parent to enemy hit target hierarchy
-- rigidbody gravity / motion disabled on spawn
-- remain attached after impact
-
-### Ground stain behavior
-- spawn on ground hit
-- parent to world `Stains` root
-- remain world-rooted
-
-This prevents enemy hit stains from falling out of the scene after collision.
+1. If a blocked hit still gives score, inspect whether `wasBlocked` is actually being returned
+2. If a pattern seems correct before Play but not during Play, inspect runtime preset overwrite first
+3. If a goal seems wrong, verify current encounter config and current level selection asset
+4. If a HUD line is misleading, fix display logic before changing underlying systems
 
 ---
 
-## Result Panel Polish 1.0
+## Current Recommended Gameplay Direction
 
-Result Panel Polish 1.0 upgrades the functional result screen into a readable prototype UI.
+The next gameplay step should be:
 
-Implemented scene hierarchy:
-- HUDCanvas
-  - HudPanel
-  - ResultPanel
-    - Dimmer
-    - SafeArea
-      - ResultCard
-        - Header
-          - ResultTitleText
-          - ResultSubtitleText
-        - Body
-          - LevelInfoText
-          - GoalSummaryText
-          - FinalLevelNoticeText
-        - Actions
-          - RetryButton
-            - RetryButtonText
-          - NextLevelButton
-            - NextLevelButtonText
+**Boss Defense Identity Expansion 1.0**
 
-Implemented runtime presentation:
-- startup scene keeps result panel hidden
-- round finish shows localized title
-- subtitle changes based on win/final-state condition
-- level info text is shown on result panel
-- goal progress text is shown on result panel
-- final-level notice is supported
-- Retry and Next use localized labels
-- next button visibility depends on LevelProgressionController.HasNextLevel()
-
-Localization keys required by result panel:
-- `ui_retry`
-- `ui_next_level`
-- `result_victory`
-- `result_failed`
-- `result_ready_for_next`
-- `result_all_levels_complete`
-- `result_try_again`
-- `ui_level`
-- `ui_goal_progress`
-- `ui_final_level_cleared`
-
-Validation result:
-- no placeholder `New Text` remains after proper inspector hookup
-- no raw localization keys remain after CSV update
-- result panel only appears after round finish
-- button flow remains functional
-
-Known current quality note:
-- panel styling is prototype-level
-- future polish may improve dimmer strength, button style, card styling, and HUD suppression during result display
-
----
-
-## Current Gameplay Boundaries
-
-Do:
-- keep gameplay state in GameplayManager
-- keep level flow in LevelProgressionController
-- keep encounter application in LevelEncounterController
-- keep goal runtime progress in LevelGoalController
-- keep enemy startup selection in LevelEnemySelectionController
-- keep result presentation in HudController
-- keep gameplay colliders separate from visual shell colliders
-
-Do not:
-- move level progression into HUD
-- move result UI ownership into GameplayManager
-- bypass LevelEncounterController for runtime level application
-- bypass EnemyPresetApplicator for preset injection
-- enable defense window auto-cycle
-- use EnemyVisual as the main gameplay hitbox
+Meaning:
+- keep teaching block stable
+- expand item-specific meaning
+- add more boss reads after Level 04
+- avoid fake content repetition
