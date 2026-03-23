@@ -16,9 +16,9 @@ MonoBehaviour:
   displayName: Level 05 Encounter
   enemySelection: {fileID: 11400000, guid: 296c01c7d72aa8f4cafafb98450b4086, type: 2}
   primaryGoal:
-    goalType: 1
-    targetCount: 7
-    requiredItemId: 
-  targetBreakdownValue: 170
-  roundDurationSeconds: 42
+    goalType: 2
+    targetCount: 5
+    requiredItemId: item_paint_ball
+  targetBreakdownValue: 160
+  roundDurationSeconds: 45
   autoStartRound: 1

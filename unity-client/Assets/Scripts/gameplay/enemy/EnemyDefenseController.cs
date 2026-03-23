@@ -210,16 +210,20 @@ namespace PowerPrank3D.Gameplay
                 Debug.Log("[DefenseEval] WEAK triggered");
             }
 
+            // Level 05 boss rule:
+            // When FaceGuard is active, paint is fully invalid until the defense is broken.
+            // This intentionally applies to all paint hits, not only head hits,
+            // so the boss can support a paint-based level goal cleanly.
             if (defenseActive && defensePattern.patternType == EnemyDefensePatternType.FaceGuard)
             {
-                if (isHeadHit && defensePattern.reducePaintOnFaceGuard && IsPaintBall(itemData))
+                if (defensePattern.reducePaintOnFaceGuard && IsPaintBall(itemData))
                 {
                     result.wasBlocked = true;
-                    result.breakdownMultiplier *= defensePattern.blockedBreakdownMultiplier;
-                    result.reactionMultiplier *= defensePattern.blockedReactionMultiplier;
+                    result.breakdownMultiplier = 0f;
+                    result.reactionMultiplier = Mathf.Max(0f, defensePattern.blockedReactionMultiplier);
                     result.popupText = "FACE GUARD";
 
-                    Debug.Log("[DefenseEval] FACE GUARD block");
+                    Debug.Log("[DefenseEval] FACE GUARD block item=" + SafeItemId(itemData) + " head=" + isHeadHit);
                     return FinalizeResult(itemData, isHeadHit, result);
                 }
             }

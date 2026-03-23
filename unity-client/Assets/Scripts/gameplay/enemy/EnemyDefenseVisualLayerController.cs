@@ -323,6 +323,7 @@ namespace PowerPrank3D.Gameplay
                     break;
 
                 case "BLOCK":
+                case "FACE GUARD":
                     TriggerBlock(reactionMultiplier);
                     break;
 
