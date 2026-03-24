@@ -46,6 +46,7 @@ Defines defense behavior details, such as:
 - timed activation
 - reactive activation
 - weakness settings
+- boss-specific special handling
 
 ### `EnemyAiProfileData`
 Defines enemy timing/personality control where applicable.
@@ -92,15 +93,22 @@ Base Narcissist Manager runtime identity.
 ### 3. `meeting_tyrant_briefcase_boss`
 Boss-variant roster entry created for Level 04.
 
-This is not just a renamed copy.
-It exists to support:
+Supports:
 - dedicated preset
 - dedicated defense pattern
-- boss-style break rule
+- boss-style hammer-break rule
+
+### 4. `narcissist_manager_sunglasses_boss`
+Boss-variant roster entry created for Level 05.
+
+Supports:
+- dedicated preset
+- dedicated defense pattern
+- boss-style foam-break / paint-finish rule
 
 ---
 
-## Level 04 Briefcase Boss Prototype
+## Level 04 Briefcase Boss
 
 ### Purpose
 Validate the first true boss-defense identity.
@@ -111,17 +119,37 @@ Validate the first true boss-defense identity.
 - `meeting_tyrant_briefcase_boss` roster entry
 - `level_enemy_selection_level_04`
 
-### Briefcase boss rules
+### Rule
 When briefcase guard is active:
 - sponge hammer breaks defense
 - non-hammer items are blocked
 
-### Important debugging lesson
-Scene-only edits were overwritten by preset application.
-The fix was:
-- author a dedicated preset
-- author a dedicated roster entry
-- route the level through that entry
+---
+
+## Level 05 Sunglasses Boss
+
+### Purpose
+Validate the second boss-defense identity and push weapon-role meaning further.
+
+### Runtime authoring chain
+- `narcissist_manager_sunglasses_boss_defense_pattern`
+- `enemy_preset_narcissist_manager_sunglasses_boss`
+- `narcissist_manager_sunglasses_boss` roster entry
+- `level_enemy_selection_level_05`
+
+### Rule
+When sunglasses face guard is active:
+- paint is ineffective
+- foam breaks defense
+- paint becomes valid again after break
+
+### Content meaning
+This is not just “another block.”  
+It forces a two-step combat read:
+
+1. read boss defense timing
+2. use the breaker item
+3. switch to the actual scoring item
 
 ---
 

@@ -58,7 +58,7 @@ If a scene value looks correct before Play and wrong after Play, inspect:
 
 before rewriting systems.
 
-This rule is now proven by the Level 04 briefcase-boss debugging path.
+This rule is proven by the Level 04 briefcase-boss debugging path and reinforced by Level 05 sunglasses-boss authoring.
 
 ---
 
@@ -108,3 +108,16 @@ In Play mode:
 - inspect runtime fields on the actually selected runtime enemy
 
 This is mandatory in the current multi-root scene setup.
+
+---
+
+## 9. Preserve validated boss levels
+
+Level 04 and Level 05 are now validated boss-foundation content.
+
+Do not casually redesign them while building later levels.
+
+Use them as reference implementations for:
+- preset overwrite-safe authoring
+- boss-specific item-counter rules
+- goal-aligned combat structure

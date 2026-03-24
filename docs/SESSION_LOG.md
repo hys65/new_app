@@ -2,64 +2,76 @@
 
 ## Session Summary
 
-This session continued from the already validated multi-level runtime flow and focused on:
+This session continued from the validated multi-level runtime flow and focused on:
 
-1. expanding runtime content from Level 04 to Level 09
-2. fixing non-breakdown goal values
-3. improving goal readability in the main HUD
-4. shifting design direction from generic repeated encounters toward boss-identity content
-5. implementing the first boss-defense prototype for Level 04
+1. confirming the real code/runtime state instead of trusting old summaries
+2. checking docs against actual runtime architecture
+3. identifying doc drift around Level 05
+4. implementing and validating Level 05 as a true boss-identity encounter
+5. updating project direction from “next do Level 05” to “Level 05 complete”
 
 ---
 
 ## Completed During This Session
 
-### Content expansion
-Added / validated content through Level 09:
-- Level 04
-- Level 05
-- Level 06
-- Level 07
-- Level 08
-- Level 09
+### State audit
+Confirmed current runtime structure still uses:
 
-### Goal fixes
-- corrected invalid `SpecificItemHitCount` magnitude usage
-- restored sensible target counts for specific-item levels
+- `LevelProgressionController`
+- `LevelEncounterController`
+- `LevelEnemySelectionController`
+- `EnemySwitchingManager`
+- `EnemyRuntimePresetController`
+- `EnemyPresetApplicator`
 
-### HUD work
-Implemented goal-aware main HUD display:
-- `Head Hits: X / Y`
-- item-specific goal display
-- breakdown retained as secondary combat information
+Confirmed the project is still data-driven and preset-authoritative.
 
-### Design direction update
-Locked in new content rule:
-- Levels 01–03 are teaching levels
-- Level 04+ must move toward boss-identity content
-- fake repeated content is not acceptable
+### Doc drift identification
+Found that older docs described Level 05 as the next target, but runtime content had not yet been fully aligned as a finished boss identity.
 
-### Level 04 boss prototype
-Implemented and validated:
-- dedicated briefcase-boss defense pattern
-- timed defense activation
-- dedicated boss preset
-- dedicated boss roster entry
-- Level 04 selection remapped to that boss entry
-- runtime preset overwrite issue diagnosed and resolved through proper preset/roster chain
-- briefcase guard rule stabilized:
-  - sponge hammer breaks
-  - non-hammer items block
+The key issue was conceptual drift:
+- docs assumed Level 05 Sunglasses Boss direction
+- runtime content still needed explicit boss completion and validation
+
+### Level 05 boss implementation
+Completed and validated:
+
+- dedicated sunglasses-boss defense pattern
+- dedicated sunglasses-boss preset
+- dedicated sunglasses-boss roster entry
+- Level 05 enemy selection routed to that boss entry
+- face-guard behavior aligned with paint suppression
+- foam break behavior validated
+- post-break paint scoring flow validated
+- level goal aligned to `SpecificItemHitCount(item_paint_ball)`
+
+### Level 05 final gameplay rule
+Validated rule set:
+
+- timed sunglasses face guard
+- paint ineffective during active guard
+- foam breaks defense
+- paint becomes valid after defense break
+- level goal built around paint hits, not generic repeated scoring
 
 ---
 
 ## Key Debugging Lessons From This Session
 
-1. Runtime preset application overrides scene defense pattern references
-2. Debugging must target the actually active runtime enemy root
-3. Scene-only fixes are unreliable when preset injection is authoritative
-4. Goal HUD must reflect the real win condition
-5. First boss-defense content should be made deterministic before adding more complexity
+1. Docs can drift forward into design intent before runtime content fully catches up
+2. Real source of truth remains current code + current runtime asset chain
+3. Boss behavior must still be validated through:
+   - selection
+   - roster
+   - preset
+   - runtime preset application
+4. A boss level is not complete when the pattern exists
+5. A boss level is complete only when:
+   - defense rule works
+   - break rule works
+   - scoring rule works
+   - goal rule works
+   - active runtime enemy is correct
 
 ---
 
@@ -67,20 +79,41 @@ Implemented and validated:
 
 Validated state at end of session:
 
-- Levels 01–09 wired into progression
-- non-breakdown goals working
+- Levels 01–03 stable as tutorial levels
+- Level 04 briefcase boss working
+- Level 05 sunglasses boss working
 - goal-aware HUD working
-- Level 04 briefcase boss prototype working
-- project direction shifted toward boss-defense identity expansion
+- result flow working
+- project direction now clearly supports multiple boss-identity levels
+
+---
+
+## Current Boss Foundation Status
+
+### Level 04
+Completed as first boss foundation:
+- Meeting Tyrant briefcase guard
+- hammer break
+- non-hammer block
+
+### Level 05
+Completed as second boss foundation:
+- Narcissist Manager sunglasses guard
+- foam break
+- paint finish
+
+This means the project now has two validated boss-reference levels.
 
 ---
 
 ## Recommended Starting Point For Next Session
 
 Start with:
+
 - docs review
 - script inspection
-- confirmation of current Level 04 briefcase boss state
+- confirmation of current Level 04 and Level 05 boss state
 
 Then proceed to:
-**Level 05 boss identity design and implementation**
+
+**Level 06 boss identity design and implementation**

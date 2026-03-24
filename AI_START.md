@@ -52,7 +52,8 @@ The following milestones are completed and runtime-validated:
 - Enemy gameplay hitbox structure repair
 - Enemy stain attachment repair
 - Goal-aware HUD readability update
-- Level 4 Briefcase Boss foundation
+- Level 04 Briefcase Boss foundation
+- Level 05 Sunglasses Boss foundation
 
 The project is no longer a single-enemy prototype.
 It already supports same-scene multi-level runtime flow and goal-driven encounters.
@@ -72,8 +73,10 @@ Validated example progression:
 - Level 1 -> BreakdownTarget
 - Level 2 -> HeadHitCount
 - Level 3 -> SpecificItemHitCount(item_egg)
+- Level 4 -> BreakdownTarget + Briefcase Boss rule
+- Level 5 -> SpecificItemHitCount(item_paint_ball) + Sunglasses Boss rule
 
-Levels 4-9 content assets also exist and are wired into progression.
+Levels 4-9 content assets exist in progression, but only Levels 1-5 should currently be treated as meaningfully validated content structure.
 
 ---
 
@@ -103,7 +106,7 @@ Do not create parallel preset injection paths.
 
 ---
 
-## Important New Runtime Fact
+## Important Runtime Fact
 
 For boss-pattern work, changing `EnemyDefenseController.defensePattern` directly on the scene object is NOT sufficient if runtime preset application is active.
 
@@ -117,9 +120,9 @@ If a boss defense pattern must survive runtime startup, it must be assigned thro
 
 ## Current Level Design Direction
 
-Levels 1-3 are now treated as tutorial levels.
+Levels 1-3 are tutorial levels.
 
-From Level 4 onward, level design direction has changed:
+From Level 4 onward, level design direction is:
 
 - each level should represent a distinct boss identity
 - each boss should have a distinct defense style
@@ -127,9 +130,11 @@ From Level 4 onward, level design direction has changed:
 - avoid fake content expansion through repeated goal rotation only
 
 Do not continue building the project as simple repeated:
+
 - BreakdownTarget
 - HeadHitCount
 - SpecificItemHitCount
+
 loops with only numeric escalation.
 
 Boss identity now has higher priority than pure goal rotation.
@@ -138,19 +143,42 @@ Boss identity now has higher priority than pure goal rotation.
 
 ## Current Boss Progress
 
-Level 4 has started transition into:
+### Level 04
+**Briefcase Boss / Hammer Break rule** is completed and validated.
 
-**Briefcase Boss / Hammer Break rule**
+Runtime authoring path:
 
-Validated implementation direction:
+- `meeting_tyrant_briefcase_boss_defense_pattern`
+- `enemy_preset_meeting_tyrant_briefcase_boss`
+- `meeting_tyrant_briefcase_boss` roster entry
+- `level_enemy_selection_level_04`
+
+Validated rule:
 
 - timed defense activation
 - briefcase-style guard state
-- runtime preset-specific boss defense pattern
-- scene-level manual defense pattern override is insufficient if preset overwrites it
-- boss-specific preset / roster entry path is now established
+- sponge hammer breaks defense
+- non-hammer items are blocked
 
-This foundation exists for future boss identity work.
+### Level 05
+**Sunglasses Boss / Foam Break / Paint Finish rule** is completed and validated.
+
+Runtime authoring path:
+
+- `narcissist_manager_sunglasses_boss_defense_pattern`
+- `enemy_preset_narcissist_manager_sunglasses_boss`
+- `narcissist_manager_sunglasses_boss` roster entry
+- `level_enemy_selection_level_05`
+
+Validated rule:
+
+- timed sunglasses defense activation
+- paint is ineffective while face guard is active
+- foam breaks defense
+- paint becomes valid after defense break
+- level goal is built around `SpecificItemHitCount(item_paint_ball)`
+
+This is now the second true boss-identity encounter.
 
 ---
 
@@ -178,25 +206,26 @@ The project has already moved beyond:
 - single-enemy combat validation
 - result-panel-only polish
 - simple goal variety validation
+- first boss-defense proof only
 
 The project is now at:
 
 - tutorial-to-boss structure planning
-- boss identity implementation stage
+- multi-boss identity implementation stage
 - preset-driven boss configuration stage
 
 ---
 
 ## Current Recommended Next Milestone
 
-**Level 5 Boss Identity: Sunglasses Boss**
+**Level 06 Boss Identity design and implementation**
 
 Suggested direction:
 
-- create boss-specific preset path, not scene-only patching
-- add paint immunity / pre-break condition behavior
-- preserve existing goal/runtime/progression structure
-- continue using data-driven preset + roster + selection stack
+- continue distinct boss identity work after Level 05
+- preserve Level 04 and Level 05 as boss-foundation levels
+- avoid reverting to generic repeated content
+- prefer minimal clean extensions over architecture churn
 
 Secondary follow-up:
 

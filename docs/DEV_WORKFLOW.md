@@ -49,9 +49,12 @@ When creating a boss-style level variant:
 3. add dedicated roster entry
 4. point level selection to that roster entry
 5. verify runtime preset and defense pattern during Play
-6. only then tune values
+6. verify blocked / break / scoring behavior
+7. only then tune values
 
-This workflow was validated during Level 04 briefcase-boss setup.
+This workflow was validated during:
+- Level 04 briefcase-boss setup
+- Level 05 sunglasses-boss setup
 
 ---
 
@@ -98,3 +101,8 @@ After any validated milestone:
 - update docs before moving on
 - keep docs replaceable and repository-friendly
 - do not leave “next milestone” text pointing to already completed work
+
+This is especially important now that:
+- Level 04 is completed
+- Level 05 is completed
+- future sessions must start from Level 06 work, not repeat finished milestones

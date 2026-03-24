@@ -131,7 +131,7 @@ Must not:
 
 ## Current Content Architecture
 
-The project now has two content blocks:
+The project now has three content blocks:
 
 ### Teaching block
 Levels 01–03
@@ -141,18 +141,27 @@ Characteristics:
 - low confusion
 - low boss identity complexity
 
-### Boss-content block
-Level 04+
+### Boss-foundation block
+Levels 04–05
 
 Characteristics:
-- each level should add a new boss read or break rule
-- repeated generic encounters are not acceptable as “content expansion”
+- first validated boss encounters
+- each level has a distinct counter rule
+- each level uses dedicated preset / roster / selection authoring
+- each level should be treated as reference implementation for later boss content
+
+### Extended boss block
+Level 06+
+
+Characteristics:
+- should continue unique boss identity work
+- must not regress into generic repeated encounters
 
 ---
 
 ## Boss Prototype Architecture Rule
 
-Level 04 established a critical architectural rule:
+Level 04 and Level 05 established a critical architectural rule:
 
 Boss-specific behavior must be introduced through:
 
@@ -178,6 +187,22 @@ When adding a new boss-style enemy variant:
 3. add a new roster entry
 4. point the level selection asset to that roster entry
 5. verify runtime active enemy root, not inactive scene roots
+
+---
+
+## Current Validated Boss Authoring Paths
+
+### Level 04
+- defense pattern → `meeting_tyrant_briefcase_boss_defense_pattern`
+- preset → `enemy_preset_meeting_tyrant_briefcase_boss`
+- roster entry → `meeting_tyrant_briefcase_boss`
+- level selection → `level_enemy_selection_level_04`
+
+### Level 05
+- defense pattern → `narcissist_manager_sunglasses_boss_defense_pattern`
+- preset → `enemy_preset_narcissist_manager_sunglasses_boss`
+- roster entry → `narcissist_manager_sunglasses_boss`
+- level selection → `level_enemy_selection_level_05`
 
 ---
 

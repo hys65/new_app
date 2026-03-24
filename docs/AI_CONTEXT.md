@@ -41,10 +41,12 @@ It has already validated:
 - localized result panel support
 - goal-aware HUD readability
 - level-specific boss defense pattern injection through runtime preset path
+- Level 04 boss identity
+- Level 05 boss identity
 
 The current project stage is:
 
-**tutorial-complete prototype moving into distinct boss identity implementation**
+**tutorial-complete prototype moving into multi-boss identity implementation**
 
 ---
 
@@ -107,8 +109,9 @@ The current project stage is:
 ### Progression Content
 - Levels 1-9 currently exist in progression data
 - Levels 1-3 function as tutorial levels
-- Level 4 has begun conversion into a boss-identity level
-- Levels 5-9 exist as content placeholders / extended content and may be revised under the new boss-first design direction
+- Level 4 is a validated briefcase boss level
+- Level 5 is a validated sunglasses boss level
+- Levels 6-9 exist as extended content placeholders and may be revised under the boss-first design direction
 
 ---
 
@@ -174,6 +177,31 @@ in that order.
 
 ---
 
+## Current Boss-State Summary
+
+### Level 04 Boss
+Meeting Tyrant briefcase boss is completed.
+
+Core rule:
+
+- timed guard
+- hammer breaks
+- non-hammer items blocked
+
+### Level 05 Boss
+Narcissist Manager sunglasses boss is completed.
+
+Core rule:
+
+- timed face guard
+- paint blocked while defense is active
+- foam breaks defense
+- paint is required to complete the level goal after break
+
+This means the project now has two validated boss-identity encounters instead of one.
+
+---
+
 ## Mandatory Architecture Rules
 
 ### Preset Application
@@ -203,14 +231,14 @@ in that order.
 
 Preferred next milestone:
 
-**Level 5 Boss Identity: Sunglasses Boss**
+**Level 06 Boss Identity design and implementation**
 
 Reason:
 
-- Level 4 proved the need for boss-specific preset paths
-- preset overwrite behavior is now understood
+- Level 04 proved the first boss-specific preset path
+- Level 05 proved the second boss-specific counter-rule path
 - next value comes from extending boss identity, not rebuilding architecture
-- item roles still need stronger mechanical differentiation
+- item roles still need stronger mechanical differentiation across later levels
 
 Secondary follow-up:
 

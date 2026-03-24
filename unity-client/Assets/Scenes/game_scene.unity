@@ -577,7 +577,7 @@ MonoBehaviour:
   enemySwitchingManager: {fileID: 1760690826}
   selectionData: {fileID: 0}
   applyOnAwake: 1
-  lastAppliedLevelId: level_test
+  lastAppliedLevelId: level_05
   lastResolvedStartupSlotIndex: 0
 --- !u!1 &201078843
 GameObject:
@@ -2116,8 +2116,8 @@ MonoBehaviour:
   autoAdvanceOnWin: 0
   restartCurrentLevelOnLoss: 0
   advanceDelaySeconds: 0.15
-  currentLevelIndex: 0
-  currentEncounterConfig: {fileID: 11400000, guid: 11015be65ab525e46b461e092046dbf8, type: 2}
+  currentLevelIndex: 4
+  currentEncounterConfig: {fileID: 11400000, guid: 50044abf2e5d3484f9b6f7b6aab34a93, type: 2}
   isTransitioning: 0
 --- !u!1 &912459463
 GameObject:
@@ -4959,7 +4959,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyRuntimePresetController
   presetApplicator: {fileID: 1620351227}
-  currentPreset: {fileID: 0}
+  currentPreset: {fileID: 11400000, guid: 848eea4ff9c1a654585a9a8a0ee7f0d3, type: 2}
 --- !u!114 &1620351226
 MonoBehaviour:
   m_ObjectHideFlags: 0

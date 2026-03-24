@@ -2,7 +2,7 @@
 
 ## Project
 
-**Power Prank 3D**
+**Power Prank 3D**  
 Unity 6.3 LTS small-scale prototype game.
 
 Core fantasy:
@@ -37,7 +37,8 @@ Core fantasy:
 - Enemy Stain Attachment Repair ✅
 - Goal-aware HUD Readability 1.0 ✅
 - Boss Preset Override Debugging Pass ✅
-- Level 4 Briefcase Boss Foundation ✅
+- Level 04 Briefcase Boss Foundation ✅
+- Level 05 Sunglasses Boss Foundation ✅
 
 ---
 
@@ -55,7 +56,12 @@ Validated tutorial flow:
 - Level 2 -> HeadHitCount
 - Level 3 -> SpecificItemHitCount(item_egg)
 
-Current note:
+Validated boss flow:
+
+- Level 4 -> BreakdownTarget + briefcase boss rule
+- Level 5 -> SpecificItemHitCount(item_paint_ball) + sunglasses boss rule
+
+Current note:  
 These goal types are still the active production goal set, but future boss content may require a minimal set of new boss-specific goals.
 
 ---
@@ -82,7 +88,7 @@ Runtime application path:
 
 Important fact:
 
-Runtime preset application can overwrite scene-level defense pattern and defense window configuration.
+Runtime preset application can overwrite scene-level defense pattern and defense window configuration.  
 Boss behavior must be authored through the actual preset used by the selected roster entry.
 
 ---
@@ -92,15 +98,16 @@ Boss behavior must be authored through the actual preset used by the selected ro
 ### Meeting Tyrant
 - base archetype exists
 - preset exists
-- boss-specific briefcase preset path now exists
-- boss-specific briefcase defense pattern now exists
-- Level 4 has begun transition into a distinct boss identity encounter
+- boss-specific briefcase preset path exists
+- boss-specific briefcase defense pattern exists
+- Level 04 uses this as a validated boss encounter
 
 ### Narcissist Manager
 - base archetype exists
 - preset exists
-- still uses standard behavior path
-- intended next boss identity direction: sunglasses-based defense behavior
+- boss-specific sunglasses preset path exists
+- boss-specific sunglasses defense pattern exists
+- Level 05 uses this as a validated boss encounter
 
 ---
 
@@ -111,14 +118,18 @@ Boss behavior must be authored through the actual preset used by the selected ro
 - Level 2 = tutorial head hits
 - Level 3 = tutorial specific item
 
-### Boss Transition
+### Boss Block
 - Level 4 = first distinct boss identity level
 - current identity: Briefcase Boss / Hammer Break rule
 - current implementation uses a dedicated roster entry and dedicated preset path
 
+- Level 5 = second distinct boss identity level
+- current identity: Sunglasses Boss / Foam Break / Paint Finish rule
+- current implementation uses a dedicated roster entry and dedicated preset path
+
 ### Extended Content
-- Levels 5-9 exist in progression content
-- these levels may be revised to align with the new boss-first structure
+- Levels 6-9 exist in progression content
+- these levels may be revised to align with the boss-first structure
 
 ---
 
@@ -158,14 +169,30 @@ For boss work:
 
 ---
 
+## Current Validated Boss Rules
+
+### Level 04
+- timed briefcase guard
+- sponge hammer breaks defense
+- non-hammer items are blocked
+
+### Level 05
+- timed sunglasses face guard
+- paint is ineffective while defense is active
+- foam breaks defense
+- paint becomes the real scoring item after break
+- level goal uses `SpecificItemHitCount(item_paint_ball)`
+
+---
+
 ## Current Recommended Next Step
 
-**Level 5 Boss Identity: Sunglasses Boss**
+**Level 06 Boss Identity design and implementation**
 
 High-level direction:
-- create boss-specific Narcissist Manager preset
-- assign boss-specific defense pattern through preset path
-- make paint ineffective until sunglasses defense is broken
+- create the next boss-specific roster/preset/pattern path
+- preserve Level 04 and Level 05 as reference implementations
+- strengthen item meaning through boss counters
 - preserve current progression / encounter / goal architecture
 
 ---

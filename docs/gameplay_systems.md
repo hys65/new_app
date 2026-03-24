@@ -8,7 +8,7 @@ Gameplay is built around a prank-throwing core loop:
 2. projectile hits enemy or ground
 3. defense logic evaluates hit
 4. reaction / popup / breakdown updates apply
-5. goal progress updates
+5. goal progress updates apply
 6. round win/loss resolves
 7. result UI handles retry / next
 
@@ -67,7 +67,7 @@ Show breakdown-oriented HUD lines.
 Show `Head Hits: X / Y`
 
 ### SpecificItemHitCount
-Show item-specific line such as `Tomato Hits: X / Y`
+Show item-specific line such as `Tomato Hits: X / Y` or `Paint Ball Hits: X / Y`
 
 Breakdown may still be shown as secondary combat information.
 
@@ -95,6 +95,7 @@ These three are implemented and working.
 Levels 01–03 are teaching levels.
 
 After that, gameplay content should not expand by simple number reuse alone.
+
 New levels must increasingly justify themselves through:
 - new boss behavior
 - new item relevance
@@ -111,7 +112,24 @@ Level 04 introduced the first gameplay rule where item choice materially matters
 - sponge hammer = break
 - other items = blocked
 
-This is the first real proof that weapons can have roles beyond raw hit score.
+This is the first proof that weapons can have roles beyond raw hit score.
+
+---
+
+## Level 05 Gameplay Rule
+
+Level 05 expanded this design.
+
+### Sunglasses face guard active
+- paint ball = ineffective
+- foam sprayer = break
+- paint ball = real scoring item after break
+
+This is the first validated level where:
+
+- one item is the breaker
+- another item is the actual goal item
+- the player must execute a sequence, not just pick one weapon forever
 
 ---
 
@@ -121,6 +139,7 @@ This is the first real proof that weapons can have roles beyond raw hit score.
 2. If a pattern seems correct before Play but not during Play, inspect runtime preset overwrite first
 3. If a goal seems wrong, verify current encounter config and current level selection asset
 4. If a HUD line is misleading, fix display logic before changing underlying systems
+5. For boss content, validate blocked-hit behavior and goal-hit behavior separately
 
 ---
 
@@ -128,10 +147,11 @@ This is the first real proof that weapons can have roles beyond raw hit score.
 
 The next gameplay step should be:
 
-**Boss Defense Identity Expansion 1.0**
+**Boss Defense Identity Expansion 2.0**
 
 Meaning:
 - keep teaching block stable
-- expand item-specific meaning
-- add more boss reads after Level 04
+- preserve Level 04 and Level 05 as reference boss levels
+- continue expanding item-specific meaning
+- add more boss reads after Level 05
 - avoid fake content repetition
