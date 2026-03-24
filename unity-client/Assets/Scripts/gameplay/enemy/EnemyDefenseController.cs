@@ -17,7 +17,6 @@ namespace PowerPrank3D.Gameplay
         [SerializeField] private float runtimeElapsed;
         [SerializeField] private float nextTimedActivationAt;
         [SerializeField] private EnemyDefenseStateWindowController defenseStateWindow;
-
         [SerializeField] private EnemyAiLayerController enemyAiLayer;
 
         public EnemyDefensePatternData DefensePattern => defensePattern;
@@ -113,12 +112,8 @@ namespace PowerPrank3D.Gameplay
             }
 
             // --------------------------------------------------
-            // Level 4 hard-rule path:
-            // BriefcaseBlock must behave deterministically.
-            // When active:
-            // - Hammer always BREAKS
-            // - Everything else always BLOCKS
-            // No state-window short-circuit here.
+            // Level 04 hard-rule path:
+            // BriefcaseBlock must remain deterministic.
             // --------------------------------------------------
             if (defensePattern.patternType == EnemyDefensePatternType.BriefcaseBlock && defenseActive)
             {
@@ -146,23 +141,23 @@ namespace PowerPrank3D.Gameplay
                 return FinalizeResult(itemData, isHeadHit, result);
             }
 
-            // 通用窗口逻辑只留给非 BriefcaseBlock 的普通通用防御
-            if (defenseStateWindow != null &&
-                defensePattern.patternType != EnemyDefensePatternType.BriefcaseBlock &&
-                !defenseStateWindow.CanUseDefenseLogic())
-            {
-                return FinalizeResult(itemData, isHeadHit, result);
-            }
-
             CountRepeatedHit();
 
+            bool weakWindowHeadBypass = false;
+
+            // --------------------------------------------------
+            // Core rule for Level 06:
+            // If defense is active, blocking should be enforced by default.
+            // State window does NOT decide whether defense exists.
+            // State window only decides whether the weak head bypass opens.
+            // --------------------------------------------------
             if (defenseActive)
             {
                 if (CanBreakDefense(itemData))
                 {
                     defenseActive = false;
                     defenseTimer = 0f;
-                    defenseCooldownTimer = defensePattern.blockCooldown;
+                    defenseCooldownTimer = Mathf.Max(0f, defensePattern.blockCooldown);
 
                     result.brokeDefense = true;
                     result.breakdownMultiplier = 1.15f;
@@ -173,7 +168,9 @@ namespace PowerPrank3D.Gameplay
                     return FinalizeResult(itemData, isHeadHit, result);
                 }
 
-                if (ShouldBlockHit(isHeadHit))
+                weakWindowHeadBypass = CanUseWeakWindowHeadBypass(isHeadHit);
+
+                if (ShouldBlockHit(isHeadHit) && !weakWindowHeadBypass)
                 {
                     result.wasBlocked = true;
                     result.breakdownMultiplier = defensePattern.blockedBreakdownMultiplier;
@@ -193,27 +190,25 @@ namespace PowerPrank3D.Gameplay
                 Debug.Log("[DefenseEval] GUARD activated");
             }
 
-            if (defensePattern.weakToHeadHits &&
+            bool canApplyWeakness =
+                defenseActive &&
+                defensePattern.weakToHeadHits &&
                 isHeadHit &&
-                (defenseStateWindow == null || defenseStateWindow.CanExposeWeakness()))
+                weakWindowHeadBypass;
+
+            if (canApplyWeakness)
             {
                 result.weaknessApplied = true;
                 result.breakdownMultiplier *= defensePattern.headWeaknessMultiplier;
                 result.reactionMultiplier *= 1.15f;
                 result.wasBlocked = false;
-
-                if (string.IsNullOrEmpty(result.popupText) || result.popupText == "GUARD")
-                {
-                    result.popupText = "WEAK";
-                }
+                result.popupText = "WEAK";
 
                 Debug.Log("[DefenseEval] WEAK triggered");
             }
 
-            // Level 05 boss rule:
-            // When FaceGuard is active, paint is fully invalid until the defense is broken.
-            // This intentionally applies to all paint hits, not only head hits,
-            // so the boss can support a paint-based level goal cleanly.
+            // Level 05 rule:
+            // FaceGuard active + paint should remain invalid until defense is broken.
             if (defenseActive && defensePattern.patternType == EnemyDefensePatternType.FaceGuard)
             {
                 if (defensePattern.reducePaintOnFaceGuard && IsPaintBall(itemData))
@@ -336,12 +331,32 @@ namespace PowerPrank3D.Gameplay
                 return false;
             }
 
-            if (isHeadHit)
+            return isHeadHit ? defensePattern.canBlockHead : defensePattern.canBlockBody;
+        }
+
+        private bool CanUseWeakWindowHeadBypass(bool isHeadHit)
+        {
+            if (!defenseActive || !isHeadHit || !HasPattern())
             {
-                return defensePattern.canBlockHead;
+                return false;
             }
 
-            return defensePattern.canBlockBody;
+            if (!defensePattern.weakToHeadHits)
+            {
+                return false;
+            }
+
+            if (!ShouldBlockHit(true))
+            {
+                return false;
+            }
+
+            if (defenseStateWindow == null)
+            {
+                return false;
+            }
+
+            return defenseStateWindow.CanExposeWeakness();
         }
 
         private bool CanBreakDefense(GameplayItemData itemData)

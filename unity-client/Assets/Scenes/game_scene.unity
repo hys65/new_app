@@ -3458,7 +3458,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cfd0d2474865b347985de99a5947b93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyDefenseController
-  defensePattern: {fileID: 11400000, guid: a5f9f1783627bdd4db3887b10bacd26b, type: 2}
+  defensePattern: {fileID: 0}
   useDefensePattern: 1
   defenseActive: 0
   defenseTimer: 0
@@ -3467,7 +3467,7 @@ MonoBehaviour:
   repeatedHitWindowTimer: 0
   runtimeElapsed: 0
   nextTimedActivationAt: 0
-  defenseStateWindow: {fileID: 0}
+  defenseStateWindow: {fileID: 1310628148}
   enemyAiLayer: {fileID: 1310628149}
 --- !u!114 &1310628147
 MonoBehaviour:
@@ -3623,7 +3623,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyRuntimePresetController
   presetApplicator: {fileID: 1310628150}
-  currentPreset: {fileID: 0}
+  currentPreset: {fileID: 11400000, guid: 19cca2914ef8e374b9f883bf721cbc9c, type: 2}
 --- !u!1 &1334280080
 GameObject:
   m_ObjectHideFlags: 0
@@ -5113,7 +5113,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cfd0d2474865b347985de99a5947b93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyDefenseController
-  defensePattern: {fileID: 11400000, guid: a5f9f1783627bdd4db3887b10bacd26b, type: 2}
+  defensePattern: {fileID: 11400000, guid: b650e4fb085d84441870fbf272343173, type: 2}
   useDefensePattern: 1
   defenseActive: 0
   defenseTimer: 0
@@ -5403,6 +5403,12 @@ MonoBehaviour:
     runtimePresetController: {fileID: 1620351225}
     reactionLayer: {fileID: 1620351232}
     defaultPreset: {fileID: 11400000, guid: bc0df5fa7e58c9d479c85586f88c36c0, type: 2}
+  - slotId: enemy_slot_03
+    displayName: Meeting Tyrant Boss
+    enemyRoot: {fileID: 1310628143}
+    runtimePresetController: {fileID: 1310628152}
+    reactionLayer: {fileID: 1310628145}
+    defaultPreset: {fileID: 11400000, guid: 8ef3d4c13a3789b4da797011a91be528, type: 2}
   startingSlotIndex: 0
   autoApplyDefaultPresetOnStart: 1
   deactivateNonActiveEnemiesOnStart: 1

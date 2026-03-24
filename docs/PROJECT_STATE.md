@@ -39,6 +39,7 @@ Core fantasy:
 - Boss Preset Override Debugging Pass ✅
 - Level 04 Briefcase Boss Foundation ✅
 - Level 05 Sunglasses Boss Foundation ✅
+- Level 06 Weak-Window Boss Foundation ✅
 
 ---
 
@@ -52,17 +53,20 @@ Implemented and validated:
 
 Validated tutorial flow:
 
-- Level 1 -> BreakdownTarget
-- Level 2 -> HeadHitCount
-- Level 3 -> SpecificItemHitCount(item_egg)
+- Level 1 -> `BreakdownTarget`
+- Level 2 -> `HeadHitCount`
+- Level 3 -> `SpecificItemHitCount(item_egg)`
 
 Validated boss flow:
 
-- Level 4 -> BreakdownTarget + briefcase boss rule
-- Level 5 -> SpecificItemHitCount(item_paint_ball) + sunglasses boss rule
+- Level 4 -> `BreakdownTarget` + briefcase boss rule
+- Level 5 -> `SpecificItemHitCount(item_paint_ball)` + sunglasses boss rule
+- Level 6 -> `HeadHitCount` + weak-window boss rule
 
-Current note:  
-These goal types are still the active production goal set, but future boss content may require a minimal set of new boss-specific goals.
+Current note:
+
+These three goal types remain sufficient for the current production content set.  
+Level 06 proved that new boss identity can still be built without inventing a new goal type, as long as defense logic and runtime preset routing are correct.
 
 ---
 
@@ -82,13 +86,14 @@ Runtime application path:
 
 - `EnemyRosterData`
 - `LevelEnemySelectionData`
-- `EnemyPresetApplicator`
-- `EnemyRuntimePresetController`
 - `EnemySwitchingManager`
+- `EnemyRuntimePresetController`
+- `EnemyPresetApplicator`
 
 Important fact:
 
-Runtime preset application can overwrite scene-level defense pattern and defense window configuration.  
+Runtime preset application can overwrite scene-level defense pattern and defense window configuration.
+
 Boss behavior must be authored through the actual preset used by the selected roster entry.
 
 ---
@@ -96,17 +101,22 @@ Boss behavior must be authored through the actual preset used by the selected ro
 ## Current Known Working Enemy Content
 
 ### Meeting Tyrant
+
 - base archetype exists
-- preset exists
-- boss-specific briefcase preset path exists
-- boss-specific briefcase defense pattern exists
-- Level 04 uses this as a validated boss encounter
+- base preset exists
+- briefcase boss preset path exists
+- briefcase boss defense pattern exists
+- weak-window boss preset path exists
+- weak-window boss defense pattern exists
+- Level 04 uses Meeting Tyrant as a validated breaker boss encounter
+- Level 06 uses Meeting Tyrant as a validated timing / weak-window boss encounter
 
 ### Narcissist Manager
+
 - base archetype exists
-- preset exists
-- boss-specific sunglasses preset path exists
-- boss-specific sunglasses defense pattern exists
+- base preset exists
+- sunglasses boss preset path exists
+- sunglasses boss defense pattern exists
 - Level 05 uses this as a validated boss encounter
 
 ---
@@ -114,22 +124,31 @@ Boss behavior must be authored through the actual preset used by the selected ro
 ## Current Content Structure
 
 ### Tutorial Levels
+
 - Level 1 = tutorial breakdown
 - Level 2 = tutorial head hits
 - Level 3 = tutorial specific item
 
 ### Boss Block
+
 - Level 4 = first distinct boss identity level
-- current identity: Briefcase Boss / Hammer Break rule
-- current implementation uses a dedicated roster entry and dedicated preset path
+  - identity: Briefcase Boss / Hammer Break rule
+  - implementation uses dedicated roster entry + dedicated preset path
 
 - Level 5 = second distinct boss identity level
-- current identity: Sunglasses Boss / Foam Break / Paint Finish rule
-- current implementation uses a dedicated roster entry and dedicated preset path
+  - identity: Sunglasses Boss / Foam Break / Paint Finish rule
+  - implementation uses dedicated roster entry + dedicated preset path
+
+- Level 6 = third distinct boss identity level
+  - identity: Weak-Window Boss / Long Defense / Short Timing Window rule
+  - implementation uses dedicated roster entry + dedicated preset path
+  - primary goal uses `HeadHitCount`
 
 ### Extended Content
-- Levels 6-9 exist in progression content
-- these levels may be revised to align with the boss-first structure
+
+- Levels 7-9 still exist in progression content
+- these levels should continue boss-first content expansion
+- they should not regress into fake repeated encounters
 
 ---
 
@@ -138,11 +157,13 @@ Boss behavior must be authored through the actual preset used by the selected ro
 Do NOT treat Levels 4+ as simple repeated content rotation.
 
 Invalid direction:
+
 - repeat breakdown / head-hit / specific-item loops with only numeric escalation
 
 Required direction:
+
 - each boss level must have a distinct defense identity
-- each boss level must create a distinct item usage pattern
+- each boss level must create a distinct item usage pattern or timing pattern
 - boss identity takes priority over raw goal repetition
 
 ---
@@ -150,50 +171,76 @@ Required direction:
 ## Current Technical Debug Lessons
 
 ### Preset Override Lesson
+
 Scene-level edits to `EnemyDefenseController.defensePattern` are not reliable if runtime preset application is active.
 
 Correct debug order:
+
 1. level enemy selection
 2. roster entry
-3. preset
-4. runtime controller
-5. scene object final state
+3. switching manager target slot
+4. runtime preset controller
+5. preset applicator
+6. scene object final state
 
-### Boss Foundation Lesson
-For boss work:
-- first make runtime preset path correct
-- then verify runtime-selected defense pattern
-- then verify defense activation
-- then verify blocked / break combat result
-- only after that add higher-level boss goals
+### Slot Targeting Lesson
+
+For multi-slot runtime setups, a correct preset can still fail to produce the intended gameplay if it is applied to the wrong slot / wrong active enemy root.
+
+Correct question:
+
+- not only “is the preset valid?”
+- but also “did the runtime route this preset into the intended active slot?”
+
+### Weak-Window Defense Lesson
+
+Level 06 established an important logic distinction:
+
+- `defenseActive` determines whether defense exists
+- `DefenseStateWindow` should determine when weakness is exposed
+- defense should not be globally disabled just because the state window is outside the weak phase
+
+This is the rule that makes a long-defense / short-window boss possible.
 
 ---
 
 ## Current Validated Boss Rules
 
 ### Level 04
+
 - timed briefcase guard
 - sponge hammer breaks defense
 - non-hammer items are blocked
 
 ### Level 05
+
 - timed sunglasses face guard
 - paint is ineffective while defense is active
 - foam breaks defense
 - paint becomes the real scoring item after break
 - level goal uses `SpecificItemHitCount(item_paint_ball)`
 
+### Level 06
+
+- Meeting Tyrant weak-window boss
+- long-duration defense is active for most of the cycle
+- general attacks are blocked during defense
+- only a short weak window allows valid head-hit scoring
+- level goal uses `HeadHitCount`
+- final tuning intentionally favors “mostly defended, briefly vulnerable”
+
 ---
 
 ## Current Recommended Next Step
 
-**Level 06 Boss Identity design and implementation**
+**Level 07 Boss Identity design and implementation**
 
 High-level direction:
-- create the next boss-specific roster/preset/pattern path
-- preserve Level 04 and Level 05 as reference implementations
-- strengthen item meaning through boss counters
-- preserve current progression / encounter / goal architecture
+
+- preserve Levels 04–06 as reference implementations
+- do not redesign finished boss levels without proof of regression
+- create a fourth boss identity that is not just another breaker or weak-window clone
+- continue using the preset-authoritative runtime path
 
 ---
 
@@ -203,5 +250,6 @@ High-level direction:
 - Do not rely on scene-only defense pattern assignment for runtime boss behavior
 - Do not regress repaired hitbox structure
 - Do not reintroduce `EnemyVisual` as main gameplay collider
-- Do not rebuild architecture before checking preset / roster / selection wiring
+- Do not rebuild architecture before checking preset / roster / slot wiring
 - Do not design post-tutorial levels as fake repetition
+- Do not let weak-window bosses devolve into mostly-open enemies with only brief blocking

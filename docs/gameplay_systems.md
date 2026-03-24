@@ -9,7 +9,7 @@ Gameplay is built around a prank-throwing core loop:
 3. defense logic evaluates hit
 4. reaction / popup / breakdown updates apply
 5. goal progress updates apply
-6. round win/loss resolves
+6. round win / loss resolves
 7. result UI handles retry / next
 
 ---
@@ -17,12 +17,15 @@ Gameplay is built around a prank-throwing core loop:
 ## Core Gameplay Systems
 
 ### ThrowController
+
 Owns projectile launch input and spawn usage.
 
 ### ProjectileBehavior
+
 Owns projectile hit handling.
 
 Key responsibilities:
+
 - detect enemy vs ground hit
 - query `EnemyDefenseController`
 - convert defense result into breakdown contribution
@@ -31,7 +34,9 @@ Key responsibilities:
 - handle stain placement
 
 ### GameplayManager
+
 Owns:
+
 - round state
 - breakdown values
 - selected item state
@@ -39,14 +44,18 @@ Owns:
 - finish / retry behavior
 
 ### LevelGoalController
+
 Owns:
+
 - current goal definition
 - current progress
 - goal completion
 - summary text generation
 
 ### HudController
+
 Owns:
+
 - current top-left HUD state
 - timer display
 - selected item display
@@ -61,13 +70,19 @@ Owns:
 HUD must reflect the real win condition.
 
 ### BreakdownTarget
+
 Show breakdown-oriented HUD lines.
 
 ### HeadHitCount
+
 Show `Head Hits: X / Y`
 
 ### SpecificItemHitCount
-Show item-specific line such as `Tomato Hits: X / Y` or `Paint Ball Hits: X / Y`
+
+Show item-specific line such as:
+
+- `Tomato Hits: X / Y`
+- `Paint Ball Hits: X / Y`
 
 Breakdown may still be shown as secondary combat information.
 
@@ -78,12 +93,15 @@ This change is complete and validated.
 ## Current Goal Types
 
 ### `BreakdownTarget`
+
 Win by reaching target breakdown.
 
 ### `HeadHitCount`
+
 Win by reaching valid head-hit count.
 
 ### `SpecificItemHitCount`
+
 Win by reaching valid hit count with required item.
 
 These three are implemented and working.
@@ -94,12 +112,12 @@ These three are implemented and working.
 
 Levels 01–03 are teaching levels.
 
-After that, gameplay content should not expand by simple number reuse alone.
-
+After that, gameplay content should not expand by simple number reuse alone.  
 New levels must increasingly justify themselves through:
+
 - new boss behavior
 - new item relevance
-- new break logic
+- new timing relevance
 - new player read
 
 ---
@@ -109,6 +127,7 @@ New levels must increasingly justify themselves through:
 Level 04 introduced the first gameplay rule where item choice materially matters.
 
 ### Briefcase guard active
+
 - sponge hammer = break
 - other items = blocked
 
@@ -121,37 +140,106 @@ This is the first proof that weapons can have roles beyond raw hit score.
 Level 05 expanded this design.
 
 ### Sunglasses face guard active
-- paint ball = ineffective
-- foam sprayer = break
-- paint ball = real scoring item after break
 
-This is the first validated level where:
+- paint = invalid
+- foam = break tool
+- paint after break = scoring item
 
-- one item is the breaker
-- another item is the actual goal item
-- the player must execute a sequence, not just pick one weapon forever
+This is the first proof that a boss can require a sequence:
+
+1. break defense
+2. switch into real scoring behavior
 
 ---
 
-## Known Gameplay-Side Debugging Lessons
+## Level 06 Gameplay Rule
 
-1. If a blocked hit still gives score, inspect whether `wasBlocked` is actually being returned
-2. If a pattern seems correct before Play but not during Play, inspect runtime preset overwrite first
-3. If a goal seems wrong, verify current encounter config and current level selection asset
-4. If a HUD line is misleading, fix display logic before changing underlying systems
-5. For boss content, validate blocked-hit behavior and goal-hit behavior separately
+Level 06 established a different kind of boss read.
+
+### Weak-window timing boss
+
+- boss is defended for most of the cycle
+- ordinary attacks are blocked during that defended phase
+- only a short vulnerability window allows valid head-hit progress
+- scoring is driven by timing correctness, not by breaker-item choice
+
+This is the first proof that the current gameplay architecture can support a timing boss without introducing a new goal type.
+
+---
+
+## Current Boss Gameplay Ladder
+
+The validated boss ladder is now:
+
+### Level 04
+
+**Breaker boss**
+
+- identify the guarded state
+- use the correct breaker item
+- wrong items are blocked
+
+### Level 05
+
+**Break-then-score boss**
+
+- identify the guarded state
+- use the breaker item first
+- then switch to the actual scoring item
+
+### Level 06
+
+**Weak-window timing boss**
+
+- recognize that the boss is mostly defended
+- wait for a short valid scoring window
+- land the correct timed head hit
+- progress is earned by timing discipline
+
+This ladder matters.  
+Future boss levels should extend this language rather than repeat it.
+
+---
+
+## Current Gameplay Tuning Lesson
+
+A boss level is not complete when logic merely works.
+
+It is complete when:
+
+- its rule is readable
+- its pressure profile matches intent
+- its goal type matches that rule
+- its timing / item demand feels distinct from prior levels
+
+Level 06 specifically proved that pacing values are gameplay-critical:
+
+- defense duration
+- activation interval
+- weakness window range
+
+Those values are not cosmetic.  
+They are part of boss identity.
 
 ---
 
 ## Current Recommended Gameplay Direction
 
-The next gameplay step should be:
+For Level 07+:
 
-**Boss Defense Identity Expansion 2.0**
+- continue distinct boss identity design
+- avoid simple number escalation
+- avoid repeating Level 04 / 05 / 06 structures with renamed assets
+- strengthen either punishment logic, denial logic, or counter-play logic
 
-Meaning:
-- keep teaching block stable
-- preserve Level 04 and Level 05 as reference boss levels
-- continue expanding item-specific meaning
-- add more boss reads after Level 05
-- avoid fake content repetition
+Good future direction:
+
+- a boss where wrong timing is punished
+- a boss where wrong item choice creates counter-pressure
+- a boss where restraint matters as much as aggression
+
+Bad future direction:
+
+- another mostly-open enemy with decorative defense
+- another simple breaker swap
+- another copy of Level 06 with only shorter numbers

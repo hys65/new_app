@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: level_06_encounter_config
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.LevelEncounterConfigData
   levelId: level_06
-  displayName: Level 06 Encounter
+  displayName: Level 06 Weak Window Boss
   enemySelection: {fileID: 11400000, guid: cbce2d24be7d55e4e9554e1b2e96b0ab, type: 2}
   primaryGoal:
-    goalType: 2
+    goalType: 1
     targetCount: 6
-    requiredItemId: item_tomato
-  targetBreakdownValue: 160
-  roundDurationSeconds: 38
+    requiredItemId: 
+  targetBreakdownValue: 170
+  roundDurationSeconds: 42
   autoStartRound: 1

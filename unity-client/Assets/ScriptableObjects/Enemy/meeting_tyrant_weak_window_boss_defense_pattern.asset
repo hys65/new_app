@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be0abebe2f093f745a1704086c0a0b6d, type: 3}
+  m_Name: meeting_tyrant_weak_window_boss_defense_pattern
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyDefensePatternData
+  defenseId: defense_meeting_tyrant_weak_window_boss
+  displayName: Meeting Tyrant Weak Window Boss
+  patternType: 2
+  canBlockBody: 1
+  canBlockHead: 1
+  randomBlockChance: 0
+  blockDuration: 4.6
+  blockCooldown: 0.1
+  triggeredByRepeatedHits: 0
+  repeatedHitCountThreshold: 2
+  repeatedHitWindow: 2
+  useTimedActivation: 1
+  firstActivationDelay: 1.2
+  timedActivationInterval: 5
+  blockedBreakdownMultiplier: 0
+  blockedReactionMultiplier: 0.35
+  weakToHeadHits: 1
+  headWeaknessMultiplier: 2
+  breakByHammer: 0
+  breakByFoam: 0
+  breakByPaint: 0
+  breakByEgg: 0
+  breakByTomato: 0
+  autoActivateOnHeadHit: 0
+  autoActivateOnBodyHit: 0
+  reducePaintOnFaceGuard: 0
