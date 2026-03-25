@@ -41,6 +41,7 @@ Core fantasy:
 - Level 04 Briefcase Boss Foundation ✅
 - Level 05 Sunglasses Boss Foundation ✅
 - Level 06 Weak-Window Boss Foundation ✅
+- Level 07 Precision Paint Boss Foundation ✅
 
 ---
 
@@ -63,12 +64,13 @@ Validated boss flow:
 - Level 04 -> `BreakdownTarget` + briefcase boss rule
 - Level 05 -> `SpecificItemHitCount(item_paint_ball)` + sunglasses boss rule
 - Level 06 -> `HeadHitCount` + weak-window boss rule
+- Level 07 -> `SpecificItemHitCount(item_paint_ball)` + precision paint boss rule
 
 Current note:
 
 These three goal types remain sufficient for the current production content set.
 
-Level 06 proved that new boss identity can still be built without inventing a new goal type, as long as defense logic and runtime preset routing are correct.
+Level 07 proved that the same goal type can support a different boss identity when defense logic, scoring restriction, and item loop are meaningfully different.
 
 ---
 
@@ -119,7 +121,10 @@ Boss behavior must be authored through the actual preset used by the selected ro
 - base preset exists
 - sunglasses boss preset path exists
 - sunglasses boss defense pattern exists
-- Level 05 uses this as a validated boss encounter
+- precision paint boss preset path exists
+- precision paint boss defense pattern exists
+- Level 05 uses this as a validated break-then-score boss encounter
+- Level 07 uses this as a validated repeat precision-loop boss encounter
 
 ---
 
@@ -146,9 +151,14 @@ Boss behavior must be authored through the actual preset used by the selected ro
   - implementation uses dedicated roster entry + dedicated preset path
   - primary goal uses `HeadHitCount`
 
+- Level 07 = fourth distinct boss identity level
+  - identity: Precision Paint Boss / Repeated Foam Break / Paint Head Score rule
+  - implementation uses dedicated roster entry + dedicated preset path
+  - primary goal uses `SpecificItemHitCount(item_paint_ball)`
+
 ### Extended Content
 
-- Levels 07–09 still exist in progression content
+- Levels 08–09 still exist in progression content
 - these levels should continue boss-first content expansion
 - they should not regress into fake repeated encounters
 
@@ -200,9 +210,18 @@ Level 06 established an important logic distinction:
 
 - `defenseActive` determines whether defense exists
 - `DefenseStateWindow` determines when weakness is exposed
-- defense should not be globally disabled just because the state window is outside the weak phase
+- defense should not be globally disabled just because the state window was outside the weak phase
 
-This is the rule that makes a long-defense / short-window boss possible.
+### Asset Serialization Lesson
+
+Unity Inspector changes are not always immediately reflected in the on-disk `.asset` file.
+
+Correct workflow:
+
+1. edit asset values
+2. explicitly save
+3. confirm the file actually changed in source control
+4. verify GitHub file contents directly when the exact serialized value matters
 
 ---
 
@@ -231,17 +250,27 @@ This is the rule that makes a long-defense / short-window boss possible.
 - level goal uses `HeadHitCount`
 - final tuning intentionally favors “mostly defended, briefly vulnerable”
 
+### Level 07
+
+- Narcissist Manager precision paint boss
+- repeated sunglasses defense cycling controls when the head is meaningfully scoreable
+- foam is the practical breaker item
+- paint ball is the required scoring item
+- repeated paint-head scoring loop is the intended mastery pattern
+- level goal uses `SpecificItemHitCount(item_paint_ball)`
+- final tuning uses `TargetCount = 10` and `RoundDurationSeconds = 32`
+
 ---
 
 ## Current Recommended Next Step
 
-**Level 07 Boss Identity design and implementation**
+**Level 08 Boss Identity design and implementation**
 
 High-level direction:
 
-- preserve Levels 04–06 as reference implementations
+- preserve Levels 04–07 as reference implementations
 - do not redesign finished boss levels without proof of regression
-- create a fourth boss identity that is not just another breaker or weak-window clone
+- create a fifth boss identity that is not just another breaker or weak-window clone
 - continue using the preset-authoritative runtime path
 
 ---

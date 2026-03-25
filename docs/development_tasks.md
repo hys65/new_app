@@ -13,20 +13,20 @@
 - Level 04 -> `BreakdownTarget` + Meeting Tyrant briefcase boss
 - Level 05 -> `SpecificItemHitCount(item_paint_ball)` + Narcissist Manager sunglasses boss
 - Level 06 -> `HeadHitCount` + Meeting Tyrant weak-window boss
+- Level 07 -> `SpecificItemHitCount(item_paint_ball)` + Narcissist Manager precision paint boss
 
 ### Still-open progression levels
 
-- Level 07
 - Level 08
 - Level 09
 
-These later levels still exist in progression and should continue the boss-first structure already proven by Levels 04–06.
+These later levels still exist in progression and should continue the boss-first structure already proven by Levels 04–07.
 
 ---
 
 ## Current Priority
 
-**Level 07 Boss Identity design and implementation**
+**Level 08 Boss Identity design and implementation**
 
 ---
 
@@ -36,8 +36,8 @@ These later levels still exist in progression and should continue the boss-first
 2. Preserve Level 04 as first validated breaker-boss reference
 3. Preserve Level 05 as second validated break-then-score boss reference
 4. Preserve Level 06 as validated long-defense / short-window timing boss reference
-5. Design Level 07 as a genuinely new boss-identity encounter
-6. Expand weapon meaning or punishment logic without breaking current architecture
+5. Preserve Level 07 as validated repeated precision-loop boss reference
+6. Design Level 08 as a genuinely new boss-identity encounter
 7. Keep boss authoring data-driven through:
    - defense pattern
    - defense state window profile
@@ -87,11 +87,20 @@ From Level 04 onward, each level must justify itself as a new boss encounter.
 - scorer = valid head hits during weak timing
 - goal = `HeadHitCount`
 
+### Level 07 reference
+
+- boss = Narcissist Manager precision paint boss
+- defense = repeated face-guard cycling
+- practical breaker = foam sprayer
+- required scorer = paint ball
+- intended mastery = repeatedly execute foam-break -> paint-head loop
+- goal = `SpecificItemHitCount(item_paint_ball)`
+
 ---
 
-## Current Design Direction For Level 07+
+## Current Design Direction For Level 08+
 
-Level 07 and beyond should continue the same content logic:
+Level 08 and beyond should continue the same content logic:
 
 - distinct boss read
 - distinct counter logic, restriction logic, or punishment logic
@@ -112,6 +121,7 @@ Bad direction examples:
 - another simple breaker swap
 - another generic breakdown level with a different label
 - another mostly-open enemy with cosmetic blocking
+- Level 07 again with only a higher paint count
 
 ---
 
@@ -132,10 +142,10 @@ Do not assume scene component values are authoritative after Play starts.
 
 ## Current Production Note
 
-Level 06 is complete as a runtime-validated boss-reference level.
+Level 07 is complete as a runtime-validated boss-reference level.
 
-That means future sessions should stop treating Level 06 as a design target and instead treat it as:
+That means future sessions should stop treating Level 07 as a design target and instead treat it as:
 
 - a finished reference implementation
-- a proof that `HeadHitCount` can support boss timing content
-- a proof that long-defense / short-window identity works inside the current system
+- a proof that `SpecificItemHitCount(item_paint_ball)` can support more than one boss identity
+- a proof that repeated break-score loops can form a clean boss mastery check without architecture churn

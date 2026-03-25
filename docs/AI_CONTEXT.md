@@ -39,7 +39,7 @@ It has already validated:
 - player-facing result UI with Retry / Next flow
 - goal-aware HUD text
 - three distinct goal types
-- three distinct boss-reference levels
+- four distinct boss-reference levels
 
 The current project stage is:
 
@@ -120,12 +120,13 @@ Validated boss-reference levels:
 - Level 04 -> Meeting Tyrant briefcase boss
 - Level 05 -> Narcissist Manager sunglasses boss
 - Level 06 -> Meeting Tyrant weak-window boss
+- Level 07 -> Narcissist Manager precision paint boss
 
 Current production note:
 
 - Levels 01–03 are the teaching block
-- Levels 04–06 are the current validated boss-reference block
-- Levels 07–09 still exist in progression and should continue boss-first expansion rather than fake repetition
+- Levels 04–07 are the current validated boss-reference block
+- Levels 08–09 still exist in progression and should continue boss-first expansion rather than fake repetition
 
 ---
 
@@ -293,6 +294,7 @@ Validated:
 - Level 04 briefcase boss = hammer break rule
 - Level 05 sunglasses boss = foam break / paint finish rule
 - Level 06 weak-window boss = mostly defended / briefly vulnerable timing rule
+- Level 07 precision paint boss = repeat foam-break / paint-head score loop
 
 ---
 
@@ -300,7 +302,7 @@ Validated:
 
 Preferred next milestone:
 
-**Level 07 Boss Identity design and implementation**
+**Level 08 Boss Identity design and implementation**
 
 Reason:
 
@@ -324,7 +326,7 @@ Secondary follow-up directions:
 Any future AI working on this project must:
 
 1. inspect repository code, not just old summaries
-2. preserve Levels 04–06 as reference implementations unless real regression is proven
+2. preserve Levels 04–07 as reference implementations unless real regression is proven
 3. keep behavior data-driven
 4. use the preset-authoritative runtime path for boss authoring
 5. explain doc drift clearly if docs and runtime content diverge

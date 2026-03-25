@@ -2,14 +2,15 @@
 
 ## Session Summary
 
-This session continued from the validated Level 04 / Level 05 boss foundation and focused on:
+This session continued from the validated Level 04 / Level 05 / Level 06 boss foundation and focused on:
 
-1. auditing the real runtime state instead of trusting old summaries
-2. confirming doc drift around Level 06
-3. designing Level 06 as a true third boss-identity encounter
-4. implementing the Level 06 weak-window boss through the preset-authoritative runtime chain
-5. debugging runtime slot / preset / active-enemy issues until the real root cause was isolated
-6. tuning the boss pacing until the final behavior matched design intent
+1. auditing the real repository state instead of trusting stale summaries
+2. identifying doc drift around Level 07
+3. attempting and then abandoning a failed Level 07 counter-guard direction
+4. cleaning that failed branch out of the main content chain
+5. redesigning Level 07 into a cleaner boss identity that fit the current runtime architecture
+6. implementing and validating the final Level 07 precision paint boss
+7. confirming and documenting a Unity asset serialization / push workflow pitfall
 
 ---
 
@@ -17,7 +18,7 @@ This session continued from the validated Level 04 / Level 05 boss foundation an
 
 ### State audit
 
-Confirmed the current runtime structure still uses:
+Confirmed the runtime structure still uses:
 
 - `LevelProgressionController`
 - `LevelEncounterController`
@@ -26,166 +27,201 @@ Confirmed the current runtime structure still uses:
 - `EnemyRuntimePresetController`
 - `EnemyPresetApplicator`
 
-Confirmed again that the project is still data-driven and preset-authoritative.
+Confirmed again that the project remains data-driven and preset-authoritative.
 
 ### Doc drift identification
 
-Found that older docs still described Level 06 as a future target rather than a finished boss-reference level.
+Found that existing docs still treated Level 07 as an open design task.
 
-The key drift was:
-
-- docs still ended at Level 05 as completed boss content
-- Level 06 still appeared as placeholder / revision content
-- recommended next step still assumed “do Level 06”
-
-That drift is no longer valid after this session.
+That drift was valid at the start of the session, but no longer valid after the final Level 07 implementation and sync pass.
 
 ---
 
-## Level 06 Boss Design
+## Failed Design Branch
+
+### Rejected concept
+
+**Meeting Tyrant Counter Guard Boss**
+
+Intended meaning:
+
+- punish greedy repeated attacks
+- player should stop over-attacking
+- repeated hits should trigger a strong counter-defense state
+
+### Why it was rejected
+
+The concept sounded distinct on paper, but it did not fit the current implementation cleanly enough.
+
+Observed problems included:
+
+- automatic or unclear defense behavior muddying the intended read
+- runtime feel collapsing toward existing Level 04 behavior
+- insufficient clarity between “AI started defense” and “player triggered punishment”
+- poor communication of cause and effect to the player
+
+### Important outcome
+
+The branch was not force-kept.
+
+It was fully cleaned out of:
+
+- `enemy_roster_main`
+- `level_enemy_selection_level_07`
+- `level_07_encounter_config`
+- related temporary boss assets
+
+This prevented failed data from polluting the validated chain.
+
+---
+
+## Final Level 07 Boss Design
 
 ### Final boss identity
 
-**Meeting Tyrant Weak-Window Boss**
+**Narcissist Manager Precision Paint Boss**
 
 Core gameplay meaning:
 
-- long-duration defense pressure
-- short valid scoring window
-- player must read timing, not just pick a breaker item
-- `HeadHitCount` remains the goal type
-- the boss should feel mostly defended, not mostly open
+- repeated face-guard cycles control when the head is meaningfully scoreable
+- foam is the practical break tool
+- paint ball is the required scoring tool
+- the player must repeatedly execute the correct loop rather than solve the boss only once
 
 ### Final intended player read
 
-- most of the cycle is hostile / blocked
-- the boss only exposes a short vulnerability window
-- valid progress comes from reading the window correctly
-- this is a timing boss, not a break-item boss
+- sunglasses defense creates repeated denial
+- foam opens the route
+- paint ball to the head is the real scoring action
+- wrong items do not efficiently solve the encounter
+- this is not a generic breakdown level
+- this is not just Level 05 with cosmetic escalation
+- this is a repeat precision loop boss
 
 ---
 
-## Level 06 Authoring Chain
+## Level 07 Authoring Chain
 
 Completed and validated authoring path:
 
-- dedicated weak-window defense pattern
-- dedicated weak-window defense state window profile
-- dedicated weak-window preset
+- dedicated precision paint defense pattern
+- dedicated precision paint defense state window profile
+- dedicated precision paint preset
 - dedicated roster entry
-- Level 06 enemy selection routed to that boss entry
-- runtime slot routing confirmed
+- Level 07 enemy selection routed to that boss entry
+- runtime slot routing corrected to the validated Narcissist slot
 - active runtime enemy confirmed
+- encounter goal switched to `SpecificItemHitCount(item_paint_ball)`
 
-This means Level 06 is not a scene-only hack.
+This means Level 07 is not a scene-only tweak.
 
-It is a true runtime-authored boss encounter.
+It is a real runtime-authored boss encounter.
 
 ---
 
 ## Main Debugging Path From This Session
 
-### Phase 1: apparent boss setup but wrong runtime behavior
+### Phase 1: stale assumptions and wrong branch
 
-Early on, Level 06 looked partially correct in assets, but runtime behavior did not match design intent.
+Early exploration assumed a new Meeting Tyrant counter-punish boss would be the best next step.
 
-Observed symptoms included:
+That assumption failed in runtime testing.
 
-- attacks still going through too freely
-- boss timing not behaving like a real window-based defense
-- confusion between scene values and runtime-applied values
+The important decision was not to rationalize the bad result.
+The branch was abandoned.
 
-### Phase 2: runtime slot / preset routing checks
+### Phase 2: chain cleanup
 
-The session then verified:
+Before starting the new design, the failed Level 07 branch was fully removed from the live path.
 
-- roster entry selection
-- recommended slot targeting
-- slot default preset reassignment at runtime
-- current active slot
-- active runtime enemy root
-- preset applicator state
-- runtime preset controller state
+This restored:
 
-This isolated several non-bug sources of confusion:
+- normal roster state
+- normal Level 07 selection state
+- normal Level 07 encounter state
 
-- startup inspector values were not always trustworthy runtime truth
-- `CurrentPreset` before Play could be stale serialized debug state
-- scene-level field values were not authoritative once runtime preset application began
+Only after that cleanup did the new implementation start.
 
-### Phase 3: real logic issue
+### Phase 3: precision paint implementation
 
-After preset routing was confirmed correct, the actual gameplay logic problem was isolated:
+Level 07 was rebuilt around Narcissist Manager using:
 
-- `defenseActive` could be true
-- but defense logic could still be effectively bypassed
-- because overall defense gating was tied too broadly to state-window permission
+- a dedicated precision-paint defense pattern
+- a dedicated precision-paint defense state window profile
+- a dedicated precision-paint preset
+- a new roster entry
+- Level 07 selection rerouting
+- encounter retargeting to `SpecificItemHitCount(item_paint_ball)`
 
-This was the wrong design for Level 06.
+### Phase 4: slot routing bug
 
-Level 06 needed:
+The first implementation used the wrong recommended slot for the new Narcissist boss entry.
 
-- defense existence determined by `defenseActive`
-- weak vulnerability determined by the state-window weakness phase
+That caused:
 
-Not:
+- no visible enemy at runtime
+- both enemy roots appearing inactive / greyed
+- HUD updating without a live boss in view
 
-- defense globally disabled whenever the state window was outside its weakness logic phase
+The issue was corrected by routing the new Narcissist boss through the already validated Narcissist runtime slot.
 
-### Phase 4: controller fix
+This re-established correct enemy activation.
 
-`EnemyDefenseController` was corrected so that:
+### Phase 5: gameplay validation
 
-- active defense blocks by default
-- weakness only opens a short bypass path for valid head hits
-- weak-window timing no longer globally disables defense
-- Level 04 briefcase boss behavior remains deterministic
-- Level 05 face-guard paint suppression remains intact
+After slot correction, the actual intended loop appeared:
 
-This was the core code correction that made Level 06 possible as a real boss identity.
+- paint ball to the head counted
+- the boss heavily defended
+- foam functioned as the practical break tool
 
-### Phase 5: final tuning pass
+This confirmed that the new boss identity was now structurally correct.
 
-After the logic fix, the boss technically worked but pacing was reversed:
+### Phase 6: final difficulty tuning
 
-- defense duration felt too short
-- open attack time felt too long
+Initial tuning was too permissive.
+Correct play was stable, but incorrect play could still sometimes pass.
 
-The final pass then tuned the Level 06 pattern / state window assets so the boss became:
+The final tuning moved the encounter to:
 
-- mostly defended
-- briefly vulnerable
-- aligned with the intended long-defense / short-window design
+- `TargetCount = 10`
+- `RoundDurationSeconds = 32`
 
-This final tuning is now validated.
+This established the intended balance:
+
+- correct play feels fair
+- repeated proper execution is required
+- skipping foam is no longer a reliable solution
+- overall player feel is “just right”
 
 ---
 
 ## Final Validated Rule Set
 
-### Level 06
+### Level 07
 
-- boss = Meeting Tyrant weak-window boss
+- boss = Narcissist Manager precision paint boss
 - runtime preset path is correct
-- long defense phase is active for most of the cycle
-- weak scoring window is short
-- general attacks are blocked during defense
-- valid progress is driven by correctly timed head hits
-- goal = `HeadHitCount`
-- encounter now matches intended boss pressure
+- runtime slot routing is correct
+- repeated sunglasses defense cycles control score access
+- foam is the practical breaker
+- paint ball is the required scorer
+- goal = `SpecificItemHitCount(item_paint_ball)`
+- final encounter tuning uses `TargetCount = 10`
+- final encounter tuning uses `RoundDurationSeconds = 32`
 
 ---
 
 ## Key Debugging Lessons From This Session
 
-1. Runtime preset routing must be proven on the actual active enemy root, not inferred from scene values
-2. A correct preset asset is not enough; it must land on the intended active slot
-3. Startup inspector values can be stale debug residue rather than true runtime state
-4. For weak-window bosses:
-   - `defenseActive` defines the defense gate
-   - state window defines when weakness is exposed
-5. After logic correctness is achieved, boss identity still depends heavily on pacing tuning
-6. “Mostly blocked, briefly vulnerable” must be tuned deliberately; it does not emerge automatically
+1. A design direction that sounds new is still invalid if runtime feel collapses into an already-solved boss identity
+2. Failed content branches should be fully removed from the live data chain before the next attempt begins
+3. Correct archetype-specific slot reuse matters; using the wrong recommended slot can make a valid preset appear “broken”
+4. Post-tutorial boss design should prioritize readable mastery loops over abstract punishment concepts that the current runtime cannot communicate clearly
+5. `SpecificItemHitCount` can support multiple distinct boss identities if the break / score loop is genuinely different
+6. Unity Inspector values are not always immediately serialized to disk
+7. GitHub Desktop only sees what Unity actually wrote to the `.asset` file, not what is merely visible in Inspector memory
+8. When an exact serialized value matters, confirm the actual GitHub file content directly after push
 
 ---
 
@@ -197,9 +233,10 @@ Validated state at end of session:
 - Level 04 briefcase boss working
 - Level 05 sunglasses boss working
 - Level 06 weak-window boss working
+- Level 07 precision paint boss working
 - goal-aware HUD working
 - result flow working
-- project now has three distinct validated boss-reference levels
+- project now has four distinct validated boss-reference levels
 
 ---
 
@@ -230,7 +267,16 @@ Completed as third boss reference:
 - short scoring window
 - timing-driven head-hit progress
 
-This means the project now has three validated boss-reference levels with different pacing identities.
+### Level 07
+
+Completed as fourth boss reference:
+
+- Narcissist Manager precision paint defense
+- repeated break-score loop
+- foam as practical opener
+- paint ball as required head-scoring tool
+
+This means the project now has four validated boss-reference levels with distinct pacing and item-read identities.
 
 ---
 
@@ -240,8 +286,8 @@ Start with:
 
 - docs review
 - script inspection
-- confirmation that Level 04 / Level 05 / Level 06 still match runtime state
+- confirmation that Levels 04–07 still match runtime state
 
 Then proceed to:
 
-**Level 07 boss identity design and implementation**
+**Level 08 boss identity design and implementation**

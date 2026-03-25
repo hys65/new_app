@@ -58,6 +58,7 @@ The following milestones are completed and validated:
 - Level 04 Briefcase Boss Foundation
 - Level 05 Sunglasses Boss Foundation
 - Level 06 Weak-Window Boss Foundation
+- Level 07 Precision Paint Boss Foundation
 
 The project is no longer at the single-enemy prototype stage.
 It already supports reusable multi-level runtime content in one scene.
@@ -83,6 +84,7 @@ Validated boss-reference block:
 - Level 04 -> `BreakdownTarget` + Meeting Tyrant briefcase boss rule
 - Level 05 -> `SpecificItemHitCount(item_paint_ball)` + Narcissist Manager sunglasses boss rule
 - Level 06 -> `HeadHitCount` + Meeting Tyrant weak-window boss rule
+- Level 07 -> `SpecificItemHitCount(item_paint_ball)` + Narcissist Manager precision paint boss rule
 
 These three goal types are sufficient for the current repository content.
 
@@ -147,11 +149,12 @@ Validated boss-reference levels:
 - Level 04 = Meeting Tyrant briefcase boss
 - Level 05 = Narcissist Manager sunglasses boss
 - Level 06 = Meeting Tyrant weak-window boss
+- Level 07 = Narcissist Manager precision paint boss
 
 Important rule:
 
 Post-tutorial content must not regress into fake repetition.
-Level 07 and beyond should continue boss-identity-driven expansion.
+Level 08 and beyond should continue boss-identity-driven expansion.
 
 ---
 
@@ -187,23 +190,24 @@ The project has already moved beyond:
 - scene-only encounter setup
 - forced auto-advance after victory
 - Level 06 as a future design target
+- Level 07 as a future design target
 
 The project is currently at:
 
 - reusable multi-level runtime flow
 - validated three-goal system
-- validated three-boss-reference block
+- validated four-boss-reference block
 - content authoring expansion stage
 
 ---
 
 ## Next Recommended Milestone
 
-**Level 07 Boss Identity design and implementation**
+**Level 08 Boss Identity design and implementation**
 
 High-level direction:
 
-- preserve Levels 04–06 as validated reference implementations
+- preserve Levels 04–07 as validated reference implementations
 - do not redesign finished boss levels unless repository inspection proves a real regression
 - continue expanding boss identity through minimal clean extensions
 - do not introduce unnecessary architecture churn
