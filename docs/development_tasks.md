@@ -1,151 +1,121 @@
-# DEVELOPMENT TASKS
+# development_tasks.md
 
-## Current Completed Content
+## Current Position
 
-### Teaching levels
+The project has completed:
 
-- Level 01 -> `BreakdownTarget`
-- Level 02 -> `HeadHitCount`
-- Level 03 -> `SpecificItemHitCount(item_egg)`
-
-### Boss-reference levels
-
-- Level 04 -> `BreakdownTarget` + Meeting Tyrant briefcase boss
-- Level 05 -> `SpecificItemHitCount(item_paint_ball)` + Narcissist Manager sunglasses boss
-- Level 06 -> `HeadHitCount` + Meeting Tyrant weak-window boss
-- Level 07 -> `SpecificItemHitCount(item_paint_ball)` + Narcissist Manager precision paint boss
-
-### Still-open progression levels
-
-- Level 08
-- Level 09
-
-These later levels still exist in progression and should continue the boss-first structure already proven by Levels 04–07.
+- core throw / hit / breakdown loop
+- enemy reaction layer
+- defense visual layer
+- archetype system
+- enemy AI layer
+- enemy switching
+- roster / level enemy selection
+- level encounter configuration
+- level progression / multi-level flow
+- runtime level advance
+- victory choice flow
+- result panel polish
+- level goal variety
+- boss preset override debugging pass
+- validated boss-reference Levels 04–08
 
 ---
 
-## Current Priority
+## Completed Boss Reference Ladder
 
-**Level 08 Boss Identity design and implementation**
+### Level 04
+Meeting Tyrant briefcase boss
 
----
+### Level 05
+Narcissist Manager sunglasses boss
 
-## Immediate Next Tasks
+### Level 06
+Meeting Tyrant weak-window boss
 
-1. Preserve Levels 01–03 as teaching levels
-2. Preserve Level 04 as first validated breaker-boss reference
-3. Preserve Level 05 as second validated break-then-score boss reference
-4. Preserve Level 06 as validated long-defense / short-window timing boss reference
-5. Preserve Level 07 as validated repeated precision-loop boss reference
-6. Design Level 08 as a genuinely new boss-identity encounter
-7. Keep boss authoring data-driven through:
-   - defense pattern
-   - defense state window profile
-   - preset
-   - roster entry
-   - level enemy selection
-   - runtime slot routing
+### Level 07
+Narcissist Manager precision paint boss
+
+### Level 08
+Zero-Mistake Boss
 
 ---
 
-## Strict Content Rule
+## Level 08 Status
 
-Do not continue content expansion by repeating old levels with only:
+Level 08 is now implemented and validated as a distinct boss-rule encounter.
 
-- bigger numbers
-- same boss read
-- same break logic
-- same timing logic with different labels
+### Final rule
+- Goal Type = `UnblockedHitStreak`
+- Target Count = `6`
+- Round Duration Seconds = `32`
 
-From Level 04 onward, each level must justify itself as a new boss encounter.
-
----
-
-## Current Boss Reference Rules
-
-### Level 04 reference
-
-- boss = Meeting Tyrant briefcase boss
-- defense = timed briefcase guard
-- breaker = sponge hammer
-- blocked = non-hammer items
-
-### Level 05 reference
-
-- boss = Narcissist Manager sunglasses boss
-- defense = timed face guard
-- breaker = foam sprayer
-- scorer = paint ball
-- blocked while active = paint
-
-### Level 06 reference
-
-- boss = Meeting Tyrant weak-window boss
-- defense = long active defense cycle
-- dominant pacing = mostly blocked
-- vulnerability = very short exposed scoring window
-- scorer = valid head hits during weak timing
-- goal = `HeadHitCount`
-
-### Level 07 reference
-
-- boss = Narcissist Manager precision paint boss
-- defense = repeated face-guard cycling
-- practical breaker = foam sprayer
-- required scorer = paint ball
-- intended mastery = repeatedly execute foam-break -> paint-head loop
-- goal = `SpecificItemHitCount(item_paint_ball)`
+### Validated behavior
+- successful non-blocked hit increments progress
+- blocked hit resets progress to zero
+- HUD clearly communicates clean-hit progress and reset rule
+- defense activation hit no longer gives a free score
+- defense visual boundary and blocked evaluation boundary are aligned closely enough for reliable play
 
 ---
 
-## Current Design Direction For Level 08+
+## What Is Explicitly Finished
 
-Level 08 and beyond should continue the same content logic:
+Do **not** reopen these unless runtime testing proves a real bug:
 
-- distinct boss read
-- distinct counter logic, restriction logic, or punishment logic
-- distinct pacing identity
-- minimal clean extension
-- no fake repetition
-
-Good direction examples:
-
-- punishment-on-wrong-item boss
-- precision-sequence boss
-- short punishable arrogance window
-- boss that teaches “prepare correctly, then score correctly”
-
-Bad direction examples:
-
-- Level 06 again but with bigger numbers
-- another simple breaker swap
-- another generic breakdown level with a different label
-- another mostly-open enemy with cosmetic blocking
-- Level 07 again with only a higher paint count
+- Level 04 reference implementation
+- Level 05 reference implementation
+- Level 06 reference implementation
+- Level 07 reference implementation
+- Level 08 zero-mistake implementation
+- UnblockedHitStreak goal support
+- Level 08 HUD rule readability
+- Level 08 blocked-boundary evaluation fix
 
 ---
 
-## Current Technical Rule For Boss Authoring
+## Immediate Next Milestone
 
-Boss-specific behavior must be authored through:
+Next work should move forward to the next boss-identity content after Level 08.
 
-1. defense pattern
-2. defense state window profile
-3. preset
-4. roster entry
-5. level enemy selection
-6. runtime slot routing
+Rules for next milestone:
 
-Do not assume scene component values are authoritative after Play starts.
+1. do not redesign finished boss levels
+2. do not add architecture churn without proof of necessity
+3. preserve the validated reference ladder
+4. next level must introduce a genuinely different boss problem, not a disguised repeat of:
+   - weak-window burst
+   - specific-item counting
+   - zero-mistake clean-hit streak
 
 ---
 
-## Current Production Note
+## Next-Level Design Constraint
 
-Level 07 is complete as a runtime-validated boss-reference level.
+The next boss milestone must create a new pressure model.
 
-That means future sessions should stop treating Level 07 as a design target and instead treat it as:
+That means it should not simply be:
+- “hit more times”
+- “same boss but faster”
+- “same rule with smaller window”
 
-- a finished reference implementation
-- a proof that `SpecificItemHitCount(item_paint_ball)` can support more than one boss identity
-- a proof that repeated break-score loops can form a clean boss mastery check without architecture churn
+It must create a different player demand.
+
+Examples of acceptable direction:
+- sequencing pressure
+- bait / punish pressure
+- rule inversion
+- multi-step identity behavior
+
+These are examples of direction only, not locked implementation.
+
+---
+
+## Ongoing Discipline
+
+For every future boss level:
+
+- verify runtime GitHub asset contents after push
+- treat runtime preset application as authoritative
+- validate both logic and readability
+- reject content that feels unclear even if technically correct

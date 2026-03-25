@@ -1,317 +1,160 @@
-# ENEMY SYSTEM
+# enemy_system.md
 
 ## Overview
 
-The enemy system is data-driven and preset-applied.
+Enemy behavior is now fully data-driven and runtime-routed.
 
-Enemy runtime behavior is formed by combining:
+Behavior definition stack:
 
-- archetype
-- defense pattern
-- AI profile
-- defense state window profile
+1. `EnemyArchetypeData`
+2. `EnemyDefensePatternData`
+3. `EnemyAiProfileData`
+4. `EnemyDefenseStateWindowProfileData`
+5. `EnemyPresetData`
+6. `EnemyRosterData`
+7. `LevelEnemySelectionData`
 
-through:
-
-- `EnemyPresetData`
-- `EnemyPresetApplicator`
-
----
-
-## Runtime Components
-
-### Core runtime enemy components
-
-- `EnemyReactionLayerController`
-- `EnemyDefenseController`
-- `EnemyDefenseVisualLayerController`
-- `EnemyDefenseStateWindowController`
-- `EnemyAiLayerController`
-- `EnemyPresetApplicator`
-- `EnemyRuntimePresetController`
-- `EnemyVisualProxyController`
+Runtime authority comes from preset application, not scene-only tuning.
 
 ---
 
-## Data Components
+## Core Runtime Rule
 
-### `EnemyArchetypeData`
+Do not treat scene-edited defense values as authoritative boss configuration.
 
-Defines broad enemy identity tendencies.
+Actual runtime behavior must be authored through:
 
-### `EnemyDefensePatternData`
+**pattern → state window profile → preset → roster entry → level selection → runtime slot routing**
 
-Defines defense behavior details, such as:
+This remains the project’s core enemy architecture rule.
 
-- blockability
-- duration
-- cooldown
-- break items
+---
+
+## Enemy Defense Controller
+
+`EnemyDefenseController` is the main gameplay gate for:
+
+- defense active state
 - timed activation
-- reactive activation
-- weakness settings
-- boss-specific special handling
-
-### `EnemyAiProfileData`
-
-Defines enemy timing / personality control where applicable.
-
-### `EnemyDefenseStateWindowProfileData`
-
-Defines defense window profile behavior.
-
-### `EnemyPresetData`
-
-Combines:
-
-- archetype
-- defense pattern
-- AI profile
-- defense state window profile
-
-### `EnemyRosterData`
-
-Maps:
-
-- roster entry id
-- preset
-- recommended slot
+- repeated-hit activation
+- block / break / weak evaluation
+- cooldown handling
+- defense-state-driven hit resolution
 
 ---
 
-## Critical Runtime Rule
+## Important Runtime Behavior
 
-Do not treat scene component references as final truth.
+### Blocking Window
+Defense is no longer interpreted as a single rigid boolean in practice.
 
-Why:
+For correct boss behavior, blocked evaluation now reflects:
 
-- runtime preset application can overwrite defense pattern and defense window profile references
+- active defense state
+- short defense exit grace window
+- activation-time block enforcement when the triggering hit should already be considered defended
 
-Therefore:
-
-- if a boss pattern looks correct before Play but changes on startup, inspect the active runtime preset and roster chain first
-
----
-
-## Runtime Authoring Rule
-
-For runtime-authored boss content, the reliable chain is:
-
-1. defense pattern
-2. defense state window profile
-3. preset
-4. roster entry
-5. level enemy selection
-6. runtime slot routing
-7. active runtime enemy state during Play
-
-This is the real boss-authoring chain.
+This was required to make zero-mistake content trustworthy.
 
 ---
 
-## Current Enemy Types
+## Why This Changed
 
-### 1. `meeting_tyrant`
+A pure `defenseActive` boolean produced two bad edge cases:
 
-Base Meeting Tyrant runtime identity.
+### Edge Case 1
+Enemy still looked defensive, but defense had just turned off.
+Result:
+- player saw defense
+- hit was not blocked
 
-### 2. `narcissist_manager`
+### Edge Case 2
+Current hit triggered defense and showed `GUARD`, but still scored.
+Result:
+- player saw defense begin
+- hit still counted
 
-Base Narcissist Manager runtime identity.
-
-### 3. `meeting_tyrant_briefcase_boss`
-
-Boss-variant roster entry created for Level 04.
-
-Supports:
-
-- dedicated preset
-- dedicated defense pattern
-- boss-style hammer-break rule
-
-### 4. `narcissist_manager_sunglasses_boss`
-
-Boss-variant roster entry created for Level 05.
-
-Supports:
-
-- dedicated preset
-- dedicated defense pattern
-- boss-style foam-break / paint-finish rule
-
-### 5. `meeting_tyrant_weak_window_boss`
-
-Boss-variant roster entry created for Level 06.
-
-Supports:
-
-- dedicated preset
-- dedicated defense pattern
-- dedicated defense state window profile
-- boss-style long-defense / short-window timing rule
+Both cases destroyed boundary clarity.
 
 ---
 
-## Level 04 Briefcase Boss
+## Current Fix
 
-### Purpose
+### Defense Exit Block Grace
+A short blocked grace window now persists briefly after defense ends.
 
-Validate the first true breaker-boss identity.
+Purpose:
+- blocked evaluation window should be slightly stricter than the visual exit
+- prevents “looks blocked but scores anyway” failures
 
-### Runtime authoring chain
+### Block On Activation
+If the current hit activates defense and the hit type should be blockable, that same hit is evaluated as blocked immediately.
 
-- `meeting_tyrant_briefcase_boss_defense_pattern`
-- `enemy_preset_meeting_tyrant_briefcase_boss`
-- `meeting_tyrant_briefcase_boss` roster entry
-- `level_enemy_selection_level_04`
-
-### Rule
-
-When briefcase guard is active:
-
-- sponge hammer breaks defense
-- non-hammer items are blocked
+Purpose:
+- prevents “GUARD + successful score” on the same impact
+- keeps boss-rule levels fair and readable
 
 ---
 
-## Level 05 Sunglasses Boss
+## Defense Readability Principle
 
-### Purpose
+For boss-rule encounters:
 
-Validate the second boss-defense identity and push weapon-role meaning further.
+**blocked evaluation window must be at least as strict as visual defense presentation**
 
-### Runtime authoring chain
+Never allow:
+- obvious defense posture
+- but permissive scoring result
 
-- `narcissist_manager_sunglasses_boss_defense_pattern`
-- `enemy_preset_narcissist_manager_sunglasses_boss`
-- `narcissist_manager_sunglasses_boss` roster entry
-- `level_enemy_selection_level_05`
-
-### Rule
-
-When sunglasses face guard is active:
-
-- paint is ineffective
-- foam breaks defense
-- paint becomes valid again after break
-
-### Content meaning
-
-This is not just another block.  
-It forces a two-step combat read:
-
-1. read boss defense timing
-2. use the breaker item
-3. switch to the actual scoring item
+Slightly strict is acceptable.
+Visibly blocked but logically open is not.
 
 ---
 
-## Level 06 Weak-Window Boss
+## Weak Window Interaction
 
-### Purpose
+Weak-window head bypass still exists for weak-window style bosses.
 
-Validate a third boss identity that is timing-based rather than breaker-based.
-
-### Runtime authoring chain
-
-- `meeting_tyrant_weak_window_boss_defense_pattern`
-- `defense_state_window_meeting_tyrant_weak_window_boss`
-- `enemy_preset_meeting_tyrant_weak_window_boss`
-- `meeting_tyrant_weak_window_boss` roster entry
-- `level_enemy_selection_level_06`
-
-### Rule
-
-The final validated Level 06 behavior is:
-
-- defense stays active for most of the cycle
-- regular attacks are blocked during that defended period
-- only a short weakness window allows valid scoring head hits
-- boss identity is driven by timing pressure, not breaker-item usage
-
-### System meaning
-
-Level 06 established an important runtime logic rule:
-
-- `defenseActive` defines whether the boss currently has a defense gate
-- `EnemyDefenseStateWindowController` defines when weakness is exposed
-- weakness timing should not be allowed to globally disable defense outside the exposed window
-
-This distinction is what enables a true long-defense / short-window boss.
+Important constraint:
+- weak-window bypass should only apply when defense is truly active and the state window explicitly exposes weakness
+- zero-mistake rule content must not accidentally inherit permissive scoring from unrelated weak-window behavior
 
 ---
 
-## Enemy Debugging Rules
+## Boss Reference Identities
 
-When enemy behavior appears wrong:
+### Level 04 – Meeting Tyrant Briefcase Boss
+Identity:
+- deterministic hard block
+- explicit break item logic
 
-### Step 1
+### Level 05 – Narcissist Manager Sunglasses Boss
+Identity:
+- face guard
+- paint invalid while guarded
 
-Confirm you selected the actual active runtime enemy root.
+### Level 06 – Meeting Tyrant Weak-Window Boss
+Identity:
+- short vulnerability windows
+- pressure through timing bursts
 
-### Step 2
+### Level 07 – Narcissist Manager Precision Paint Boss
+Identity:
+- required-item success rule
+- paint-ball precision objective
 
-Inspect runtime fields during Play:
-
-- current preset
-- last applied preset
-- defense pattern
-- defense active
-- runtime elapsed
-- next timed activation
-- defense state window profile
-- current slot / active slot if switching is involved
-
-### Step 3
-
-If scene values changed on startup:
-
-- inspect `EnemyPresetApplicator`
-- inspect `EnemyPresetData`
-- inspect the roster entry used by current level
-- inspect the slot chosen by runtime routing
-
-### Step 4
-
-Only after data-chain validation, inspect controller code
-
-### Step 5
-
-After logic is correct, tune pacing:
-
-- defense duration
-- activation interval
-- weak window normalized range
-
-Because boss identity depends on pacing, not just binary correctness.
+### Level 08 – Zero-Mistake Boss
+Identity:
+- clean-hit streak objective
+- blocked hit resets progress
+- boundary clarity is part of the encounter design
 
 ---
 
-## Collision / Hit Rules
+## Production Lessons
 
-Validated gameplay collision structure:
-
-- `EnemyVisual` = visual only
-- visual collider disabled
-- `Torso` = body hit collider
-- `HeadCollider` tagged `Head`
-- hit reaction not attached to `EnemyVisual`
-
-This structure must not be regressed.
-
----
-
-## Current Recommended Enemy-System Direction
-
-Next enemy-system work should focus on:
-
-- boss identity expansion through new presets / patterns / roster entries
-- stronger weapon-role readability
-- stronger timing / punishment readability
-- avoiding repeated generic enemies after Level 03
-
-Not on:
-
-- broad rewrites
-- abandoning preset-driven runtime injection
-- falling back to scene-only boss setup
+- Wrong slot routing can make a valid boss appear absent.
+- Runtime preset application is the source of truth.
+- Defense visuals and block logic must remain aligned.
+- A boss encounter can fail not because of numbers, but because of unreadable boundaries.
+- Future boss-rule content should be evaluated first on clarity, second on difficulty.
