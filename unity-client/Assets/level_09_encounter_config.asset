@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 646b1b3bee028404190f08eebe4b94e0, type: 3}
+  m_Name: level_09_encounter_config
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.LevelEncounterConfigData
+  levelId: level_09
+  displayName: Level 09 Face Guard Boss
+  enemySelection: {fileID: 11400000, guid: c0393f127924c8143a75574b0052f16c, type: 2}
+  primaryGoal:
+    goalType: 0
+    targetCount: 1
+    requiredItemId: 
+  targetBreakdownValue: 180
+  roundDurationSeconds: 34
+  autoStartRound: 1

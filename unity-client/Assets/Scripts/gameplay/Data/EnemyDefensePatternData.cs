@@ -40,6 +40,12 @@ namespace PowerPrank3D.Gameplay
         [Range(0f, 1f)] public float blockedBreakdownMultiplier = 0.25f;
         [Range(0f, 1f)] public float blockedReactionMultiplier = 0.55f;
 
+        [Header("Passive Hit Shaping")]
+        public bool reduceHeadHitsOutsideDefense = false;
+        [Range(0f, 1f)] public float passiveHeadBreakdownMultiplier = 0.25f;
+        [Range(0f, 1f)] public float passiveHeadReactionMultiplier = 0.9f;
+        public string passiveHeadPopupText = string.Empty;
+
         [Header("Weakness")]
         public bool weakToHeadHits = false;
         [Range(1f, 3f)] public float headWeaknessMultiplier = 1.5f;

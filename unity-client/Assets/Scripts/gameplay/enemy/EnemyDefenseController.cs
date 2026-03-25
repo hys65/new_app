@@ -255,7 +255,45 @@ namespace PowerPrank3D.Gameplay
                 }
             }
 
+            ApplyPassiveHeadHitShaping(ref result, isHeadHit, itemData);
+
             return FinalizeResult(itemData, isHeadHit, result);
+        }
+
+        private void ApplyPassiveHeadHitShaping(ref DefenseHitResult result, bool isHeadHit, GameplayItemData itemData)
+        {
+            if (!HasPattern())
+            {
+                return;
+            }
+
+            if (!isHeadHit)
+            {
+                return;
+            }
+
+            if (!defensePattern.reduceHeadHitsOutsideDefense)
+            {
+                return;
+            }
+
+            if (result.wasBlocked || result.brokeDefense || result.weaknessApplied)
+            {
+                return;
+            }
+
+            result.breakdownMultiplier *= Mathf.Clamp01(defensePattern.passiveHeadBreakdownMultiplier);
+            result.reactionMultiplier *= Mathf.Clamp01(defensePattern.passiveHeadReactionMultiplier);
+
+            if (string.IsNullOrEmpty(result.popupText) &&
+                !string.IsNullOrWhiteSpace(defensePattern.passiveHeadPopupText))
+            {
+                result.popupText = defensePattern.passiveHeadPopupText;
+            }
+
+            Debug.Log(
+                "[DefenseEval] PASSIVE HEAD REDUCE item=" + SafeItemId(itemData) +
+                " multiplier=" + defensePattern.passiveHeadBreakdownMultiplier);
         }
 
         private void TryActivateTimedDefense()

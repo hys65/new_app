@@ -3368,7 +3368,7 @@ Transform:
   m_GameObject: {fileID: 1310628143}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3, y: 1, z: 1.5}
+  m_LocalPosition: {x: 1.93, y: 1, z: 1.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3460,6 +3460,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyDefenseController
   defensePattern: {fileID: 0}
   useDefensePattern: 1
+  defenseExitBlockGraceSeconds: 0.18
   defenseActive: 0
   defenseTimer: 0
   defenseCooldownTimer: 0
@@ -3467,6 +3468,7 @@ MonoBehaviour:
   repeatedHitWindowTimer: 0
   runtimeElapsed: 0
   nextTimedActivationAt: 0
+  defenseBlockGraceTimer: 0
   defenseStateWindow: {fileID: 1310628148}
   enemyAiLayer: {fileID: 1310628149}
 --- !u!114 &1310628147
@@ -4939,7 +4941,7 @@ Transform:
   m_GameObject: {fileID: 1620351223}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3, y: 1, z: 1.5}
+  m_LocalPosition: {x: -1.46, y: 1, z: 1.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5115,6 +5117,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyDefenseController
   defensePattern: {fileID: 11400000, guid: b650e4fb085d84441870fbf272343173, type: 2}
   useDefensePattern: 1
+  defenseExitBlockGraceSeconds: 0.18
   defenseActive: 0
   defenseTimer: 0
   defenseCooldownTimer: 0
@@ -5122,6 +5125,7 @@ MonoBehaviour:
   repeatedHitWindowTimer: 0
   runtimeElapsed: 0
   nextTimedActivationAt: 0
+  defenseBlockGraceTimer: 0
   defenseStateWindow: {fileID: 1620351229}
   enemyAiLayer: {fileID: 1620351228}
 --- !u!114 &1620351232

@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be0abebe2f093f745a1704086c0a0b6d, type: 3}
+  m_Name: narcissist_manager_face_guard_boss_defense_pattern
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyDefensePatternData
+  defenseId: defense_narcissist_manager_face_guard_boss
+  displayName: Narcissist Manager Face Guard Boss
+  patternType: 2
+  canBlockBody: 0
+  canBlockHead: 1
+  randomBlockChance: 0
+  blockDuration: 1.25
+  blockCooldown: 2.6
+  triggeredByRepeatedHits: 0
+  repeatedHitCountThreshold: 2
+  repeatedHitWindow: 2
+  useTimedActivation: 1
+  firstActivationDelay: 4
+  timedActivationInterval: 6.5
+  blockedBreakdownMultiplier: 0.15
+  blockedReactionMultiplier: 0.55
+  reduceHeadHitsOutsideDefense: 1
+  passiveHeadBreakdownMultiplier: 0.2
+  passiveHeadReactionMultiplier: 0.9
+  passiveHeadPopupText: FACE
+  weakToHeadHits: 0
+  headWeaknessMultiplier: 1.5
+  breakByHammer: 0
+  breakByFoam: 0
+  breakByPaint: 0
+  breakByEgg: 0
+  breakByTomato: 0
+  autoActivateOnHeadHit: 1
+  autoActivateOnBodyHit: 0
+  reducePaintOnFaceGuard: 0
