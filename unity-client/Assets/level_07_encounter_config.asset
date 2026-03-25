@@ -17,7 +17,7 @@ MonoBehaviour:
   enemySelection: {fileID: 11400000, guid: ddee42b2107cf804a8dd84255231a82e, type: 2}
   primaryGoal:
     goalType: 2
-    targetCount: 8
+    targetCount: 10
     requiredItemId: item_paint_ball
   targetBreakdownValue: 1
   roundDurationSeconds: 32
