@@ -101,6 +101,21 @@ namespace PowerPrank3D.Gameplay
                         TryCompleteGoal();
                     }
                     break;
+
+                case LevelGoalType.UnblockedHitStreak:
+                    if (hitInfo.wasBlocked)
+                    {
+                        currentProgress = 0;
+                        gameplayManager?.RefreshState();
+                        return;
+                    }
+
+                    if (hitInfo.gainedScore > 0)
+                    {
+                        currentProgress++;
+                        TryCompleteGoal();
+                    }
+                    break;
             }
         }
 
@@ -118,6 +133,9 @@ namespace PowerPrank3D.Gameplay
 
                 case LevelGoalType.SpecificItemHitCount:
                     return $"Goal: {currentGoal.requiredItemId} Hits {currentProgress} / {currentGoal.targetCount}";
+
+                case LevelGoalType.UnblockedHitStreak:
+                    return $"Goal: Clean Hits {currentProgress} / {currentGoal.targetCount}";
 
                 case LevelGoalType.BreakdownTarget:
                 default:

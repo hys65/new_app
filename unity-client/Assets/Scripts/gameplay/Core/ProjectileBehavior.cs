@@ -126,6 +126,7 @@ namespace PowerPrank3D.Gameplay
                     levelGoalController.NotifyHitResolved(new CombatHitInfo
                     {
                         isHeadHit = isHeadHit,
+                        wasBlocked = defenseResult.wasBlocked,
                         itemId = itemData != null ? itemData.itemId : string.Empty,
                         gainedScore = gainedScore
                     });

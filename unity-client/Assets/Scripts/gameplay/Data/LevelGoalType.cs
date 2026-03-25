@@ -4,6 +4,7 @@ namespace PowerPrank3D.Gameplay
     {
         BreakdownTarget = 0,
         HeadHitCount = 1,
-        SpecificItemHitCount = 2
+        SpecificItemHitCount = 2,
+        UnblockedHitStreak = 3
     }
 }

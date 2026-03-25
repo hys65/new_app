@@ -16,9 +16,9 @@ MonoBehaviour:
   displayName: Level 08 Encounter
   enemySelection: {fileID: 11400000, guid: 6382b2e7f91fc524292398f9330bd1c3, type: 2}
   primaryGoal:
-    goalType: 1
-    targetCount: 8
+    goalType: 3
+    targetCount: 6
     requiredItemId: 
   targetBreakdownValue: 180
-  roundDurationSeconds: 40
+  roundDurationSeconds: 32
   autoStartRound: 1

@@ -161,6 +161,14 @@ namespace PowerPrank3D.Gameplay
                     );
                     break;
 
+                case LevelGoalType.UnblockedHitStreak:
+                    SetPlainText(currentBreakdownText, $"Clean Hits: {progress} / {target}");
+                    SetPlainText(
+                        targetBreakdownText,
+                        $"Blocked Hit = Reset"
+                    );
+                    break;
+
                 case LevelGoalType.BreakdownTarget:
                 default:
                     SetText(currentBreakdownText, "ui_breakdown_current", gameplayManager.CurrentBreakdownValue.ToString());

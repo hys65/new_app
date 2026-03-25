@@ -34,12 +34,7 @@ namespace PowerPrank3D.Gameplay
         public float RoundDurationSeconds => roundDurationSeconds;
         public float RemainingTimeSeconds { get; private set; }
         public bool IsRoundRunning { get; private set; }
-
-        public GameplayItemData CurrentItem =>
-            itemList != null && itemList.Length > 0
-                ? itemList[currentItemIndex]
-                : null;
-
+        public GameplayItemData CurrentItem => itemList != null && itemList.Length > 0 ? itemList[currentItemIndex] : null;
         public int ComboCount { get; private set; }
 
         public float CurrentComboMultiplier => GetComboMultiplier(ComboCount);
@@ -222,6 +217,11 @@ namespace PowerPrank3D.Gameplay
         public void RetryRound()
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
+        public void RefreshState()
+        {
+            OnStateChanged?.Invoke();
         }
 
         private void AdvanceCombo()
