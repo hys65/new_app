@@ -30,7 +30,7 @@ Confirmed again that the project is still data-driven and preset-authoritative.
 
 ### Doc drift identification
 
-Found that current docs still described Level 06 as a future target rather than a finished boss-reference level.
+Found that older docs still described Level 06 as a future target rather than a finished boss-reference level.
 
 The key drift was:
 
@@ -77,7 +77,8 @@ Completed and validated authoring path:
 - runtime slot routing confirmed
 - active runtime enemy confirmed
 
-This means Level 06 is not a scene-only hack.  
+This means Level 06 is not a scene-only hack.
+
 It is a true runtime-authored boss encounter.
 
 ---

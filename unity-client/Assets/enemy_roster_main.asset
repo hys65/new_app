@@ -32,11 +32,16 @@ MonoBehaviour:
     enabled: 1
   - entryId: narcissist_manager_sunglasses_boss
     displayName: Narcissist Manager
-    preset: {fileID: 11400000, guid: 848eea4ff9c1a654585a9a8a0ee7f0d3, type: 2}
+    preset: {fileID: 11400000, guid: ce98f8de6aeff6e4c850702866b6982c, type: 2}
     recommendedSlotId: enemy_slot_02
     enabled: 1
   - entryId: meeting_tyrant_weak_window_boss
     displayName: Meeting Tyrant
     preset: {fileID: 11400000, guid: 19cca2914ef8e374b9f883bf721cbc9c, type: 2}
     recommendedSlotId: enemy_slot_03
+    enabled: 1
+  - entryId: narcissist_manager_precision_paint_boss
+    displayName: Narcissist Manager
+    preset: {fileID: 11400000, guid: 73d40312fa80d1a4e877b67eb242a4f0, type: 2}
+    recommendedSlotId: enemy_slot_02
     enabled: 1

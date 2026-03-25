@@ -2,7 +2,8 @@
 
 ## Project
 
-**Power Prank 3D**  
+**Power Prank 3D**
+
 Unity 6.3 LTS small-scale prototype game.
 
 Core fantasy:
@@ -33,8 +34,8 @@ Core fantasy:
 - Victory Choice Flow 1.0 ✅
 - Result Panel Polish 1.0 ✅
 - Level Goal Variety 1.0 ✅
-- Enemy Hitbox Structure Repair ✅
-- Enemy Stain Attachment Repair ✅
+- Enemy gameplay hitbox structure repair ✅
+- Enemy stain attachment repair ✅
 - Goal-aware HUD Readability 1.0 ✅
 - Boss Preset Override Debugging Pass ✅
 - Level 04 Briefcase Boss Foundation ✅
@@ -51,21 +52,22 @@ Implemented and validated:
 - `HeadHitCount`
 - `SpecificItemHitCount`
 
-Validated tutorial flow:
+Validated teaching flow:
 
-- Level 1 -> `BreakdownTarget`
-- Level 2 -> `HeadHitCount`
-- Level 3 -> `SpecificItemHitCount(item_egg)`
+- Level 01 -> `BreakdownTarget`
+- Level 02 -> `HeadHitCount`
+- Level 03 -> `SpecificItemHitCount(item_egg)`
 
 Validated boss flow:
 
-- Level 4 -> `BreakdownTarget` + briefcase boss rule
-- Level 5 -> `SpecificItemHitCount(item_paint_ball)` + sunglasses boss rule
-- Level 6 -> `HeadHitCount` + weak-window boss rule
+- Level 04 -> `BreakdownTarget` + briefcase boss rule
+- Level 05 -> `SpecificItemHitCount(item_paint_ball)` + sunglasses boss rule
+- Level 06 -> `HeadHitCount` + weak-window boss rule
 
 Current note:
 
-These three goal types remain sufficient for the current production content set.  
+These three goal types remain sufficient for the current production content set.
+
 Level 06 proved that new boss identity can still be built without inventing a new goal type, as long as defense logic and runtime preset routing are correct.
 
 ---
@@ -125,28 +127,28 @@ Boss behavior must be authored through the actual preset used by the selected ro
 
 ### Tutorial Levels
 
-- Level 1 = tutorial breakdown
-- Level 2 = tutorial head hits
-- Level 3 = tutorial specific item
+- Level 01 = tutorial breakdown
+- Level 02 = tutorial head hits
+- Level 03 = tutorial specific item
 
 ### Boss Block
 
-- Level 4 = first distinct boss identity level
+- Level 04 = first distinct boss identity level
   - identity: Briefcase Boss / Hammer Break rule
   - implementation uses dedicated roster entry + dedicated preset path
 
-- Level 5 = second distinct boss identity level
+- Level 05 = second distinct boss identity level
   - identity: Sunglasses Boss / Foam Break / Paint Finish rule
   - implementation uses dedicated roster entry + dedicated preset path
 
-- Level 6 = third distinct boss identity level
+- Level 06 = third distinct boss identity level
   - identity: Weak-Window Boss / Long Defense / Short Timing Window rule
   - implementation uses dedicated roster entry + dedicated preset path
   - primary goal uses `HeadHitCount`
 
 ### Extended Content
 
-- Levels 7-9 still exist in progression content
+- Levels 07–09 still exist in progression content
 - these levels should continue boss-first content expansion
 - they should not regress into fake repeated encounters
 
@@ -154,7 +156,7 @@ Boss behavior must be authored through the actual preset used by the selected ro
 
 ## Current Major Design Rule
 
-Do NOT treat Levels 4+ as simple repeated content rotation.
+Do NOT treat Levels 04+ as simple repeated content rotation.
 
 Invalid direction:
 
@@ -197,7 +199,7 @@ Correct question:
 Level 06 established an important logic distinction:
 
 - `defenseActive` determines whether defense exists
-- `DefenseStateWindow` should determine when weakness is exposed
+- `DefenseStateWindow` determines when weakness is exposed
 - defense should not be globally disabled just because the state window is outside the weak phase
 
 This is the rule that makes a long-defense / short-window boss possible.

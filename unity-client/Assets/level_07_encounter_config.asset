@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: level_07_encounter_config
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.LevelEncounterConfigData
   levelId: level_07
-  displayName: Level 07 Encounter
+  displayName: Level 07 Precision Paint Boss
   enemySelection: {fileID: 11400000, guid: ddee42b2107cf804a8dd84255231a82e, type: 2}
   primaryGoal:
-    goalType: 0
-    targetCount: 180
-    requiredItemId: 
-  targetBreakdownValue: 180
-  roundDurationSeconds: 36
+    goalType: 2
+    targetCount: 8
+    requiredItemId: item_paint_ball
+  targetBreakdownValue: 1
+  roundDurationSeconds: 32
   autoStartRound: 1

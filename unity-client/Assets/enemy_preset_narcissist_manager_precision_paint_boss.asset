@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad9bd1c2addfdca4581d22d682ee7330, type: 3}
+  m_Name: enemy_preset_narcissist_manager_precision_paint_boss
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyPresetData
+  presetId: enemy_preset_narcissist_manager_precision_paint_boss
+  displayName: Narcissist Manager Precision Paint Boss
+  archetype: {fileID: 11400000, guid: c91f654b40d8b13499a037860b435ab1, type: 2}
+  defensePattern: {fileID: 11400000, guid: 258b8d5ed2de5dc48bc59bd1227566f3, type: 2}
+  aiProfile: {fileID: 11400000, guid: fe46a75105614574b8501c8a26c0d56a, type: 2}
+  defenseStateWindowProfile: {fileID: 11400000, guid: 8650dc42ad7c62c4a8e9322b0502eacd, type: 2}

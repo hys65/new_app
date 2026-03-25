@@ -2,23 +2,22 @@
 
 ## Project Identity
 
-Project name:
-**Power Prank 3D**
+Project name: **Power Prank 3D**
 
 Project type:
 
-- Unity 6.3 LTS prototype
-- single-scene gameplay prototype evolving into multi-level boss flow
+- Unity 6.3 LTS small-scale prototype
+- single-scene gameplay prototype evolving into multi-level content flow
 - third-person fixed-camera prank-throwing game
 
 Core fantasy:
 
-- throw prank items at exaggerated workplace-style enemy bosses
+- throw prank items at expressive enemy bosses
 - build breakdown pressure
-- read defense states
-- react to boss-specific gimmicks
-- choose the correct item or timing window
-- clear goal-driven levels
+- trigger defense and reaction states
+- read boss identity
+- use the right item or timing
+- clear goal-driven encounters
 
 ---
 
@@ -35,195 +34,265 @@ It has already validated:
 - AI-driven defense timing
 - same-scene enemy switching
 - roster-driven level enemy selection
-- encounter-driven target/time/enemy authoring
+- encounter-driven target / time / enemy authoring
 - progression-driven multi-level runtime flow
 - player-facing result UI with Retry / Next flow
-- localized result panel support
-- goal-aware HUD readability
-- level-specific boss defense pattern injection through runtime preset path
-- Level 04 boss identity
-- Level 05 boss identity
+- goal-aware HUD text
+- three distinct goal types
+- three distinct boss-reference levels
 
 The current project stage is:
 
-**tutorial-complete prototype moving into multi-boss identity implementation**
+**content-capable runtime architecture with validated boss-reference content**
 
 ---
 
 ## Current Completed Systems
 
 ### Gameplay
-- ThrowController
-- Projectile hit flow
-- GameplayManager breakdown loop
-- Hit popup feedback
-- HUD current goal / breakdown / time / item display
+
+- `ThrowController`
+- `ProjectileBehavior`
+- `GameplayManager`
+- hit popup feedback
+- stain placement
+- HUD current / target / timer / selected item display
 - combo display
 - round finish handling
 
 ### Enemy Runtime
-- EnemyReactionLayerController
-- EnemyDefenseController
-- EnemyDefenseVisualLayerController
-- EnemyDefenseStateWindowController
-- EnemyAiLayerController
-- EnemyVisualProxyController
-- EnemyRuntimePresetController
+
+- `EnemyReactionLayerController`
+- `EnemyDefenseController`
+- `EnemyDefenseVisualLayerController`
+- `EnemyDefenseStateWindowController`
+- `EnemyAiLayerController`
+- `EnemyVisualProxyController`
 
 ### Enemy Data
-- EnemyArchetypeData
-- EnemyDefensePatternData
-- EnemyAiProfileData
-- EnemyDefenseStateWindowProfileData
-- EnemyPresetData
-- EnemyRosterData
 
-### Selection / Encounter / Progression
-- LevelEnemySelectionData
-- LevelEnemySelectionController
-- LevelEncounterConfigData
-- LevelEncounterController
-- LevelProgressionData
-- LevelProgressionController
+- `EnemyArchetypeData`
+- `EnemyDefensePatternData`
+- `EnemyAiProfileData`
+- `EnemyDefenseStateWindowProfileData`
+- `EnemyPresetData`
+
+### Enemy Switching / Selection
+
+- `EnemyPresetApplicator`
+- `EnemyRuntimePresetController`
+- `EnemySwitchingManager`
+- `EnemyRosterData`
+- `LevelEnemySelectionData`
+- `LevelEnemySelectionController`
+
+### Encounter / Progression
+
+- `LevelEncounterConfigData`
+- `LevelEncounterController`
+- `LevelProgressionData`
+- `LevelProgressionController`
 
 ### UI / Result Flow
-- HudController
+
+- `HudController`
 - localized Retry / Next labels
 - localized result subtitle / level info / goal summary / final-level notice
 - result panel hidden-at-start and shown-on-finish behavior
-- goal-aware HUD text for Breakdown / Head Hits / Specific Item Hits
 
 ---
 
-## Current Runtime Content Status
+## Current Content Status
 
-### Enemy Archetypes
-- Meeting Tyrant
-- Narcissist Manager
+Implemented enemy archetypes:
 
-### Goal Types
-- BreakdownTarget
-- HeadHitCount
-- SpecificItemHitCount
+1. Meeting Tyrant
+2. Narcissist Manager
 
-### Progression Content
-- Levels 1-9 currently exist in progression data
-- Levels 1-3 function as tutorial levels
-- Level 4 is a validated briefcase boss level
-- Level 5 is a validated sunglasses boss level
-- Levels 6-9 exist as extended content placeholders and may be revised under the boss-first design direction
+Validated teaching levels:
 
----
+- Level 01 -> `BreakdownTarget`
+- Level 02 -> `HeadHitCount`
+- Level 03 -> `SpecificItemHitCount(item_egg)`
 
-## New Design Rule
+Validated boss-reference levels:
 
-### Tutorial Rule
-Levels 1-3 are tutorial content only.
+- Level 04 -> Meeting Tyrant briefcase boss
+- Level 05 -> Narcissist Manager sunglasses boss
+- Level 06 -> Meeting Tyrant weak-window boss
 
-They teach:
-- basic breakdown
-- head-hit goals
-- specific-item goals
+Current production note:
 
-They are not the model for long-term content repetition.
-
-### Boss Rule
-From Level 4 onward:
-- each level should introduce a distinct boss identity
-- each boss should have a distinct defense style
-- each boss should have a distinct item-counter rule or timing rule
-- avoid fake expansion through repeating the same 3 goal types with only numeric escalation
-
-Boss identity now comes before simple goal rotation.
+- Levels 01–03 are the teaching block
+- Levels 04–06 are the current validated boss-reference block
+- Levels 07–09 still exist in progression and should continue boss-first expansion rather than fake repetition
 
 ---
 
 ## Current Runtime Model
 
-Current runtime model is:
+The current runtime model is:
 
-- multiple enemy roots may exist in scene
+- multiple enemy roots may exist in the scene
 - only one enemy is active at a time
 - enemy switching is scene orchestration, not AI ownership
-- runtime-selected roster entry decides which preset is applied
-- preset application decides runtime defense pattern / AI / archetype / defense window profile
-- scene-level manual defense pattern assignment may be overwritten by preset application
+- AI remains per-enemy
+- one scene may host multiple encounter configs
 - progression decides which encounter is active
-- HUD presents goals and result choices
-- progression executes retry / next logic
+- player result UI decides whether to retry or advance
+- HUD presents result choices
+- progression executes level changes
 
----
+This is not:
 
-## Important Runtime Configuration Fact
+- a wave spawn system
+- a full multi-enemy combat system
+- a runtime-loaded roster content pipeline
+- a procedural encounter generator
 
-When debugging boss behavior:
+It is:
 
-Do not assume the scene object's `EnemyDefenseController` values are the final runtime truth.
-
-Runtime preset flow may overwrite them through:
-
-- roster entry
-- level enemy selection data
-- preset application
-
-If startup behavior differs from scene values, inspect:
-
-1. `LevelEnemySelectionData`
-2. `EnemyRosterData`
-3. `EnemyPresetData`
-4. `EnemyPresetApplicator`
-
-in that order.
-
----
-
-## Current Boss-State Summary
-
-### Level 04 Boss
-Meeting Tyrant briefcase boss is completed.
-
-Core rule:
-
-- timed guard
-- hammer breaks
-- non-hammer items blocked
-
-### Level 05 Boss
-Narcissist Manager sunglasses boss is completed.
-
-Core rule:
-
-- timed face guard
-- paint blocked while defense is active
-- foam breaks defense
-- paint is required to complete the level goal after break
-
-This means the project now has two validated boss-identity encounters instead of one.
+- a reusable single-scene multi-level prototype architecture
 
 ---
 
 ## Mandatory Architecture Rules
 
 ### Preset Application
+
 - `EnemyPresetApplicator` must remain the only preset injection layer
-- do not inject preset data directly into multiple runtime components
-- do not rely on scene-only defense pattern edits when preset application is active
+- do not inject preset data directly into multiple enemy runtime controllers
+- do not create alternate preset setup shortcuts
 
-### Defense Timing
-- boss defense timing should remain runtime-controlled
-- broad system ownership should stay in current enemy runtime stack
-- do not reintroduce conflicting startup preset paths
+### Runtime Truth Rule
 
-### Encounter / Progression
-- `LevelEncounterController` owns single encounter application
-- `LevelProgressionController` owns multi-level flow
+- do not treat scene inspector references as final truth when runtime preset application is active
+- runtime preset application can overwrite defense pattern and defense state window references
+- if runtime behavior looks wrong, inspect:
+  1. level enemy selection
+  2. roster entry
+  3. recommended slot routing
+  4. runtime preset controller
+  5. preset applicator
+  6. active runtime enemy state during Play
+
+### Scene Startup
+
+- do not allow competing startup preset paths in the same scene
+- `LevelEnemyController` is legacy
+- `LevelEnemyController` must not coexist with `LevelEnemySelectionController` in the current switching-oriented scene
+
+### Encounter / Progression Boundaries
+
+- `LevelEncounterController` owns single-encounter application only
+- `LevelProgressionController` owns multi-level flow only
 - do not merge these responsibilities
 
-### HUD / Result Flow
-- `HudController` presents goal and result text
-- `HudController` must not own progression logic
+### HUD / Result Flow Boundaries
+
+- `HudController` presents result UI
+- `HudController` may localize and refresh result texts
+- `HudController` must not own level progression logic
+- `LevelProgressionController` must execute Retry / Next
 - `GameplayManager` owns round state
-- `GameplayManager` must not become progression executor
+- `GameplayManager` must not become the result-flow executor
+
+---
+
+## Result Panel Polish 1.0 Context
+
+Result Panel Polish 1.0 is complete.
+
+Purpose:
+
+- replace debug-looking result presentation with a cleaner prototype UI
+- preserve existing Retry / Next flow ownership
+- localize result labels and support texts
+- keep result panel hidden before round finish
+
+Implemented result hierarchy:
+
+- `ResultPanel`
+- `Dimmer`
+- `SafeArea`
+- `ResultCard`
+- `Header`
+- `ResultTitleText`
+- `ResultSubtitleText`
+- `Body`
+- `LevelInfoText`
+- `GoalSummaryText`
+- `FinalLevelNoticeText`
+- `Actions`
+- `RetryButton`
+- `RetryButtonText`
+- `NextLevelButton`
+- `NextLevelButtonText`
+
+Validation results:
+
+- startup scene does not show result panel
+- victory shows localized title and subtitle
+- level info and goal progress text display correctly
+- Retry and Next labels localize correctly
+- Retry and Next remain functional
+- localization CSV contains required keys
+- no placeholder TMP text remains after inspector cleanup
+
+Current note:
+
+- functionally complete
+- prototype-acceptable visually
+- not final production polish
+
+---
+
+## Known Validated Behaviors
+
+### Enemy Switching
+
+Validated:
+
+- same enemy object runtime preset switching
+- switching between multiple scene enemy roots
+- one active enemy at runtime
+- clean startup active slot selection
+
+### Level Selection / Encounter Application
+
+Validated:
+
+- enemy selection bound through encounter config
+- target breakdown refresh per level
+- timer refresh per level
+- startup level index application
+- runtime encounter reapplication during progression
+
+### Runtime Level Flow
+
+Validated:
+
+- next level progression
+- current level restart
+- enemy reselection on progression
+- drag/input contamination fix after round end
+- delayed progression transition to avoid same-frame carry-over
+
+### Goal-aware HUD
+
+Validated:
+
+- BreakdownTarget shows breakdown-oriented HUD text
+- HeadHitCount shows head-hit progress
+- SpecificItemHitCount shows item-specific progress text
+
+### Boss Content
+
+Validated:
+
+- Level 04 briefcase boss = hammer break rule
+- Level 05 sunglasses boss = foam break / paint finish rule
+- Level 06 weak-window boss = mostly defended / briefly vulnerable timing rule
 
 ---
 
@@ -231,17 +300,32 @@ This means the project now has two validated boss-identity encounters instead of
 
 Preferred next milestone:
 
-**Level 06 Boss Identity design and implementation**
+**Level 07 Boss Identity design and implementation**
 
 Reason:
 
-- Level 04 proved the first boss-specific preset path
-- Level 05 proved the second boss-specific counter-rule path
-- next value comes from extending boss identity, not rebuilding architecture
-- item roles still need stronger mechanical differentiation across later levels
+- core loop is validated
+- multi-level runtime flow is validated
+- result presentation is good enough for prototype use
+- three-goal system is already sufficient
+- the best leverage is now richer boss content, not architecture churn
 
-Secondary follow-up:
+Secondary follow-up directions:
 
-- restructure Levels 4-12 around unique boss identities
-- introduce boss-specific goal types only when necessary
-- preserve tutorial levels as Levels 1-3
+- Content Expansion toward 12 Levels
+- Enemy Visual Identity Upgrade
+- Result Panel Polish 1.1
+- HUD suppression while result panel is active
+
+---
+
+## Working Expectations For Future AI Sessions
+
+Any future AI working on this project must:
+
+1. inspect repository code, not just old summaries
+2. preserve Levels 04–06 as reference implementations unless real regression is proven
+3. keep behavior data-driven
+4. use the preset-authoritative runtime path for boss authoring
+5. explain doc drift clearly if docs and runtime content diverge
+6. avoid fake repetition in post-tutorial content

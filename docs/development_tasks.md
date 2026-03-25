@@ -20,7 +20,7 @@
 - Level 08
 - Level 09
 
-These later levels still exist in progression but should continue the boss-first structure already proven by Levels 04–06.
+These later levels still exist in progression and should continue the boss-first structure already proven by Levels 04–06.
 
 ---
 
@@ -38,11 +38,13 @@ These later levels still exist in progression but should continue the boss-first
 4. Preserve Level 06 as validated long-defense / short-window timing boss reference
 5. Design Level 07 as a genuinely new boss-identity encounter
 6. Expand weapon meaning or punishment logic without breaking current architecture
-7. Keep boss authoring data-driven:
-   - pattern
+7. Keep boss authoring data-driven through:
+   - defense pattern
+   - defense state window profile
    - preset
    - roster entry
-   - level selection
+   - level enemy selection
+   - runtime slot routing
 
 ---
 
@@ -99,16 +101,16 @@ Level 07 and beyond should continue the same content logic:
 
 Good direction examples:
 
-- counter-state boss
 - punishment-on-wrong-item boss
+- precision-sequence boss
 - short punishable arrogance window
-- boss that teaches “do not attack now” rather than only “attack now”
+- boss that teaches “prepare correctly, then score correctly”
 
 Bad direction examples:
 
 - Level 06 again but with bigger numbers
 - another simple breaker swap
-- another “paint but different color” variant
+- another generic breakdown level with a different label
 - another mostly-open enemy with cosmetic blocking
 
 ---
@@ -132,7 +134,7 @@ Do not assume scene component values are authoritative after Play starts.
 
 Level 06 is complete as a runtime-validated boss-reference level.
 
-That means future sessions should stop treating Level 06 as “next design target” and instead treat it as:
+That means future sessions should stop treating Level 06 as a design target and instead treat it as:
 
 - a finished reference implementation
 - a proof that `HeadHitCount` can support boss timing content
