@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -28,12 +29,15 @@ namespace PowerPrank3D.Gameplay
         [SerializeField] private int trajectoryPointCount = 20;
         [SerializeField] private float trajectoryTimeStep = 0.08f;
 
+        private readonly Dictionary<GameplayItemData, float> itemNextAllowedThrowTime = new();
+
         private Vector2 dragStartPos;
         private bool isDragging;
 
         private void Awake()
         {
             ResetDragState();
+            ClearThrowCooldownState();
         }
 
         private void OnEnable()
@@ -74,6 +78,13 @@ namespace PowerPrank3D.Gameplay
                     return;
                 }
 
+                GameplayItemData currentItem = gameplayManager.CurrentItem;
+                if (!CanThrowItem(currentItem))
+                {
+                    ResetDragState();
+                    return;
+                }
+
                 dragStartPos = Input.mousePosition;
                 isDragging = true;
                 UpdateAimPreview(Vector2.zero);
@@ -101,9 +112,15 @@ namespace PowerPrank3D.Gameplay
                     return;
                 }
 
+                GameplayItemData currentItem = gameplayManager.CurrentItem;
+                if (!CanThrowItem(currentItem))
+                {
+                    return;
+                }
+
                 Vector3 throwDirection = BuildThrowDirection(dragDelta);
                 float forceMultiplier = BuildForceMultiplier(dragDistance);
-                SpawnAndThrow(throwDirection, forceMultiplier);
+                SpawnAndThrow(currentItem, throwDirection, forceMultiplier);
             }
         }
 
@@ -154,9 +171,8 @@ namespace PowerPrank3D.Gameplay
             return Mathf.Lerp(minForceMultiplier, maxForceMultiplier, normalized);
         }
 
-        private void SpawnAndThrow(Vector3 throwDirection, float forceMultiplier)
+        private void SpawnAndThrow(GameplayItemData itemData, Vector3 throwDirection, float forceMultiplier)
         {
-            GameplayItemData itemData = gameplayManager.CurrentItem;
             if (itemData == null || itemData.projectilePrefab == null || throwSpawnPoint == null)
             {
                 return;
@@ -183,6 +199,39 @@ namespace PowerPrank3D.Gameplay
                 float finalForce = itemData.throwForce * forceMultiplier;
                 body.AddForce(throwDirection * finalForce, ForceMode.VelocityChange);
             }
+
+            ConsumeThrowCooldown(itemData);
+        }
+
+        private bool CanThrowItem(GameplayItemData itemData)
+        {
+            if (itemData == null)
+            {
+                return false;
+            }
+
+            if (!itemNextAllowedThrowTime.TryGetValue(itemData, out float nextAllowedTime))
+            {
+                return true;
+            }
+
+            return Time.time >= nextAllowedTime;
+        }
+
+        private void ConsumeThrowCooldown(GameplayItemData itemData)
+        {
+            if (itemData == null)
+            {
+                return;
+            }
+
+            float cooldownSeconds = Mathf.Max(0f, itemData.throwCooldownSeconds);
+            itemNextAllowedThrowTime[itemData] = Time.time + cooldownSeconds;
+        }
+
+        private void ClearThrowCooldownState()
+        {
+            itemNextAllowedThrowTime.Clear();
         }
 
         private void UpdateAimPreview(Vector2 dragDelta)
@@ -258,6 +307,7 @@ namespace PowerPrank3D.Gameplay
         private void OnRoundFinished(bool _)
         {
             ResetDragState();
+            ClearThrowCooldownState();
         }
 
         private void ResetDragState()

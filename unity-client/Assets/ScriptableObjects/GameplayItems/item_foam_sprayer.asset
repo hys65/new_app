@@ -18,6 +18,7 @@ MonoBehaviour:
   baseBreakdownScore: 8
   throwForce: 11
   feedbackType: 3
+  throwCooldownSeconds: 1.5
   impactVfxPrefab: {fileID: 6222307007742526998, guid: fb783ecca2ca88144a572ac8b3dfc0e2, type: 3}
   impactSfx: {fileID: 8300000, guid: e0298de0754dc4c4ca3e972e5947cd8a, type: 3}
   impactVolume: 1

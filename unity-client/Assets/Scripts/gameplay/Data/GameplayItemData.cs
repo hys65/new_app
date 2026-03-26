@@ -26,6 +26,9 @@ namespace PowerPrank3D.Gameplay
         public float throwForce = 12f;
         public HitFeedbackType feedbackType = HitFeedbackType.ScalePunch;
 
+        [Header("Throw Timing")]
+        [Min(0f)] public float throwCooldownSeconds = 0f;
+
         [Header("Impact VFX")]
         public GameObject impactVfxPrefab;
 
