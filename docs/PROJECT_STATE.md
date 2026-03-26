@@ -17,6 +17,7 @@ The following systems are implemented and runtime-validated:
 - Enemy Reaction Layer 1.0
 - Enemy Defense Visual Layer 1.0
 - Goal HUD Readability 1.0
+- Combat Pacing / Per-Item Throw Cooldown Pass
 
 ### Enemy Architecture
 - Enemy Archetype System
@@ -91,6 +92,12 @@ Boss-specific behavior must be authored through:
 - Boss-rule encounters cannot rely on vague defense visuals.
 - Defense visual window and blocked evaluation window must remain tightly aligned.
 - A defense activation triggered by the current hit must not allow that same hit to score for zero-mistake content.
+
+### Combat Pacing Lessons
+- High throw frequency can invalidate otherwise good boss balance.
+- Throw-rate control must live at the throw decision point, not inside hit resolution.
+- Per-item pacing is more compatible with current architecture than a single global cooldown.
+- Future boss balancing should assume non-spam throw pacing as the baseline.
 
 ### Geometry / Readability Lessons
 - A hit-zone judgment encounter requires clear visual separation between head and body.
@@ -167,6 +174,24 @@ Important current acceptance:
 
 ---
 
+## Combat Pacing Status
+
+Per-item throw cooldown is now part of the active gameplay baseline.
+
+Implementation direction:
+
+- cooldown is authored per weapon/item
+- pacing is not controlled by a single global throw lock
+- throw permission is checked before entering/finishing a throw action
+- runtime cooldown state is cleared cleanly at round end
+
+Design consequence:
+
+- future encounter balancing should assume players cannot spam throws at effectively unlimited speed
+- item identity can now include throw rhythm as part of balance
+
+---
+
 ## Current Design Direction
 
 - Levels 01–03 remain teaching levels
@@ -182,9 +207,8 @@ Important current acceptance:
 These are known and accepted for now:
 
 - head-hit stain visuals on the current sphere-head setup are imperfect
-- the current throw system still allows unrealistically high throw frequency because weapon cooldown has not yet been added
 
-These are not reasons to reopen Level 09 immediately, but they are real production notes.
+This is a real production note, but not the current blocker.
 
 ---
 
@@ -192,11 +216,11 @@ These are not reasons to reopen Level 09 immediately, but they are real producti
 
 Next milestone should be:
 
-**Combat Pacing / Per-Item Throw Cooldown Pass**
+**Level 10 Boss Identity design and implementation**
 
 This means:
 
-- add cooldown to each weapon independently
-- stop infinite high-frequency throw spam
-- create trustworthy pacing for future boss balancing
-- treat this as a gameplay systems pass, not as a one-off patch inside a single level
+- continue boss-reference content expansion
+- design around the now-established pacing-aware throw baseline
+- avoid unnecessary system rewrites
+- preserve current preset / roster / encounter / progression architecture

@@ -38,19 +38,19 @@ It has already validated:
 - progression-driven multi-level runtime flow
 - player-facing result UI with Retry / Next flow
 - goal-aware HUD text
-- three distinct goal types
-- four distinct boss-reference levels
+- four distinct goal types
+- six distinct boss-reference levels
+- per-item throw cooldown pacing
 
 The current project stage is:
 
-**content-capable runtime architecture with validated boss-reference content**
+**content-capable runtime architecture with validated boss-reference content and pacing-aware throw system**
 
 ---
 
 ## Current Completed Systems
 
 ### Gameplay
-
 - `ThrowController`
 - `ProjectileBehavior`
 - `GameplayManager`
@@ -59,9 +59,9 @@ The current project stage is:
 - HUD current / target / timer / selected item display
 - combo display
 - round finish handling
+- per-item throw cooldown gating
 
 ### Enemy Runtime
-
 - `EnemyReactionLayerController`
 - `EnemyDefenseController`
 - `EnemyDefenseVisualLayerController`
@@ -70,7 +70,6 @@ The current project stage is:
 - `EnemyVisualProxyController`
 
 ### Enemy Data
-
 - `EnemyArchetypeData`
 - `EnemyDefensePatternData`
 - `EnemyAiProfileData`
@@ -78,7 +77,6 @@ The current project stage is:
 - `EnemyPresetData`
 
 ### Enemy Switching / Selection
-
 - `EnemyPresetApplicator`
 - `EnemyRuntimePresetController`
 - `EnemySwitchingManager`
@@ -87,14 +85,12 @@ The current project stage is:
 - `LevelEnemySelectionController`
 
 ### Encounter / Progression
-
 - `LevelEncounterConfigData`
 - `LevelEncounterController`
 - `LevelProgressionData`
 - `LevelProgressionController`
 
 ### UI / Result Flow
-
 - `HudController`
 - localized Retry / Next labels
 - localized result subtitle / level info / goal summary / final-level notice
@@ -121,12 +117,14 @@ Validated boss-reference levels:
 - Level 05 -> Narcissist Manager sunglasses boss
 - Level 06 -> Meeting Tyrant weak-window boss
 - Level 07 -> Narcissist Manager precision paint boss
+- Level 08 -> Zero-Mistake Boss
+- Level 09 -> Narcissist Manager Face Guard Boss
 
 Current production note:
 
 - Levels 01–03 are the teaching block
-- Levels 04–07 are the current validated boss-reference block
-- Levels 08–09 still exist in progression and should continue boss-first expansion rather than fake repetition
+- Levels 04–09 are the current validated boss-reference block
+- Level 10 and beyond should continue boss-first expansion rather than fake repetition
 
 ---
 
@@ -197,6 +195,13 @@ It is:
 - `LevelProgressionController` must execute Retry / Next
 - `GameplayManager` owns round state
 - `GameplayManager` must not become the result-flow executor
+
+### Throw Cooldown Boundary
+
+- per-item cooldown data must stay on `GameplayItemData`
+- throw permission must be decided at the throw/input layer
+- do not move pacing ownership into projectile collision logic
+- do not replace item-specific pacing with a single global cooldown unless architecture changes prove it is necessary
 
 ---
 
@@ -286,6 +291,7 @@ Validated:
 - BreakdownTarget shows breakdown-oriented HUD text
 - HeadHitCount shows head-hit progress
 - SpecificItemHitCount shows item-specific progress text
+- UnblockedHitStreak shows clean-hit progress with blocked-reset warning
 
 ### Boss Content
 
@@ -295,6 +301,17 @@ Validated:
 - Level 05 sunglasses boss = foam break / paint finish rule
 - Level 06 weak-window boss = mostly defended / briefly vulnerable timing rule
 - Level 07 precision paint boss = repeat foam-break / paint-head score loop
+- Level 08 zero-mistake boss = blocked-hit reset pressure
+- Level 09 face-guard boss = low-value head / reliable body judgment pressure
+
+### Combat Pacing
+
+Validated in code architecture:
+
+- throw pacing is item-driven
+- each item can define its own cooldown
+- cooldown state is consumed only on actual throw
+- round-end cleanup clears throw cooldown runtime state
 
 ---
 
@@ -302,15 +319,16 @@ Validated:
 
 Preferred next milestone:
 
-**Level 08 Boss Identity design and implementation**
+**Level 10 Boss Identity design and implementation**
 
 Reason:
 
 - core loop is validated
 - multi-level runtime flow is validated
 - result presentation is good enough for prototype use
-- three-goal system is already sufficient
-- the best leverage is now richer boss content, not architecture churn
+- four-goal system is already sufficient
+- throw pacing now has a clean baseline
+- the best leverage is richer boss content, not architecture churn
 
 Secondary follow-up directions:
 
@@ -326,8 +344,9 @@ Secondary follow-up directions:
 Any future AI working on this project must:
 
 1. inspect repository code, not just old summaries
-2. preserve Levels 04–07 as reference implementations unless real regression is proven
+2. preserve Levels 04–09 as reference implementations unless real regression is proven
 3. keep behavior data-driven
 4. use the preset-authoritative runtime path for boss authoring
 5. explain doc drift clearly if docs and runtime content diverge
 6. avoid fake repetition in post-tutorial content
+7. treat per-item cooldown as part of the established gameplay baseline, not as a future idea

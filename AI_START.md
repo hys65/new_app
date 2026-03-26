@@ -55,6 +55,7 @@ The following milestones are completed and runtime-validated:
 - Enemy stain attachment repair
 - Goal HUD Readability 1.0
 - Boss Preset Override Debugging Pass
+- Combat Pacing / Per-Item Throw Cooldown Pass
 
 The project is no longer at the single-enemy prototype stage.
 It already supports reusable multi-level runtime content in one scene.
@@ -185,6 +186,26 @@ Important production note:
 
 ---
 
+## Combat Pacing Status
+
+Per-item throw cooldown is implemented.
+
+High-level direction already completed:
+
+- each weapon/item now supports its own cooldown value
+- throw pacing is no longer effectively unrestricted
+- future boss balancing can assume non-spam throw pacing
+- this was implemented as item-driven combat pacing, not as a hardcoded global cooldown
+
+Implementation rule:
+
+- cooldown data belongs to `GameplayItemData`
+- throw gating belongs at the throw decision point
+- do not move this into projectile collision logic
+- do not replace this with a single global cooldown unless architecture changes justify it
+
+---
+
 ## Important Current Rules
 
 These rules are mandatory:
@@ -199,7 +220,7 @@ These rules are mandatory:
    - defense state window profile
    - preset
    - roster entry
-   - level enemy selection
+   - level selection
    - runtime slot routing
 7. `LevelEncounterController` owns single-encounter application only
 8. `LevelProgressionController` owns multi-level flow only
@@ -218,28 +239,28 @@ The project has already moved beyond:
 - forced auto-advance after victory
 - Level 08 as a future design target
 - Level 09 as a future design target
+- per-item throw cooldown as a future gameplay pacing task
 
 The project is currently at:
 
 - reusable multi-level runtime flow
 - validated four-goal system
 - validated six-boss-reference ladder
+- validated per-item throw pacing layer
 - content authoring expansion stage
 
 ---
 
 ## Next Recommended Milestone
 
-**Combat Pacing / Per-Item Throw Cooldown Pass**
+**Level 10 Boss Identity design and implementation**
 
 High-level direction:
 
-- add a cooldown to each weapon independently
-- prevent unrealistically high spam throw rate
-- make future boss balancing trustworthy
-- do not patch this as a single global cooldown unless code inspection proves that is the intended architecture
-
-This should be treated as a high-priority gameplay pacing task before large-scale future boss balancing.
+- continue post-Level-09 boss-reference expansion
+- build on current pacing-aware combat baseline
+- avoid architecture churn unless repository code proves a real limitation
+- keep future content authored through the existing preset / roster / encounter / progression pipeline
 
 ---
 

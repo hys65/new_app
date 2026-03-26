@@ -1,8 +1,8 @@
 # SESSION_LOG.md
 
-## Session Summary – Level 09 Face Guard Boss Implementation and Closure
+## Session Summary – Level 09 Face Guard Boss Closure and Per-Item Throw Cooldown Implementation
 
-This document tracks the major validated development steps that extended the current playable boss-reference ladder from Level 08 to Level 09.
+This document tracks the major validated development steps that closed the current boss-reference ladder through Level 09 and then added the per-item throw cooldown pacing layer.
 
 ---
 
@@ -183,25 +183,58 @@ This extends the boss-reference ladder to:
 
 ---
 
-## New High-Priority Follow-Up
+## Combat Pacing Problem Identified
 
-A major gameplay pacing issue was explicitly identified:
+A major gameplay pacing issue was explicitly identified after Level 09 closure.
 
 ### Problem
-Throw frequency is currently too high and effectively unrestricted.
+Throw frequency was too high and effectively unrestricted.
 
-### Why this matters
-Without throw-rate limits, players can spam throws fast enough to distort boss balance and undermine intended pacing.
+### Why this mattered
+Without throw-rate limits, players could spam throws fast enough to distort boss balance and undermine intended pacing.
 
-### Locked future task
+### Locked task direction
 **Per-item throw cooldown / Combat pacing pass**
 
-This should:
+Target requirement:
+
 - add cooldown per weapon
 - prevent unrealistic spam throwing
-- become the baseline for future combat balancing
+- create a stable pacing baseline for future boss balancing
 
-This is now the most important next shared gameplay task before heavy future boss balancing.
+---
+
+## Per-Item Throw Cooldown Implementation
+
+The gameplay pacing pass was then implemented through the existing item-driven architecture.
+
+### Core implementation choice
+
+Cooldown was added as item-authored data instead of a single global hardcoded lock.
+
+Reason:
+- current item behavior is already data-driven
+- each weapon should own its own pacing
+- this preserves current architecture and avoids unnecessary system churn
+
+### Implemented ownership split
+
+Data ownership:
+- `GameplayItemData` now carries per-item throw cooldown data
+
+Runtime ownership:
+- `ThrowController` now decides whether the current item may throw
+- cooldown is consumed only when a throw is actually spawned
+- round-end cleanup clears runtime cooldown state
+
+### Important architectural conclusion
+
+The correct insertion point is the throw decision layer, not hit resolution.
+
+Rejected directions:
+- global cooldown hack
+- cooldown in projectile collision logic
+- cooldown added through boss-specific special-case rules
 
 ---
 
@@ -209,9 +242,11 @@ This is now the most important next shared gameplay task before heavy future bos
 
 Levels 04–09 now function as the validated boss-reference ladder.
 
-The project closes this session with:
+The project closes this session block with:
 
 - Level 09 implemented and accepted
 - boss-reference ladder extended through Level 09
+- per-item throw cooldown implemented
+- future balancing can assume non-spam throw pacing
 - no immediate need to reopen Level 09
-- next priority clearly identified as per-item throw cooldown
+- next priority moved forward from pacing repair to new boss/content expansion

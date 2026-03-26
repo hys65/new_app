@@ -2,29 +2,61 @@
 
 ## Overview
 
-Gameplay currently consists of four connected layers:
+Gameplay currently consists of five connected layers:
 
-1. throw / projectile resolution
-2. breakdown scoring
-3. level goal evaluation
-4. round / progression flow
+1. throw input and throw gating
+2. projectile resolution
+3. breakdown scoring
+4. level goal evaluation
+5. round / progression flow
 
 The game is no longer using breakdown-only win conditions for all levels.
 Goal evaluation now supports multiple encounter-specific success rules.
+
+Throw pacing is also no longer effectively unrestricted.
+Each item can now define its own cooldown.
 
 ---
 
 ## Core Throw / Hit Flow
 
+### Throw Input and Gating
+
+Player throws the currently selected item through `ThrowController`.
+
+Before a throw is accepted, the system now checks:
+
+- round must be running
+- input must not start over UI
+- item must be available
+- item cooldown must allow a new throw
+- drag distance must pass throw threshold
+
+Practical effect:
+
+- current item choice matters not only for damage / feedback
+- it also matters for throw rhythm
+- future balancing can use pacing as part of item identity
+
 ### Throw
-Player throws the currently selected item.
+
+If input is valid, player throws the currently selected item.
+
+Cooldown is consumed only after the throw is actually spawned.
+
+This is important.
+
+A failed drag or cancelled input should not burn cooldown.
 
 ### Collision
+
 `ProjectileBehavior` resolves collision with:
+
 - enemy
 - ground
 
 ### Enemy Hit Resolution
+
 If projectile hits the enemy, hit processing flows through:
 
 1. head / body hit detection
@@ -35,6 +67,44 @@ If projectile hits the enemy, hit processing flows through:
 6. popup display
 
 This means goal logic now consumes **final resolved hit state**, not raw contact alone.
+
+---
+
+## Throw Cooldown System
+
+Per-item cooldown is data-driven.
+
+### Data Ownership
+
+Cooldown value belongs to:
+
+- `GameplayItemData`
+
+This keeps throw pacing aligned with the existing item-data architecture.
+
+### Runtime Ownership
+
+Cooldown permission and consumption belong to:
+
+- `ThrowController`
+
+This is the correct architectural boundary because throw permission is decided before projectile existence.
+
+### Important Rule
+
+Do not move cooldown logic into:
+
+- `ProjectileBehavior`
+- collision callbacks
+- post-hit scoring logic
+
+That would be too late and would mix pacing with hit resolution.
+
+### Cleanup Rule
+
+Throw cooldown runtime state must be cleared when the round ends.
+
+This prevents one round’s pacing state from leaking into the next.
 
 ---
 
@@ -50,9 +120,11 @@ This means goal logic now consumes **final resolved hit state**, not raw contact
 - round finish state
 
 ### Notes
+
 - Breakdown may still be accumulated during non-breakdown-goal levels.
 - Not every level uses breakdown as the actual win condition.
 - Breakdown HUD remains useful as secondary combat feedback.
+- `GameplayManager` is not the owner of throw-cooldown gating.
 
 ---
 
@@ -177,20 +249,29 @@ It is about:
 
 ---
 
-## Design Lessons
+## Combat Pacing Design Lessons
 
 ### Bad Version
-Player sees defense posture, but hit still scores.
+Player can throw at near-unlimited rate.
 
 Result:
-- rule feels fake
-- player loses trust
+- boss timing can be brute-forced
+- item balance becomes blurry
+- encounter pressure loses meaning
 
 ### Correct Version
-Defense posture and blocked rule are tightly aligned.
+Each item has its own authored throw rhythm.
 
 Result:
-- player understands what was wrong
-- failure feels owned, not random
+- pacing becomes part of item identity
+- boss windows are more trustworthy
+- future balancing has a stable baseline
 
-This alignment is now a hard requirement for future boss-rule content.
+### Architecture Lesson
+Per-item throw cooldown is correct for the current project because:
+
+- items are already data-driven
+- throw permission is already centralized
+- it adds pacing without rewriting scoring or enemy systems
+
+This alignment is now a hard requirement for future content balancing.
