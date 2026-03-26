@@ -29,6 +29,7 @@ namespace PowerPrank3D.Gameplay
         public LevelEncounterConfigData CurrentEncounterConfig => currentEncounterConfig;
 
         private Coroutine transitionRoutine;
+        private Coroutine startupRoutine;
 
         private void Reset()
         {
@@ -57,14 +58,42 @@ namespace PowerPrank3D.Gameplay
             {
                 gameplayManager.OnRoundFinished -= HandleRoundFinished;
             }
+
+            if (startupRoutine != null)
+            {
+                StopCoroutine(startupRoutine);
+                startupRoutine = null;
+            }
+
+            if (transitionRoutine != null)
+            {
+                StopCoroutine(transitionRoutine);
+                transitionRoutine = null;
+            }
         }
 
-        private void Awake()
+        private void Start()
         {
-            if (applyOnAwake)
+            if (!applyOnAwake)
             {
-                ApplyStartupLevel();
+                return;
             }
+
+            if (startupRoutine != null)
+            {
+                StopCoroutine(startupRoutine);
+            }
+
+            startupRoutine = StartCoroutine(ApplyStartupLevelNextFrame());
+        }
+
+        private IEnumerator ApplyStartupLevelNextFrame()
+        {
+            // Let all scene startup logic finish first, especially EnemySwitchingManager.
+            yield return null;
+
+            ApplyStartupLevel();
+            startupRoutine = null;
         }
 
         [ContextMenu("Apply Startup Level")]

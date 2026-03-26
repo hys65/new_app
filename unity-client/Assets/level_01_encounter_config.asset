@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.LevelEncounterConfigData
   levelId: level_01
   displayName: Level 01 Encounter
-  enemySelection: {fileID: 11400000, guid: 7e5a6cfc5e297b548809b89a53c115d8, type: 2}
+  enemySelection: {fileID: 11400000, guid: c4e880eb3e48ce542a3434ae6ae7317c, type: 2}
   primaryGoal:
     goalType: 0
     targetCount: 100

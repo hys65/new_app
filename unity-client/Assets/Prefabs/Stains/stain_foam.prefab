@@ -127,5 +127,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.ImpactStain
   lifeTime: 20
-  randomYawOnStart: 1
+  randomRotation: 1
   randomScaleMultiplier: {x: 0.9, y: 1.15}

@@ -5,7 +5,7 @@ You are continuing development of the Unity project **Power Prank 3D**.
 Repository:
 https://github.com/hys65/new_app
 
-Before doing any design, code, debugging, or recommendations, you MUST read the project documentation and inspect actual scripts in the repository.
+Before doing any design, code, debugging, balancing, or recommendations, you MUST read the project documentation and inspect actual scripts in the repository.
 
 ---
 
@@ -36,7 +36,7 @@ If docs and repository state differ, trust the repository and explain the drift 
 
 ## Current Project Status Summary
 
-The following milestones are completed and validated:
+The following milestones are completed and runtime-validated:
 
 - Core throw / hit / breakdown gameplay loop
 - Enemy Reaction Layer 1.0
@@ -53,12 +53,8 @@ The following milestones are completed and validated:
 - Level Goal Variety 1.0
 - Enemy gameplay hitbox structure repair
 - Enemy stain attachment repair
-- Goal-aware HUD Readability 1.0
+- Goal HUD Readability 1.0
 - Boss Preset Override Debugging Pass
-- Level 04 Briefcase Boss Foundation
-- Level 05 Sunglasses Boss Foundation
-- Level 06 Weak-Window Boss Foundation
-- Level 07 Precision Paint Boss Foundation
 
 The project is no longer at the single-enemy prototype stage.
 It already supports reusable multi-level runtime content in one scene.
@@ -72,6 +68,7 @@ Implemented and validated goal types:
 - `BreakdownTarget`
 - `HeadHitCount`
 - `SpecificItemHitCount`
+- `UnblockedHitStreak`
 
 Validated teaching block:
 
@@ -81,12 +78,12 @@ Validated teaching block:
 
 Validated boss-reference block:
 
-- Level 04 -> `BreakdownTarget` + Meeting Tyrant briefcase boss rule
-- Level 05 -> `SpecificItemHitCount(item_paint_ball)` + Narcissist Manager sunglasses boss rule
-- Level 06 -> `HeadHitCount` + Meeting Tyrant weak-window boss rule
-- Level 07 -> `SpecificItemHitCount(item_paint_ball)` + Narcissist Manager precision paint boss rule
-
-These three goal types are sufficient for the current repository content.
+- Level 04 -> Meeting Tyrant briefcase boss
+- Level 05 -> Narcissist Manager sunglasses boss
+- Level 06 -> Meeting Tyrant weak-window boss
+- Level 07 -> Narcissist Manager precision paint boss
+- Level 08 -> Zero-Mistake Boss
+- Level 09 -> Narcissist Manager Face Guard Boss
 
 ---
 
@@ -110,6 +107,7 @@ Applied only through:
 - `EnemyPresetApplicator`
 
 This is a hard rule.
+
 Do not bypass `EnemyPresetApplicator`.
 Do not create parallel preset injection paths.
 
@@ -150,11 +148,40 @@ Validated boss-reference levels:
 - Level 05 = Narcissist Manager sunglasses boss
 - Level 06 = Meeting Tyrant weak-window boss
 - Level 07 = Narcissist Manager precision paint boss
+- Level 08 = Zero-Mistake Boss
+- Level 09 = Narcissist Manager Face Guard Boss
 
 Important rule:
 
 Post-tutorial content must not regress into fake repetition.
-Level 08 and beyond should continue boss-identity-driven expansion.
+Level 10 and beyond should continue boss-identity-driven expansion.
+
+---
+
+## Level 09 Finalized Direction
+
+Level 09 is implemented as:
+
+**Narcissist Manager – Face Guard Boss**
+
+Core rule:
+
+- head hits are long-term low-value
+- body hits are the primary reliable scoring route
+- the level is built around hit-zone judgment, not item restriction
+- current runtime version is accepted as playable and can be closed
+
+Final Level 09 configuration:
+
+- Goal Type = `BreakdownTarget`
+- Target Breakdown = `180`
+- Round Duration Seconds = `34`
+
+Important production note:
+
+- enemy-head stain visuals remain imperfect on the current sphere-head setup
+- this is accepted for now
+- do not reopen stain polish unless it becomes a blocker
 
 ---
 
@@ -189,28 +216,30 @@ The project has already moved beyond:
 - single enemy prototype validation
 - scene-only encounter setup
 - forced auto-advance after victory
-- Level 06 as a future design target
-- Level 07 as a future design target
+- Level 08 as a future design target
+- Level 09 as a future design target
 
 The project is currently at:
 
 - reusable multi-level runtime flow
-- validated three-goal system
-- validated four-boss-reference block
+- validated four-goal system
+- validated six-boss-reference ladder
 - content authoring expansion stage
 
 ---
 
 ## Next Recommended Milestone
 
-**Level 08 Boss Identity design and implementation**
+**Combat Pacing / Per-Item Throw Cooldown Pass**
 
 High-level direction:
 
-- preserve Levels 04–07 as validated reference implementations
-- do not redesign finished boss levels unless repository inspection proves a real regression
-- continue expanding boss identity through minimal clean extensions
-- do not introduce unnecessary architecture churn
+- add a cooldown to each weapon independently
+- prevent unrealistically high spam throw rate
+- make future boss balancing trustworthy
+- do not patch this as a single global cooldown unless code inspection proves that is the intended architecture
+
+This should be treated as a high-priority gameplay pacing task before large-scale future boss balancing.
 
 ---
 

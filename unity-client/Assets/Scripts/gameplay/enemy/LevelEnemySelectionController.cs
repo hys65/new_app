@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace PowerPrank3D.Gameplay
@@ -17,6 +18,8 @@ namespace PowerPrank3D.Gameplay
         [SerializeField] private string lastAppliedLevelId;
         [SerializeField] private int lastResolvedStartupSlotIndex = -1;
 
+        private Coroutine deferredApplyRoutine;
+
         private void Reset()
         {
             if (enemySwitchingManager == null)
@@ -26,6 +29,23 @@ namespace PowerPrank3D.Gameplay
         }
 
         private void Awake()
+        {
+            if (enemySwitchingManager == null)
+            {
+                enemySwitchingManager = FindFirstObjectByType<EnemySwitchingManager>();
+            }
+        }
+
+        private void OnDisable()
+        {
+            if (deferredApplyRoutine != null)
+            {
+                StopCoroutine(deferredApplyRoutine);
+                deferredApplyRoutine = null;
+            }
+        }
+
+        private void Start()
         {
             if (applyOnAwake && selectionData != null)
             {
@@ -39,30 +59,78 @@ namespace PowerPrank3D.Gameplay
             ApplySelection(selectionData);
         }
 
+        public void SetSelectionData(LevelEnemySelectionData data)
+        {
+            selectionData = data;
+        }
+
         public void ApplySelection(LevelEnemySelectionData data)
+        {
+            selectionData = data;
+
+            if (deferredApplyRoutine != null)
+            {
+                StopCoroutine(deferredApplyRoutine);
+            }
+
+            deferredApplyRoutine = StartCoroutine(ApplySelectionDeferred(selectionData));
+        }
+
+        private IEnumerator ApplySelectionDeferred(LevelEnemySelectionData data)
+        {
+            // 等一帧，让 EnemySwitchingManager.Start() 和其他启动逻辑先跑完
+            yield return null;
+
+            bool applied = TryApplySelection(data, logWarnings: true);
+            if (!applied)
+            {
+                deferredApplyRoutine = null;
+                yield break;
+            }
+
+            deferredApplyRoutine = null;
+        }
+
+        private bool TryApplySelection(LevelEnemySelectionData data, bool logWarnings)
         {
             if (data == null)
             {
-                Debug.LogWarning("LevelEnemySelectionController: selection data is null", this);
-                return;
+                if (logWarnings)
+                {
+                    Debug.LogWarning("LevelEnemySelectionController: selection data is null", this);
+                }
+
+                return false;
             }
 
             if (enemySwitchingManager == null)
             {
-                Debug.LogWarning("LevelEnemySelectionController: enemySwitchingManager is null", this);
-                return;
+                if (logWarnings)
+                {
+                    Debug.LogWarning("LevelEnemySelectionController: enemySwitchingManager is null", this);
+                }
+
+                return false;
             }
 
             if (data.roster == null)
             {
-                Debug.LogWarning("LevelEnemySelectionController: roster is null", this);
-                return;
+                if (logWarnings)
+                {
+                    Debug.LogWarning("LevelEnemySelectionController: roster is null", this);
+                }
+
+                return false;
             }
 
             if (data.selectedEnemies == null || data.selectedEnemies.Length == 0)
             {
-                Debug.LogWarning("LevelEnemySelectionController: selectedEnemies is empty", this);
-                return;
+                if (logWarnings)
+                {
+                    Debug.LogWarning("LevelEnemySelectionController: selectedEnemies is empty", this);
+                }
+
+                return false;
             }
 
             if (data.clearUnassignedSlotPresets)
@@ -88,9 +156,14 @@ namespace PowerPrank3D.Gameplay
                 EnemyRosterEntry rosterEntry = data.roster.GetEntryById(selectionEntry.rosterEntryId);
                 if (rosterEntry == null)
                 {
-                    Debug.LogWarning(
-                        "LevelEnemySelectionController: roster entry not found: " + selectionEntry.rosterEntryId,
-                        this);
+                    if (logWarnings)
+                    {
+                        Debug.LogWarning(
+                            "LevelEnemySelectionController: roster entry not found: " +
+                            selectionEntry.rosterEntryId,
+                            this);
+                    }
+
                     continue;
                 }
 
@@ -100,9 +173,14 @@ namespace PowerPrank3D.Gameplay
 
                 if (string.IsNullOrWhiteSpace(targetSlotId))
                 {
-                    Debug.LogWarning(
-                        "LevelEnemySelectionController: targetSlotId is empty for roster entry: " + selectionEntry.rosterEntryId,
-                        this);
+                    if (logWarnings)
+                    {
+                        Debug.LogWarning(
+                            "LevelEnemySelectionController: targetSlotId is empty for roster entry: " +
+                            selectionEntry.rosterEntryId,
+                            this);
+                    }
+
                     continue;
                 }
 
@@ -123,10 +201,15 @@ namespace PowerPrank3D.Gameplay
 
             if (resolvedStartupSlotIndex < 0)
             {
-                Debug.LogWarning(
-                    "LevelEnemySelectionController: could not resolve startup slot index for level: " + data.levelId,
-                    this);
-                return;
+                if (logWarnings)
+                {
+                    Debug.LogWarning(
+                        "LevelEnemySelectionController: could not resolve startup slot index for level: " +
+                        data.levelId,
+                        this);
+                }
+
+                return false;
             }
 
             enemySwitchingManager.ConfigureStartupSlot(
@@ -141,8 +224,11 @@ namespace PowerPrank3D.Gameplay
             lastResolvedStartupSlotIndex = resolvedStartupSlotIndex;
 
             Debug.Log(
-                "LevelEnemySelectionController: applied level selection: " + data.displayName,
+                "LevelEnemySelectionController: applied level selection: " + data.displayName +
+                " startupSlotIndex=" + resolvedStartupSlotIndex,
                 this);
+
+            return true;
         }
     }
 }

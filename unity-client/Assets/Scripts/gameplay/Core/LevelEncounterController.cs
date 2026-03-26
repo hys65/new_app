@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace PowerPrank3D.Gameplay
@@ -21,6 +22,8 @@ namespace PowerPrank3D.Gameplay
         public LevelEncounterConfigData EncounterConfig => encounterConfig;
         public bool EncounterApplied => encounterApplied;
 
+        private Coroutine deferredEncounterRoutine;
+
         private void Reset()
         {
             if (gameplayManager == null)
@@ -39,7 +42,16 @@ namespace PowerPrank3D.Gameplay
             }
         }
 
-        private void Awake()
+        private void OnDisable()
+        {
+            if (deferredEncounterRoutine != null)
+            {
+                StopCoroutine(deferredEncounterRoutine);
+                deferredEncounterRoutine = null;
+            }
+        }
+
+        private void Start()
         {
             if (applyOnAwake)
             {
@@ -81,6 +93,7 @@ namespace PowerPrank3D.Gameplay
 
             if (levelEnemySelectionController != null && encounterConfig.enemySelection != null)
             {
+                levelEnemySelectionController.SetSelectionData(encounterConfig.enemySelection);
                 levelEnemySelectionController.ApplySelection(encounterConfig.enemySelection);
             }
 
@@ -89,11 +102,37 @@ namespace PowerPrank3D.Gameplay
                 levelGoalController.ApplyGoal(encounterConfig);
             }
 
+            if (deferredEncounterRoutine != null)
+            {
+                StopCoroutine(deferredEncounterRoutine);
+            }
+
+            deferredEncounterRoutine = StartCoroutine(ApplyEncounterNextFrame());
+
             encounterApplied = true;
 
             Debug.Log(
                 "LevelEncounterController: applied encounter config: " + encounterConfig.displayName,
                 this);
+        }
+
+        private IEnumerator ApplyEncounterNextFrame()
+        {
+            yield return null;
+
+            if (encounterConfig == null)
+            {
+                deferredEncounterRoutine = null;
+                yield break;
+            }
+
+            if (levelEnemySelectionController != null && encounterConfig.enemySelection != null)
+            {
+                levelEnemySelectionController.SetSelectionData(encounterConfig.enemySelection);
+                levelEnemySelectionController.ApplySelection(encounterConfig.enemySelection);
+            }
+
+            deferredEncounterRoutine = null;
         }
     }
 }

@@ -18,7 +18,7 @@ The project has completed:
 - result panel polish
 - level goal variety
 - boss preset override debugging pass
-- validated boss-reference Levels 04–08
+- validated boss-reference Levels 04–09
 
 ---
 
@@ -39,23 +39,29 @@ Narcissist Manager precision paint boss
 ### Level 08
 Zero-Mistake Boss
 
+### Level 09
+Narcissist Manager Face Guard Boss
+
 ---
 
-## Level 08 Status
+## Level 09 Status
 
-Level 08 is now implemented and validated as a distinct boss-rule encounter.
+Level 09 is now implemented and accepted as playable.
 
 ### Final rule
-- Goal Type = `UnblockedHitStreak`
-- Target Count = `6`
-- Round Duration Seconds = `32`
+- Goal Type = `BreakdownTarget`
+- Target Breakdown = `180`
+- Round Duration Seconds = `34`
 
-### Validated behavior
-- successful non-blocked hit increments progress
-- blocked hit resets progress to zero
-- HUD clearly communicates clean-hit progress and reset rule
-- defense activation hit no longer gives a free score
-- defense visual boundary and blocked evaluation boundary are aligned closely enough for reliable play
+### Final identity
+- head is intentionally low-value
+- body is the primary reliable scoring route
+- encounter pressure comes from hit-zone judgment rather than item restriction or streak reset
+
+### Important accepted limitation
+- head stain visuals remain imperfect on the current sphere-head setup
+- this is accepted for now
+- do not reopen deep stain polish unless it becomes a true blocker later
 
 ---
 
@@ -68,46 +74,51 @@ Do **not** reopen these unless runtime testing proves a real bug:
 - Level 06 reference implementation
 - Level 07 reference implementation
 - Level 08 zero-mistake implementation
+- Level 09 face-guard implementation
 - UnblockedHitStreak goal support
 - Level 08 HUD rule readability
 - Level 08 blocked-boundary evaluation fix
+- Level 09 silhouette / hit-zone repair at the current accepted level
 
 ---
 
 ## Immediate Next Milestone
 
-Next work should move forward to the next boss-identity content after Level 08.
+**Combat Pacing / Per-Item Throw Cooldown Pass**
 
-Rules for next milestone:
+This is the next high-priority gameplay milestone.
 
-1. do not redesign finished boss levels
-2. do not add architecture churn without proof of necessity
-3. preserve the validated reference ladder
-4. next level must introduce a genuinely different boss problem, not a disguised repeat of:
-   - weak-window burst
-   - specific-item counting
-   - zero-mistake clean-hit streak
+### Why this matters
+Current throw frequency is effectively unrestricted.  
+This allows unrealistic spam throwing and undermines:
+
+- weak-window timing pressure
+- item-identity balance
+- zero-mistake pacing
+- future boss balancing trustworthiness
+
+### Required outcome
+- every weapon gets its own cooldown
+- throw rate becomes intentionally paced
+- balancing assumptions can rely on non-spam input behavior
+
+### Important constraint
+Do not solve this as a level-specific hack.  
+This must be handled as a shared gameplay systems pass.
 
 ---
 
 ## Next-Level Design Constraint
 
-The next boss milestone must create a new pressure model.
+After the cooldown pass, future boss work must continue the identity ladder.
 
-That means it should not simply be:
-- “hit more times”
-- “same boss but faster”
-- “same rule with smaller window”
+That means new content should not simply be:
+- the same boss but faster
+- the same rule with smaller windows
+- another disguised item-count encounter
+- another disguised streak-reset encounter
 
-It must create a different player demand.
-
-Examples of acceptable direction:
-- sequencing pressure
-- bait / punish pressure
-- rule inversion
-- multi-step identity behavior
-
-These are examples of direction only, not locked implementation.
+Each future boss should create a genuinely different player demand.
 
 ---
 
@@ -119,3 +130,4 @@ For every future boss level:
 - treat runtime preset application as authoritative
 - validate both logic and readability
 - reject content that feels unclear even if technically correct
+- evaluate geometry, control feel, and hit-zone readability alongside raw rule tuning

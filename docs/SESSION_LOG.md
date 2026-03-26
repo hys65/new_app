@@ -1,12 +1,13 @@
 # SESSION_LOG.md
 
-## Session Summary – Multi-Level Boss Reference Expansion Through Level 08
+## Session Summary – Level 09 Face Guard Boss Implementation and Closure
 
-This document tracks the major validated development steps that established the current playable boss-reference ladder.
+This document tracks the major validated development steps that extended the current playable boss-reference ladder from Level 08 to Level 09.
 
 ---
 
 ## Previously Completed Foundation
+
 Already completed before this session block:
 
 - core throw / hit / breakdown gameplay loop
@@ -32,130 +33,185 @@ Previously validated boss references:
 - Level 05 = Narcissist Manager sunglasses boss
 - Level 06 = Meeting Tyrant weak-window boss
 - Level 07 = Narcissist Manager precision paint boss
+- Level 08 = Zero-Mistake Boss
 
 ---
 
-## Level 07 Final Confirmation
-Level 07 was treated as the precision-paint reference implementation.
+## Initial Level 09 Direction Search
 
-Validated final design:
-- Goal Type = `SpecificItemHitCount`
-- Required Item Id = `item_paint_ball`
-- Target Count = `10`
-- Round Duration Seconds = `32`
+Multiple Level 09 directions were compared before implementation.
 
-Purpose:
-- prove required-item boss rule content
-- lock in paint-ball identity as a finished reference encounter
+One direction emphasized rotating immunity / changing item-validity states.  
+This was judged higher-risk for the current architecture.
 
----
+The final accepted direction became:
 
-## Level 08 Design Iteration
-Initial attempts for Level 08 were rejected because they overlapped too strongly with already solved content.
+**Narcissist Manager – Face Guard Boss**
 
-Rejected directions included:
-- another precision-paint style encounter
-- another weak-window head-precision style encounter
-
-Final accepted direction:
-**Zero-Mistake Boss**
-
-Core idea:
-- player must hit only during non-blocked timing
-- blocked hit is not merely ineffective
-- blocked hit destroys current progress
-
-This created a genuinely different pressure model from:
-- Level 06 short-window burst
-- Level 07 required-item counting
+Reason:
+- preserves boss-identity expansion without unnecessary architecture churn
+- creates a new player demand not covered by Levels 06–08
+- fits Narcissist Manager’s face-protective character logic
 
 ---
 
-## New Goal Type Added
-A new goal type was introduced:
+## Level 09 Core Rule Definition
 
-`UnblockedHitStreak`
+Level 09 was defined as a hit-zone judgment encounter.
 
-Purpose:
-- support streak-based boss content
-- allow immediate progress reset on blocked hit
-- create zero-mistake rule pressure without adding large architecture churn
+Final rule meaning:
 
-Associated code support added:
-- `CombatHitInfo.wasBlocked`
-- `LevelGoalType.UnblockedHitStreak`
-- `LevelGoalController` reset-on-blocked behavior
-- `GameplayManager.RefreshState()`
-- projectile-to-goal blocked-state propagation
-- HUD presentation for clean-hit streak rule
+- head hits should be long-term low-value
+- body hits should be the primary reliable scoring route
+- the encounter should teach the player not to greed for face hits
+
+Final accepted encounter configuration:
+
+- Goal Type = `BreakdownTarget`
+- Target Breakdown = `180`
+- Round Duration Seconds = `34`
 
 ---
 
-## Level 08 Encounter Configuration
-Level 08 was finalized as:
+## Level 09 Asset Chain Added
 
-- Goal Type = `UnblockedHitStreak`
-- Target Count = `6`
-- Round Duration Seconds = `32`
+A new Level 09 runtime content chain was authored through the standard enemy-routing pipeline:
 
-This configuration is now committed in the main repository branch and is no longer a placeholder head-hit encounter.
+- `narcissist_manager_face_guard_boss_defense_pattern`
+- `enemy_preset_narcissist_manager_face_guard_boss`
+- new `enemy_roster_main` entry:
+  - `narcissist_manager_face_guard_boss`
+- `level_enemy_selection_level_09`
+- `level_09_encounter_config`
+- `main_level_progression_data` updated to include Level 09
+- `startupLevelIndex` set for direct Level 09 testing during validation
+
+This preserved the required authoring rule:
+
+**pattern → state window profile → preset → roster entry → level selection → runtime slot routing**
 
 ---
 
-## Level 08 Readability Bug Pass
+## Level 09 Defense / Rule Iteration
 
-### Problem 1
-Defense posture visually looked active, but blocked result did not always occur.
+### Problem
+Early tuning produced near-constant block states and made the encounter feel almost impossible to pass.
 
-Root cause:
-- no defense-exit block grace
-- visual defense window and evaluation window were misaligned
+### Root issue
+Current code semantics treat a blocked hit as zero scoring, not as “low but non-zero” scoring.
 
-Fix:
-- added short defense exit block grace window
-
-### Problem 2
-A hit could trigger defense, show `GUARD`, and still score.
-
-Root cause:
-- activation happened after the hit had already been accepted as valid
-
-Fix:
-- if the activating hit should be blockable, that same hit is now resolved as blocked immediately
+This forced a correction in design assumptions:
+- `BLOCK` is not a soft penalty in the current code
+- `BLOCK` is effectively score denial
 
 ### Result
-Level 08 now behaves as intended:
-- side / guard posture reliably punishes mistimed attacks
-- blocked hit resets streak
-- activation hit no longer grants free progress
-- player-facing boundary is readable and trustworthy
+Level 09 had to be tuned around:
+- low-value head hits in the non-blocked case
+- body as the main scoring route
+- avoiding an always-blocked body state in regular play
+
+This was an important implementation lesson.
 
 ---
 
-## Production Lessons Locked In
+## Level 09 Geometry / Silhouette Iteration
 
-### Git / Data Lesson
-Do not trust Inspector state alone.
-When asset values matter, verify the actual GitHub file contents after push.
+### Problem
+The original simple enemy body shape did not support hit-zone judgment play well.
 
-### Boss Design Lesson
-A technically correct boss is not sufficient.
-If the player cannot clearly read the safe / unsafe boundary, the encounter is still wrong.
+Observed issues:
+- head dominated the silhouette
+- body was not a strong main target
+- current throw style made body targeting feel too unreliable
+- theoretically valid rules still felt bad in runtime
 
-### Evaluation Lesson
-For boss-rule encounters, clarity beats raw complexity.
-A smaller rule set with clean boundary feedback is stronger than a noisier “harder” fight.
+### Fix direction
+The enemy silhouette was iterated toward:
+- larger body
+- clearer chest / torso separation
+- smaller head hitbox influence
+- longer attack distance for improved throw targeting control
+
+### Result
+Level 09 became playable only after silhouette and body-target readability improved.
+
+Important lesson:
+- a boss rule can fail because of geometry and control feel, not only because of defense numbers
 
 ---
 
-## Current End State
+## Enemy Stain Visual Investigation
 
-Levels 04–08 now function as the validated boss-reference ladder:
+### Problem
+Enemy stain visuals looked incorrect, especially on the sphere-head setup.
+
+### Investigation result
+This was narrowed down to a presentation limitation rather than a single logic bug.
+
+Key conclusions:
+- current stain visuals use flat quad-style geometry
+- flat quads do not conform well to curved sphere surfaces
+- head stain visuals remain imperfect even after parenting and scaling fixes
+
+### Accepted status
+This issue is known but not treated as a blocker for closing Level 09.
+
+Reason:
+- Level 09’s core gameplay does not depend on perfect head stain visuals
+- the head is not the intended primary scoring target
+- continued stain polish would have low value relative to gameplay pacing work
+
+---
+
+## Runtime Acceptance
+
+Final practical result:
+
+- Level 09 is considered basically passable
+- no major gameplay-blocking issue remains
+- known visual imperfection on head stain is accepted for now
+- the level can be closed without reopening architecture work
+
+This extends the boss-reference ladder to:
 
 - Level 04 = break defense
 - Level 05 = face guard identity
 - Level 06 = weak-window burst
 - Level 07 = required-item precision
 - Level 08 = zero-mistake clean-hit streak
+- Level 09 = face-guard hit-zone judgment
 
-This closes the current milestone and establishes the next content phase from a stable reference base.
+---
+
+## New High-Priority Follow-Up
+
+A major gameplay pacing issue was explicitly identified:
+
+### Problem
+Throw frequency is currently too high and effectively unrestricted.
+
+### Why this matters
+Without throw-rate limits, players can spam throws fast enough to distort boss balance and undermine intended pacing.
+
+### Locked future task
+**Per-item throw cooldown / Combat pacing pass**
+
+This should:
+- add cooldown per weapon
+- prevent unrealistic spam throwing
+- become the baseline for future combat balancing
+
+This is now the most important next shared gameplay task before heavy future boss balancing.
+
+---
+
+## Current End State
+
+Levels 04–09 now function as the validated boss-reference ladder.
+
+The project closes this session with:
+
+- Level 09 implemented and accepted
+- boss-reference ladder extended through Level 09
+- no immediate need to reopen Level 09
+- next priority clearly identified as per-item throw cooldown

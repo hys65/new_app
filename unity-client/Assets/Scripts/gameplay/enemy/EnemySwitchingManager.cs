@@ -32,6 +32,8 @@ namespace PowerPrank3D.Gameplay
 
         [Header("Runtime Debug")]
         [SerializeField] private int currentSlotIndex = -1;
+        [SerializeField] private string currentSlotId;
+        [SerializeField] private bool startupApplied;
 
         public int CurrentSlotIndex => currentSlotIndex;
 
@@ -48,11 +50,21 @@ namespace PowerPrank3D.Gameplay
             }
         }
 
-        public int SlotCount
+        public int SlotCount => enemySlots != null ? enemySlots.Length : 0;
+
+        private void Reset()
         {
-            get
+            if (gameplayManager == null)
             {
-                return enemySlots != null ? enemySlots.Length : 0;
+                gameplayManager = FindFirstObjectByType<GameplayManager>();
+            }
+        }
+
+        private void Awake()
+        {
+            if (gameplayManager == null)
+            {
+                gameplayManager = FindFirstObjectByType<GameplayManager>();
             }
         }
 
@@ -64,6 +76,18 @@ namespace PowerPrank3D.Gameplay
                 return;
             }
 
+            ApplyStartupSlotIfNeeded();
+        }
+
+        [ContextMenu("Apply Startup Slot")]
+        public void ApplyStartupSlotIfNeeded()
+        {
+            if (startupApplied)
+            {
+                return;
+            }
+
+            startupApplied = true;
             SwitchToSlot(startingSlotIndex, autoApplyDefaultPresetOnStart);
         }
 
@@ -198,6 +222,40 @@ namespace PowerPrank3D.Gameplay
 
             currentSlotIndex = slotIndex;
 
+            EnemySlot currentSlot = enemySlots[currentSlotIndex];
+            currentSlotId = currentSlot != null ? currentSlot.slotId : string.Empty;
+
+            RefreshSceneActivation();
+
+            if (applyDefaultPreset)
+            {
+                ApplyDefaultPresetToSlot(currentSlotIndex);
+            }
+
+            // 强制兜底：当前槽位对象必须处于激活状态
+            if (currentSlot != null && currentSlot.enemyRoot != null)
+            {
+                currentSlot.enemyRoot.SetActive(true);
+            }
+
+            if (gameplayManager != null && currentSlot != null && currentSlot.reactionLayer != null)
+            {
+                gameplayManager.SetActiveEnemyReactionLayer(currentSlot.reactionLayer);
+            }
+
+            Debug.Log(
+                "EnemySwitchingManager: switched to slot index=" + currentSlotIndex +
+                " slotId=" + currentSlotId,
+                this);
+        }
+
+        private void RefreshSceneActivation()
+        {
+            if (enemySlots == null || enemySlots.Length == 0)
+            {
+                return;
+            }
+
             for (int i = 0; i < enemySlots.Length; i++)
             {
                 EnemySlot slot = enemySlots[i];
@@ -208,23 +266,15 @@ namespace PowerPrank3D.Gameplay
 
                 if (deactivateNonActiveEnemiesOnStart)
                 {
-                    slot.enemyRoot.SetActive(i == currentSlotIndex);
+                    bool shouldBeActive = i == currentSlotIndex;
+                    slot.enemyRoot.SetActive(shouldBeActive);
+                }
+                else if (i == currentSlotIndex)
+                {
+                    // 即使不关闭其他敌人，也要确保当前敌人被显式打开
+                    slot.enemyRoot.SetActive(true);
                 }
             }
-
-            EnemySlot currentSlot = enemySlots[currentSlotIndex];
-
-            if (applyDefaultPreset)
-            {
-                ApplyDefaultPresetToSlot(currentSlotIndex);
-            }
-
-            if (gameplayManager != null && currentSlot != null && currentSlot.reactionLayer != null)
-            {
-                gameplayManager.SetActiveEnemyReactionLayer(currentSlot.reactionLayer);
-            }
-
-            Debug.Log("EnemySwitchingManager: switched to slot: " + currentSlotIndex, this);
         }
 
         public void ApplyDefaultPresetToSlot(int slotIndex)
@@ -285,9 +335,17 @@ namespace PowerPrank3D.Gameplay
 
             slot.runtimePresetController.ApplyPreset(preset);
 
-            if (slotIndex == currentSlotIndex && gameplayManager != null && slot.reactionLayer != null)
+            if (slotIndex == currentSlotIndex)
             {
-                gameplayManager.SetActiveEnemyReactionLayer(slot.reactionLayer);
+                if (slot.enemyRoot != null)
+                {
+                    slot.enemyRoot.SetActive(true);
+                }
+
+                if (gameplayManager != null && slot.reactionLayer != null)
+                {
+                    gameplayManager.SetActiveEnemyReactionLayer(slot.reactionLayer);
+                }
             }
         }
 

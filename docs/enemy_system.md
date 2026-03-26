@@ -54,8 +54,6 @@ For correct boss behavior, blocked evaluation now reflects:
 - short defense exit grace window
 - activation-time block enforcement when the triggering hit should already be considered defended
 
-This was required to make zero-mistake content trustworthy.
-
 ---
 
 ## Why This Changed
@@ -63,13 +61,13 @@ This was required to make zero-mistake content trustworthy.
 A pure `defenseActive` boolean produced two bad edge cases:
 
 ### Edge Case 1
-Enemy still looked defensive, but defense had just turned off.
+Enemy still looked defensive, but defense had just turned off.  
 Result:
 - player saw defense
 - hit was not blocked
 
 ### Edge Case 2
-Current hit triggered defense and showed `GUARD`, but still scored.
+Current hit triggered defense and showed `GUARD`, but still scored.  
 Result:
 - player saw defense begin
 - hit still counted
@@ -106,7 +104,7 @@ Never allow:
 - obvious defense posture
 - but permissive scoring result
 
-Slightly strict is acceptable.
+Slightly strict is acceptable.  
 Visibly blocked but logically open is not.
 
 ---
@@ -118,6 +116,65 @@ Weak-window head bypass still exists for weak-window style bosses.
 Important constraint:
 - weak-window bypass should only apply when defense is truly active and the state window explicitly exposes weakness
 - zero-mistake rule content must not accidentally inherit permissive scoring from unrelated weak-window behavior
+
+---
+
+## Face Guard Expansion
+
+Level 09 established a new accepted Narcissist Manager boss variant:
+
+**Face Guard Boss**
+
+This variant is not a simple repeat of Level 05.
+
+Its purpose is different:
+
+- Level 05 focuses on face-guard identity plus paint invalidation while guarded
+- Level 09 focuses on hit-zone judgment pressure
+
+Design meaning of Level 09:
+
+- head hits are intentionally low-value over time
+- body hits are the primary reliable scoring route
+- the encounter teaches “do not greed for the face” rather than “use one specific item”
+
+This is an important boss-reference distinction.
+
+---
+
+## Geometry and Hit-Zone Constraint
+
+A boss encounter built around hit-zone judgment depends on readable enemy shape.
+
+This means:
+
+- head and body must be visually separable
+- body must be a stable main target
+- silhouette matters as much as defense logic
+
+A correct defense pattern can still fail as an encounter if:
+
+- the head dominates the silhouette
+- the body is too small to be a reliable target
+- the current throw style makes body targeting feel random
+
+This was a real production lesson during Level 09 iteration.
+
+---
+
+## Stain Visual Constraint
+
+Enemy stain visuals are currently acceptable on flat or broad surfaces.
+
+However:
+
+- stain visuals are not fully trustworthy on the current sphere-head setup
+- a flat quad stain cannot perfectly conform to a curved head surface
+- head stain polish is currently not treated as a blocker
+
+Important rule:
+- do not reopen deep stain-system work unless it becomes necessary for a later milestone
+- current priority remains gameplay clarity and pacing, not perfect curved-surface stain projection
 
 ---
 
@@ -149,6 +206,12 @@ Identity:
 - blocked hit resets progress
 - boundary clarity is part of the encounter design
 
+### Level 09 – Narcissist Manager Face Guard Boss
+Identity:
+- head is intentionally low-value
+- body is the primary scoring route
+- player must learn zone choice rather than greed for face hits
+
 ---
 
 ## Production Lessons
@@ -158,3 +221,4 @@ Identity:
 - Defense visuals and block logic must remain aligned.
 - A boss encounter can fail not because of numbers, but because of unreadable boundaries.
 - Future boss-rule content should be evaluated first on clarity, second on difficulty.
+- Geometry and control feel can invalidate a theoretically good boss rule.

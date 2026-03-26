@@ -77,7 +77,14 @@ namespace PowerPrank3D.Gameplay
                     ContactPoint contact = collision.contacts[0];
                     SpawnImpactVfx(contact.point, contact.normal);
                     PlayImpactSfx(contact.point);
-                    SpawnImpactStain(contact.point, contact.normal, receiver.transform, true, false);
+
+                    SpawnImpactStain(
+                        contact.point,
+                        contact.normal,
+                        collision.collider.transform,
+                        true,
+                        false);
+
                     CameraShake.Shake(0.12f, 0.06f);
                 }
 
@@ -110,6 +117,10 @@ namespace PowerPrank3D.Gameplay
                     finalUnits = 0;
                 }
                 else if (defenseResult.weaknessApplied)
+                {
+                    finalUnits = Mathf.Max(1, Mathf.RoundToInt(scoreUnits * defenseResult.breakdownMultiplier));
+                }
+                else
                 {
                     finalUnits = Mathf.Max(1, Mathf.RoundToInt(scoreUnits * defenseResult.breakdownMultiplier));
                 }
@@ -275,7 +286,9 @@ namespace PowerPrank3D.Gameplay
                 return;
             }
 
-            Vector3 spawnPos = position + normal * 0.02f;
+            float surfaceOffset = isEnemyHit ? 0.008f : 0.02f;
+
+            Vector3 spawnPos = position + normal * surfaceOffset;
             Quaternion rotation = Quaternion.LookRotation(-normal);
             rotation *= Quaternion.Euler(0f, 0f, Random.Range(0f, 360f));
 
@@ -290,10 +303,17 @@ namespace PowerPrank3D.Gameplay
                 parentToUse = GameObject.Find("Stains")?.transform;
             }
 
-            GameObject stain = Instantiate(itemData.impactStainPrefab, spawnPos, rotation, parentToUse);
+            // 关键修正：
+            // 先在世界空间生成，再保留世界变换挂到父对象，避免继承父级缩放炸裂。
+            GameObject stain = Instantiate(itemData.impactStainPrefab, spawnPos, rotation);
 
             float stainScale = Mathf.Max(0.01f, itemData.impactStainScale);
             stain.transform.localScale = Vector3.one * stainScale;
+
+            if (parentToUse != null)
+            {
+                stain.transform.SetParent(parentToUse, true);
+            }
 
             Collider stainCollider = stain.GetComponent<Collider>();
             if (stainCollider != null)
