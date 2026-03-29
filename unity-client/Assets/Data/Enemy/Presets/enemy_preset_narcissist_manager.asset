@@ -15,6 +15,6 @@ MonoBehaviour:
   presetId: enemy_preset_narcissist_manager
   displayName: Narcissist Manager Preset
   archetype: {fileID: 11400000, guid: c91f654b40d8b13499a037860b435ab1, type: 2}
-  defensePattern: {fileID: 11400000, guid: e31ccb6b18ec3744286b0b7d4164bc3b, type: 2}
+  defensePattern: {fileID: 11400000, guid: 71b87fe87d6d15d4a8731a38c5c8bdec, type: 2}
   aiProfile: {fileID: 11400000, guid: fe46a75105614574b8501c8a26c0d56a, type: 2}
   defenseStateWindowProfile: {fileID: 11400000, guid: ed57e20af7ec35548aa40bc4a58aabe2, type: 2}

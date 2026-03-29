@@ -3458,7 +3458,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cfd0d2474865b347985de99a5947b93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyDefenseController
-  defensePattern: {fileID: 0}
+  defensePattern: {fileID: 11400000, guid: e31ccb6b18ec3744286b0b7d4164bc3b, type: 2}
   useDefensePattern: 1
   defenseExitBlockGraceSeconds: 0.18
   defenseActive: 0
@@ -3502,7 +3502,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 898a7dcd47bcad2448168596d74bbb75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyDefenseStateWindowController
-  stateProfile: {fileID: 11400000, guid: 21f767d0b50ac9449a21f6248c68b8b3, type: 2}
+  stateProfile: {fileID: 11400000, guid: f26baf1d44d44f74fa04615a806eabd7, type: 2}
   defenseVisualLayer: {fileID: 1310628147}
   defenseController: {fileID: 1310628146}
   currentState: 0
@@ -3521,7 +3521,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20e1c25d6b7d61e42bc10e29572ecb7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyAiLayerController
-  aiProfile: {fileID: 11400000, guid: 9fc947fe1c2081a4d90e964b213905d8, type: 2}
+  aiProfile: {fileID: 11400000, guid: 6efa4cef62e518442a763378068cdcb7, type: 2}
   reactionLayer: {fileID: 1310628145}
   defenseController: {fileID: 1310628146}
   defenseVisualLayer: {fileID: 1310628147}
@@ -5162,7 +5162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20e1c25d6b7d61e42bc10e29572ecb7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyAiLayerController
-  aiProfile: {fileID: 11400000, guid: 0cc833e48bfa22b47af2bfa9bffc0885, type: 2}
+  aiProfile: {fileID: 11400000, guid: fe46a75105614574b8501c8a26c0d56a, type: 2}
   reactionLayer: {fileID: 1620351232}
   defenseController: {fileID: 1620351231}
   defenseVisualLayer: {fileID: 1620351230}
@@ -5189,7 +5189,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 898a7dcd47bcad2448168596d74bbb75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyDefenseStateWindowController
-  stateProfile: {fileID: 11400000, guid: 4b9309c519ed1c34d9a307d6a7fbc91f, type: 2}
+  stateProfile: {fileID: 11400000, guid: ed57e20af7ec35548aa40bc4a58aabe2, type: 2}
   defenseVisualLayer: {fileID: 1620351230}
   defenseController: {fileID: 1620351231}
   currentState: 0
@@ -5227,7 +5227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cfd0d2474865b347985de99a5947b93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyDefenseController
-  defensePattern: {fileID: 11400000, guid: b650e4fb085d84441870fbf272343173, type: 2}
+  defensePattern: {fileID: 11400000, guid: 71b87fe87d6d15d4a8731a38c5c8bdec, type: 2}
   useDefensePattern: 1
   defenseExitBlockGraceSeconds: 0.18
   defenseActive: 0

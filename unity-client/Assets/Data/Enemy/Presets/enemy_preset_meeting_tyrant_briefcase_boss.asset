@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad9bd1c2addfdca4581d22d682ee7330, type: 3}
   m_Name: enemy_preset_meeting_tyrant_briefcase_boss
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyPresetData
-  presetId: enemy_preset_meeting_tyrant
-  displayName: Meeting Tyrant Preset
+  presetId: enemy_preset_meeting_tyrant_briefcase_boss
+  displayName: Meeting Tyrant Briefcase Boss
   archetype: {fileID: 11400000, guid: 6546e65621743ab4bbb6f5d4ef0fcfc7, type: 2}
   defensePattern: {fileID: 11400000, guid: a5f9f1783627bdd4db3887b10bacd26b, type: 2}
   aiProfile: {fileID: 11400000, guid: 6efa4cef62e518442a763378068cdcb7, type: 2}
