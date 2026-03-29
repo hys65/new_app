@@ -67,9 +67,14 @@ namespace PowerPrank3D.Gameplay
             return useDefensePattern && defensePattern != null;
         }
 
+        private bool IsStateWindowBlockingActive()
+        {
+            return defenseStateWindow != null && defenseStateWindow.CanUseDefenseLogic();
+        }
+
         private bool IsBlockingWindowActive()
         {
-            return HasPattern() && (defenseActive || defenseBlockGraceTimer > 0f);
+            return HasPattern() && (defenseActive || defenseBlockGraceTimer > 0f || IsStateWindowBlockingActive());
         }
 
         private void Update()
@@ -133,15 +138,21 @@ namespace PowerPrank3D.Gameplay
             }
 
             bool blockingWindowActive = IsBlockingWindowActive();
+            bool defenseLogicActive = defenseActive || IsStateWindowBlockingActive();
 
             if (defensePattern.patternType == EnemyDefensePatternType.BriefcaseBlock && blockingWindowActive)
             {
-                if (defenseActive && CanBreakDefense(itemData))
+                if (defenseLogicActive && CanBreakDefense(itemData))
                 {
                     defenseActive = false;
                     defenseTimer = 0f;
                     defenseBlockGraceTimer = 0f;
                     defenseCooldownTimer = Mathf.Max(0f, defensePattern.blockCooldown);
+
+                    if (defenseStateWindow != null && defenseStateWindow.CurrentState != EnemyDefenseWindowState.None)
+                    {
+                        defenseStateWindow.ForceEndDefenseCycle();
+                    }
 
                     result.brokeDefense = true;
                     result.breakdownMultiplier = 1.15f;
@@ -167,12 +178,17 @@ namespace PowerPrank3D.Gameplay
 
             if (blockingWindowActive)
             {
-                if (defenseActive && CanBreakDefense(itemData))
+                if (defenseLogicActive && CanBreakDefense(itemData))
                 {
                     defenseActive = false;
                     defenseTimer = 0f;
                     defenseBlockGraceTimer = 0f;
                     defenseCooldownTimer = Mathf.Max(0f, defensePattern.blockCooldown);
+
+                    if (defenseStateWindow != null && defenseStateWindow.CurrentState != EnemyDefenseWindowState.None)
+                    {
+                        defenseStateWindow.ForceEndDefenseCycle();
+                    }
 
                     result.brokeDefense = true;
                     result.breakdownMultiplier = 1.15f;
@@ -183,7 +199,7 @@ namespace PowerPrank3D.Gameplay
                     return FinalizeResult(itemData, isHeadHit, result);
                 }
 
-                weakWindowHeadBypass = defenseActive && CanUseWeakWindowHeadBypass(isHeadHit);
+                weakWindowHeadBypass = defenseLogicActive && CanUseWeakWindowHeadBypass(isHeadHit);
 
                 if (ShouldBlockHit(isHeadHit) && !weakWindowHeadBypass)
                 {
@@ -204,7 +220,7 @@ namespace PowerPrank3D.Gameplay
 
                 bool canBlockThisHitNow = ShouldBlockHit(isHeadHit);
                 bool canBypassThisHitNow =
-                    defenseActive &&
+                    defenseLogicActive &&
                     defensePattern.weakToHeadHits &&
                     isHeadHit &&
                     CanUseWeakWindowHeadBypass(isHeadHit);
@@ -225,7 +241,7 @@ namespace PowerPrank3D.Gameplay
             }
 
             bool canApplyWeakness =
-                defenseActive &&
+                defenseLogicActive &&
                 defensePattern.weakToHeadHits &&
                 isHeadHit &&
                 CanUseWeakWindowHeadBypass(isHeadHit);
@@ -407,7 +423,9 @@ namespace PowerPrank3D.Gameplay
 
         private bool CanUseWeakWindowHeadBypass(bool isHeadHit)
         {
-            if (!defenseActive || !isHeadHit || !HasPattern())
+            bool defenseLogicActive = defenseActive || IsStateWindowBlockingActive();
+
+            if (!defenseLogicActive || !isHeadHit || !HasPattern())
             {
                 return false;
             }

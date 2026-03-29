@@ -103,6 +103,11 @@ namespace PowerPrank3D.Gameplay
                 EnemyDefenseController defenseController =
                     collision.collider.GetComponentInParent<EnemyDefenseController>();
 
+                Debug.Log(
+                    "[DefenseLookup] collider=" + collision.collider.name +
+                    " defenseController=" + (defenseController != null ? defenseController.name : "NULL")
+                );
+
                 DefenseHitResult defenseResult = DefenseHitResult.Default();
 
                 if (defenseController != null)

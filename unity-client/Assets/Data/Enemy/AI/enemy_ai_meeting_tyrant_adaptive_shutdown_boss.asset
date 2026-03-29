@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aaf943a0162351845a0497bc4f6792c8, type: 3}
+  m_Name: enemy_ai_meeting_tyrant_adaptive_shutdown_boss
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyAiProfileData
+  aiId: enemy_ai_meeting_tyrant_adaptive_shutdown_boss
+  displayName: Meeting Tyrant Adaptive Shutdown Boss AI
+  requiredHitSamples: 2
+  memoryDuration: 5.5
+  minAcceptedHitInterval: 0.16
+  predictedIntervalClamp: {x: 0.32, y: 1.1}
+  intervalBlend: 0.68
+  baseLeadTime: 0.26
+  agitatedLeadBonus: 0.05
+  furiousLeadBonus: 0.09
+  meltdownLeadBonus: 0.12
+  decisionCooldown: 0.1
+  calmThreat: 0.2
+  annoyedThreat: 0.34
+  agitatedThreat: 0.48
+  furiousThreat: 0.66
+  meltdownThreat: 0.82
+  headHitThreatBonus: 0.06
+  blockedConfidenceBonus: 0.14
+  weaknessPenalty: 0.08
+  breakPenalty: 0.18
+  defenseTriggerThreshold: 0.28
+  brokenLockDuration: 0.6
+  rearmDelayAfterRecover: 0.18
+  debugLog: 0
