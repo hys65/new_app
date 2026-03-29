@@ -18,7 +18,8 @@ The project has completed:
 - result panel polish
 - level goal variety
 - boss preset override debugging pass
-- validated boss-reference Levels 04–09
+- combat pacing / per-item throw cooldown pass
+- repository asset-structure cleanup
 
 ---
 
@@ -46,7 +47,7 @@ Narcissist Manager Face Guard Boss
 
 ## Level 09 Status
 
-Level 09 is now implemented and accepted as playable.
+Level 09 is implemented and accepted as playable.
 
 ### Final rule
 - Goal Type = `BreakdownTarget`
@@ -65,6 +66,20 @@ Level 09 is now implemented and accepted as playable.
 
 ---
 
+## Repository Cleanup Status
+
+This is now treated as finished:
+
+- enemy data lives under `Assets/Data/Enemy/...`
+- level data lives under `Assets/Data/Levels/...`
+- gameplay items remain under `Assets/ScriptableObjects/GameplayItems/`
+- enemy runtime scripts use `Assets/Scripts/gameplay/Enemy/`
+- duplicate legacy naming families were removed from active use
+
+Do not reopen cleanup work unless a real duplicate or misplaced asset reappears.
+
+---
+
 ## What Is Explicitly Finished
 
 Do **not** reopen these unless runtime testing proves a real bug:
@@ -79,55 +94,35 @@ Do **not** reopen these unless runtime testing proves a real bug:
 - Level 08 HUD rule readability
 - Level 08 blocked-boundary evaluation fix
 - Level 09 silhouette / hit-zone repair at the current accepted level
+- Per-item throw cooldown baseline
+- Repository structure cleanup pass
 
 ---
 
 ## Immediate Next Milestone
 
-**Combat Pacing / Per-Item Throw Cooldown Pass**
+**Level 10 boss identity design and content authoring**
 
-This is the next high-priority gameplay milestone.
+### Constraints
+- keep it meaningfully different from Levels 04–09
+- preserve current architecture and data-driven authoring flow
+- prefer existing systems before proposing new systems
+- avoid fake repeats of existing bosses
+- avoid unnecessary architecture churn
 
-### Why this matters
-Current throw frequency is effectively unrestricted.  
-This allows unrealistic spam throwing and undermines:
-
-- weak-window timing pressure
-- item-identity balance
-- zero-mistake pacing
-- future boss balancing trustworthiness
-
-### Required outcome
-- every weapon gets its own cooldown
-- throw rate becomes intentionally paced
-- balancing assumptions can rely on non-spam input behavior
-
-### Important constraint
-Do not solve this as a level-specific hack.  
-This must be handled as a shared gameplay systems pass.
-
----
-
-## Next-Level Design Constraint
-
-After the cooldown pass, future boss work must continue the identity ladder.
-
-That means new content should not simply be:
-- the same boss but faster
-- the same rule with smaller windows
-- another disguised item-count encounter
-- another disguised streak-reset encounter
-
-Each future boss should create a genuinely different player demand.
+### Required output
+- clean Level 10 identity
+- exact asset-authoring plan
+- code changes only if truly necessary and tightly justified
 
 ---
 
 ## Ongoing Discipline
 
 For every future boss level:
-
 - verify runtime GitHub asset contents after push
 - treat runtime preset application as authoritative
 - validate both logic and readability
 - reject content that feels unclear even if technically correct
 - evaluate geometry, control feel, and hit-zone readability alongside raw rule tuning
+- keep new assets in canonical folders from the start

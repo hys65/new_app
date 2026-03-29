@@ -41,7 +41,6 @@ The following systems are implemented and runtime-validated:
 ## Validated Goal Types
 
 Currently implemented goal types:
-
 1. `BreakdownTarget`
 2. `HeadHitCount`
 3. `SpecificItemHitCount`
@@ -63,7 +62,94 @@ Counts only successful hits from one required item id.
 Counts only successful hits that are **not blocked**.  
 If a blocked hit occurs, current progress is reset to zero.
 
-This goal type was added specifically to support boss-style zero-mistake encounters.
+---
+
+## Validated Boss Reference Levels
+
+### Level 04
+**Meeting Tyrant briefcase boss**
+- deterministic hard block
+- explicit break item logic
+
+### Level 05
+**Narcissist Manager sunglasses boss**
+- face guard identity
+- paint invalid while guarded
+
+### Level 06
+**Meeting Tyrant weak-window boss**
+- weak-window pressure
+- short opening exploitation
+
+### Level 07
+**Narcissist Manager precision paint boss**
+- Goal Type = `SpecificItemHitCount`
+- Required Item Id = `item_paint_ball`
+- Target Count = `10`
+- Round Duration Seconds = `32`
+
+### Level 08
+**Zero-Mistake Boss**
+- Goal Type = `UnblockedHitStreak`
+- Target Count = `6`
+- Round Duration Seconds = `32`
+
+### Level 09
+**Narcissist Manager Face Guard Boss**
+- Goal Type = `BreakdownTarget`
+- Target Breakdown = `180`
+- Round Duration Seconds = `34`
+- head is intentionally low-value
+- body is the primary reliable scoring route
+
+Important accepted limitation:
+- head stain visuals remain imperfect on the current sphere-head setup
+- do not reopen deep stain work unless it becomes a true blocker
+
+---
+
+## Canonical Repository Layout
+
+### Scripts
+```text
+unity-client/Assets/Scripts/gameplay/
+  Core/
+  Data/
+  Enemy/
+  UI/
+  VFX/
+```
+
+### Enemy data
+```text
+unity-client/Assets/Data/Enemy/
+  AI/
+  Archetypes/
+  Defense/
+    Patterns/
+    StateWindows/
+    Visuals/
+  Presets/
+  Rosters/
+```
+
+### Level data
+```text
+unity-client/Assets/Data/Levels/
+  Encounters/
+  EnemySelections/
+  Progression/
+```
+
+### Gameplay items
+```text
+unity-client/Assets/ScriptableObjects/GameplayItems/
+```
+
+Repository cleanliness rule:
+- do not place enemy or level config assets back into `Assets/` root
+- do not restore `Assets/ScriptableObjects/Enemy/`
+- do not restore duplicate legacy naming families
 
 ---
 
@@ -71,11 +157,11 @@ This goal type was added specifically to support boss-style zero-mistake encount
 
 Runtime preset application remains authoritative.
 
-Do not rely on scene-only edits for boss behavior.
-
 Boss-specific behavior must be authored through:
 
 **pattern → state window profile → preset → roster entry → level selection → runtime slot routing**
+
+Do not rely on scene-only edits for final boss behavior.
 
 ---
 
@@ -106,121 +192,11 @@ Boss-specific behavior must be authored through:
 
 ---
 
-## Validated Boss Reference Levels
+## Immediate Next Milestone
 
-### Level 04
-**Meeting Tyrant briefcase boss**
+**Level 10 boss identity design and authoring**
 
-Reference purpose:
-- deterministic hard block
-- explicit break item logic
-
-### Level 05
-**Narcissist Manager sunglasses boss**
-
-Reference purpose:
-- face guard identity
-- paint invalid while guarded
-
-### Level 06
-**Meeting Tyrant weak-window boss**
-
-Reference purpose:
-- weak-window pressure
-- short opening exploitation
-
-### Level 07
-**Narcissist Manager precision paint boss**
-
-Reference purpose:
-- specified item goal
-- paint-ball identity
-
-Final validated tuning:
-- Goal Type = `SpecificItemHitCount`
-- Required Item Id = `item_paint_ball`
-- Target Count = `10`
-- Round Duration Seconds = `32`
-
-### Level 08
-**Zero-Mistake Boss**
-
-Reference purpose:
-- no-error timing discipline
-- blocked hit resets progress
-- clean-hit streak pressure
-
-Final validated tuning:
-- Goal Type = `UnblockedHitStreak`
-- Target Count = `6`
-- Round Duration Seconds = `32`
-
-### Level 09
-**Narcissist Manager Face Guard Boss**
-
-Reference purpose:
-- hit-zone judgment pressure
-- head is intentionally low-value
-- body is the primary reliable scoring route
-
-Final validated tuning:
-- Goal Type = `BreakdownTarget`
-- Target Breakdown = `180`
-- Round Duration Seconds = `34`
-
-Important current acceptance:
-- the encounter is considered playable and closed for now
-- head stain visuals remain imperfect and are intentionally not the current blocker
-
----
-
-## Combat Pacing Status
-
-Per-item throw cooldown is now part of the active gameplay baseline.
-
-Implementation direction:
-
-- cooldown is authored per weapon/item
-- pacing is not controlled by a single global throw lock
-- throw permission is checked before entering/finishing a throw action
-- runtime cooldown state is cleared cleanly at round end
-
-Design consequence:
-
-- future encounter balancing should assume players cannot spam throws at effectively unlimited speed
-- item identity can now include throw rhythm as part of balance
-
----
-
-## Current Design Direction
-
-- Levels 01–03 remain teaching levels
-- Levels 04–09 are boss-identity reference levels
-- New levels must continue boss identity and rule differentiation
-- Do not continue with fake repeated encounters
-- Do not add architecture churn unless current systems provably fail
-
----
-
-## Current Open Quality Notes
-
-These are known and accepted for now:
-
-- head-hit stain visuals on the current sphere-head setup are imperfect
-
-This is a real production note, but not the current blocker.
-
----
-
-## Immediate Next Focus
-
-Next milestone should be:
-
-**Level 10 Boss Identity design and implementation**
-
-This means:
-
-- continue boss-reference content expansion
-- design around the now-established pacing-aware throw baseline
-- avoid unnecessary system rewrites
-- preserve current preset / roster / encounter / progression architecture
+Constraint:
+- keep it meaningfully different from Levels 04–09
+- preserve current architecture and cleaned asset layout
+- prefer data authoring over new system churn

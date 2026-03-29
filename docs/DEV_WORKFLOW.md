@@ -12,10 +12,58 @@ Do not do large speculative batches without verifying:
 
 ---
 
+## Repository Structure Discipline
+
+All new work must respect the current canonical layout.
+
+### Runtime scripts
+```text
+unity-client/Assets/Scripts/gameplay/
+  Core/
+  Data/
+  Enemy/
+  UI/
+  VFX/
+```
+
+### Enemy data
+```text
+unity-client/Assets/Data/Enemy/
+  AI/
+  Archetypes/
+  Defense/
+    Patterns/
+    StateWindows/
+    Visuals/
+  Presets/
+  Rosters/
+```
+
+### Level data
+```text
+unity-client/Assets/Data/Levels/
+  Encounters/
+  EnemySelections/
+  Progression/
+```
+
+### Gameplay items
+```text
+unity-client/Assets/ScriptableObjects/GameplayItems/
+```
+
+Hard rules:
+- do not put enemy or level config assets in `Assets/` root
+- do not recreate `Assets/ScriptableObjects/Enemy/`
+- do not recreate duplicate legacy asset families
+- do not recreate a lowercase `gameplay/enemy/` script path
+
+---
+
 ## Standard Development Loop
 
 ### 1. Inspect
-Read docs and inspect relevant scripts.
+Read docs and inspect relevant scripts and data assets.
 
 ### 2. Change one layer only
 Prefer changing one of:
@@ -35,7 +83,14 @@ Check:
 - HUD output
 - goal completion
 
-### 4. Record result
+### 4. Verify repository truth
+After an important asset change:
+- let Unity serialize
+- check Git diff
+- push if needed
+- verify the actual repository file contents
+
+### 5. Record result
 If behavior is validated, update docs immediately.
 
 ---
@@ -45,22 +100,17 @@ If behavior is validated, update docs immediately.
 When creating a boss-style level variant:
 
 1. duplicate or create defense pattern
-2. duplicate or create preset
-3. add dedicated roster entry
-4. point level selection to that roster entry
-5. verify runtime preset and defense pattern during Play
-6. verify blocked / break / scoring behavior
-7. only then tune values
-
-This workflow was validated during:
-- Level 04 briefcase-boss setup
-- Level 05 sunglasses-boss setup
+2. duplicate or create state window profile if needed
+3. duplicate or create preset
+4. add dedicated roster entry
+5. point level selection to that roster entry
+6. verify runtime preset and defense pattern during Play
+7. verify blocked / break / scoring behavior
+8. only then tune values
 
 ---
 
 ## Current Debug Order
-
-If something is wrong at runtime, check in this order:
 
 ### Enemy behavior issue
 1. active runtime enemy root
@@ -75,7 +125,7 @@ If something is wrong at runtime, check in this order:
 2. current level progression index
 3. current goal type / target
 4. projectile hit reporting
-5. LevelGoalController behavior
+5. `LevelGoalController` behavior
 
 ### HUD issue
 1. current goal type
@@ -83,15 +133,11 @@ If something is wrong at runtime, check in this order:
 3. current live runtime state
 4. only then UI code
 
----
-
-## Current Scene-Wiring Rule
-
-Do not trust pre-Play scene fields when a runtime preset will overwrite them.
-
-If the value changes after entering Play:
-- debug the data chain
-- not just the scene object
+### Repository issue
+1. check canonical asset path
+2. check for duplicate naming family
+3. check whether Unity moved the `.asset` or duplicated it
+4. only then inspect logic
 
 ---
 
@@ -100,9 +146,5 @@ If the value changes after entering Play:
 After any validated milestone:
 - update docs before moving on
 - keep docs replaceable and repository-friendly
-- do not leave “next milestone” text pointing to already completed work
-
-This is especially important now that:
-- Level 04 is completed
-- Level 05 is completed
-- future sessions must start from Level 06 work, not repeat finished milestones
+- remove stale “next milestone” text once that milestone is complete
+- keep file-structure guidance aligned with the real repository

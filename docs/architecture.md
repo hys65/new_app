@@ -4,14 +4,63 @@
 
 `Power Prank 3D` is a single-scene, data-driven Unity prototype.
 
-Its current architecture is built around:
-
+Its architecture is built around:
 - one active enemy at runtime
-- multiple enemy roots existing in one scene
+- multiple enemy roots coexisting in one scene
 - level-driven encounter configuration
 - progression-driven multi-level flow
 - preset-driven enemy behavior injection
 - HUD-driven player-facing feedback
+
+---
+
+## Canonical Repository Structure
+
+### Scripts
+```text
+unity-client/Assets/Scripts/gameplay/
+  Core/
+  Data/
+  Enemy/
+  UI/
+  VFX/
+```
+
+Rules:
+- `gameplay/Enemy/` is the only valid enemy runtime script directory
+- do not recreate a parallel lowercase `gameplay/enemy/` tree
+- do not scatter gameplay runtime scripts into alternate folders without a clear module reason
+
+### Enemy data assets
+```text
+unity-client/Assets/Data/Enemy/
+  AI/
+  Archetypes/
+  Defense/
+    Patterns/
+    StateWindows/
+    Visuals/
+  Presets/
+  Rosters/
+```
+
+### Level data assets
+```text
+unity-client/Assets/Data/Levels/
+  Encounters/
+  EnemySelections/
+  Progression/
+```
+
+### Gameplay item data
+```text
+unity-client/Assets/ScriptableObjects/GameplayItems/
+```
+
+Rules:
+- enemy data must not live in `Assets/ScriptableObjects/Enemy/`
+- enemy or level config assets must not be left in `Assets/` root
+- legacy naming families must not be reintroduced
 
 ---
 
@@ -22,6 +71,7 @@ Its current architecture is built around:
 - `EnemyDefensePatternData`
 - `EnemyAiProfileData`
 - `EnemyDefenseStateWindowProfileData`
+- `EnemyDefenseVisualProfileData`
 
 ### Enemy preset layer
 - `EnemyPresetData`
@@ -59,8 +109,6 @@ Must:
 Must not:
 - be bypassed by direct runtime scene-field assignment hacks
 
----
-
 ### `EnemySwitchingManager`
 Owns:
 - choosing which scene enemy root is active
@@ -68,8 +116,6 @@ Owns:
 Must not:
 - own encounter rules
 - own progression logic
-
----
 
 ### `LevelEnemySelectionController`
 Owns:
@@ -80,8 +126,6 @@ Must not:
 - own progression
 - own round state
 
----
-
 ### `LevelEncounterController`
 Owns:
 - applying one encounter’s time / goal / enemy selection content
@@ -89,8 +133,6 @@ Owns:
 Must not:
 - own multi-level progression
 - own result UI
-
----
 
 ### `LevelProgressionController`
 Owns:
@@ -103,8 +145,6 @@ Must not:
 - absorb encounter-application logic
 - absorb HUD ownership
 
----
-
 ### `GameplayManager`
 Owns:
 - round start / running / finish state
@@ -113,96 +153,62 @@ Owns:
 - combo state
 
 Must not:
-- become the executor of retry / next scene-like progression flow
-
----
+- become the executor of retry / next progression flow
 
 ### `HudController`
 Owns:
-- result panel display
 - current live HUD display
-- goal-aware top-left HUD text
-- player-facing Retry / Next button presentation
+- result panel display
+- goal-aware HUD text
+- player-facing Retry / Next presentation
 
 Must not:
 - become the progression system itself
 
 ---
 
-## Current Content Architecture
-
-The project now has three content blocks:
-
-### Teaching block
-Levels 01–03
-
-Characteristics:
-- explain goal types
-- low confusion
-- low boss identity complexity
-
-### Boss-foundation block
-Levels 04–05
-
-Characteristics:
-- first validated boss encounters
-- each level has a distinct counter rule
-- each level uses dedicated preset / roster / selection authoring
-- each level should be treated as reference implementation for later boss content
-
-### Extended boss block
-Level 06+
-
-Characteristics:
-- should continue unique boss identity work
-- must not regress into generic repeated encounters
-
----
-
-## Boss Prototype Architecture Rule
-
-Level 04 and Level 05 established a critical architectural rule:
+## Boss Authoring Rule
 
 Boss-specific behavior must be introduced through:
 
 1. dedicated `EnemyDefensePatternData`
-2. dedicated `EnemyPresetData`
-3. dedicated roster entry
-4. level enemy selection pointing to that roster entry
+2. dedicated `EnemyDefenseStateWindowProfileData` when needed
+3. dedicated `EnemyPresetData`
+4. dedicated roster entry
+5. level enemy selection pointing to that roster entry
 
 Not through:
 - scene-only manual component edits
 - pre-Play inspector values that are overwritten at runtime
+- duplicate legacy asset families
 
 This rule exists because runtime preset application overwrites defense-related references.
 
----
+Canonical authoring chain:
 
-## Current Data Authoring Principle
-
-When adding a new boss-style enemy variant:
-
-1. create or duplicate a dedicated `EnemyDefensePatternData`
-2. create or duplicate a dedicated `EnemyPresetData`
-3. add a new roster entry
-4. point the level selection asset to that roster entry
-5. verify runtime active enemy root, not inactive scene roots
+**pattern → state window profile → preset → roster entry → level selection → runtime slot routing**
 
 ---
 
-## Current Validated Boss Authoring Paths
+## Current Content Architecture
 
-### Level 04
-- defense pattern → `meeting_tyrant_briefcase_boss_defense_pattern`
-- preset → `enemy_preset_meeting_tyrant_briefcase_boss`
-- roster entry → `meeting_tyrant_briefcase_boss`
-- level selection → `level_enemy_selection_level_04`
+### Teaching block
+Levels 01–03
+- explain goal types
+- low confusion
+- low boss identity complexity
 
-### Level 05
-- defense pattern → `narcissist_manager_sunglasses_boss_defense_pattern`
-- preset → `enemy_preset_narcissist_manager_sunglasses_boss`
-- roster entry → `narcissist_manager_sunglasses_boss`
-- level selection → `level_enemy_selection_level_05`
+### Boss-reference block
+Levels 04–09
+- each level has a distinct boss demand
+- each level is a data-authored reference implementation
+- these levels should not be casually redesigned once validated
+
+### Expansion block
+Level 10+
+- must continue unique boss identity work
+- should reuse the current asset layout and runtime chain
+- should avoid fake repetition of prior bosses
 
 ---
 
@@ -210,17 +216,15 @@ When adding a new boss-style enemy variant:
 
 `LevelEnemyController` is legacy.
 
-It must not coexist with the current selection/switching/progression path in the same scene-driven flow.
+Do not build new content flow around it if `LevelEnemySelectionController` and progression are active in the same scene.
 
 ---
 
-## Current Recommended Architectural Direction
+## Current Recommended Direction
 
-Do not introduce broad new architecture before content demands it.
+Do not introduce broad new architecture before content truly demands it.
 
-Current best leverage is:
-
+Best leverage remains:
 - more boss identity through data
-- clearer weapon-counter rules
 - clean roster/preset authoring
-- minimal system expansion only when content truly requires it
+- minimal system expansion only when current systems are proven insufficient
