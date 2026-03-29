@@ -3387,7 +3387,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1220c1117d2b5e14b81d57ba19ed914b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyReactionLayerController
-  enemyArchetype: {fileID: 11400000, guid: 9c3d6871c41803c4ab5d6db73bb0ed56, type: 2}
+  enemyArchetype: {fileID: 11400000, guid: 6546e65621743ab4bbb6f5d4ef0fcfc7, type: 2}
   useArchetype: 1
   bodyVisual: {fileID: 324402295}
   headVisual: {fileID: 1294028790}
@@ -3625,7 +3625,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyRuntimePresetController
   presetApplicator: {fileID: 1310628150}
-  currentPreset: {fileID: 11400000, guid: 19cca2914ef8e374b9f883bf721cbc9c, type: 2}
+  currentPreset: {fileID: 11400000, guid: 7f15965a5d62773448fa1d24b4a8dbd8, type: 2}
 --- !u!1 &1334280080
 GameObject:
   m_ObjectHideFlags: 0
@@ -5073,7 +5073,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyRuntimePresetController
   presetApplicator: {fileID: 1620351227}
-  currentPreset: {fileID: 11400000, guid: 848eea4ff9c1a654585a9a8a0ee7f0d3, type: 2}
+  currentPreset: {fileID: 11400000, guid: bc0df5fa7e58c9d479c85586f88c36c0, type: 2}
 --- !u!114 &1620351226
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5252,7 +5252,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1220c1117d2b5e14b81d57ba19ed914b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyReactionLayerController
-  enemyArchetype: {fileID: 11400000, guid: 93ce39ee1d9ffe340aa47fad35ba97f2, type: 2}
+  enemyArchetype: {fileID: 11400000, guid: c91f654b40d8b13499a037860b435ab1, type: 2}
   useArchetype: 1
   bodyVisual: {fileID: 948574321}
   headVisual: {fileID: 912459464}
