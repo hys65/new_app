@@ -5,11 +5,13 @@
 Project name: **Power Prank 3D**
 
 Project type:
+
 - Unity 6.3 LTS prototype
 - single-scene runtime with multi-level content progression
 - fixed-camera prank-throwing boss game
 
 Core fantasy:
+
 - throw prank items
 - build breakdown pressure
 - read defense timing
@@ -22,9 +24,10 @@ Core fantasy:
 
 The project is now in this stage:
 
-**cleaned data-driven boss-reference prototype with unified asset layout and validated Level 10 closure**
+**cleaned data-driven boss-reference prototype with validated Level 11 closure**
 
 Already implemented and runtime-validated:
+
 - core throw / hit / breakdown gameplay loop
 - enemy reaction layer
 - enemy defense visual layer
@@ -39,8 +42,11 @@ Already implemented and runtime-validated:
 - goal HUD readability
 - boss preset override debugging pass
 - combat pacing / per-item throw cooldown pass
+- Level 10 boss identity closure
+- Level 11 boss identity closure
 
 Validated boss-reference ladder:
+
 - Level 04 = Meeting Tyrant briefcase boss
 - Level 05 = Narcissist Manager sunglasses boss
 - Level 06 = Meeting Tyrant weak-window boss
@@ -48,6 +54,7 @@ Validated boss-reference ladder:
 - Level 08 = Zero-Mistake Boss
 - Level 09 = Narcissist Manager Face Guard Boss
 - Level 10 = Adaptive Shutdown Boss
+- Level 11 = Head Hunter Boss
 
 ---
 
@@ -57,14 +64,16 @@ Validated boss-reference ladder:
 
 All gameplay scripts now live under:
 
-    unity-client/Assets/Scripts/gameplay/
-      Core/
-      Data/
-      Enemy/
-      UI/
-      VFX/
+unity-client/Assets/Scripts/gameplay/
+
+- Core/
+- Data/
+- Enemy/
+- UI/
+- VFX/
 
 Important rule:
+
 - there is no separate lowercase `gameplay/enemy/` runtime path anymore
 - `gameplay/Enemy/` is the only valid enemy-runtime script folder
 
@@ -72,28 +81,31 @@ Important rule:
 
 Canonical data asset roots:
 
-    unity-client/Assets/Data/Enemy/
-      AI/
-      Archetypes/
-      Defense/
-        Patterns/
-        StateWindows/
-        Visuals/
-      Presets/
-      Rosters/
-    
-    unity-client/Assets/Data/Levels/
-      Encounters/
-      EnemySelections/
-      Progression/
+unity-client/Assets/Data/Enemy/
+
+- AI/
+- Archetypes/
+- Defense/
+- Patterns/
+- StateWindows/
+- Visuals/
+- Presets/
+- Rosters/
+
+unity-client/Assets/Data/Levels/
+
+- Encounters/
+- EnemySelections/
+- Progression/
 
 ### Gameplay item assets
 
 Gameplay items remain here:
 
-    unity-client/Assets/ScriptableObjects/GameplayItems/
+unity-client/Assets/ScriptableObjects/GameplayItems/
 
 Important rule:
+
 - enemy data must not be reintroduced into `Assets/ScriptableObjects/Enemy/`
 - enemy presets / patterns / AI / archetypes / level configs must not be left in `Assets/` root
 
@@ -110,11 +122,13 @@ The runtime model is:
 - runtime preset application decides final enemy behavior
 
 This is not:
+
 - a procedural encounter generator
 - a multi-enemy combat sandbox
 - a scene-manual boss tuning workflow
 
 It is:
+
 - a reusable single-scene multi-level boss-content prototype
 
 ---
@@ -134,6 +148,7 @@ Boss-specific behavior must be authored through:
 ### Canonical asset naming
 
 Use the current naming families only:
+
 - `enemy_ai_*`
 - `enemy_archetype_*`
 - `defense_pattern_*`
@@ -142,32 +157,37 @@ Use the current naming families only:
 - `level_*_encounter_config`
 - `level_enemy_selection_level_*`
 
-Do not create or restore alternate legacy families such as:
-- `*_ai_profile`
-- `*_archetype_data`
-- `*_defense_pattern_data`
-- `*_defense_state_window_profile`
-- `*_enemy_preset_data`
+Important clarification:
+
+Some runtime script class names and some legacy `CreateAssetMenu` defaults may still use older suffix families such as `*ProfileData` or `*_data`.
+If docs and auto-generated default filenames differ, trust the actual repository naming already in active use.
+
+Do not create duplicate parallel naming families inside active content.
 
 ### Scene startup
 
-`LevelEnemyController` is legacy.  
+`LevelEnemyController` is legacy.
+
 Do not build new work around it if `LevelEnemySelectionController` and progression are active in the same scene.
 
 ---
 
 ## Current Production Direction
 
-Levels 01–03 are the teaching block.  
-Levels 04–10 are the validated boss-reference block.
+Levels 01–03 are the teaching block.
 
-Level 10 is now closed as a valid new boss identity rather than a repeat of earlier boss logic.
+Levels 04–11 are the validated boss-reference block.
 
-Current next design target:
-- create a clean Level 11 boss identity
-- reuse current systems before proposing new ones
-- avoid fake repeats of Levels 04–10
-- preserve the cleaned repository structure while authoring new content
+Level 10 is closed as a valid anti-predictability boss identity.
+
+Level 11 is closed as a valid late-window head-pressure boss identity.
+
+Current next design / production target:
+
+- strengthen combat readability and boss presentation
+- improve the clarity of telegraph / active / weak / block / break / success states
+- preserve current architecture while polishing the combat language
+- postpone full release balancing until later presentation work is in place
 
 ---
 
@@ -178,6 +198,7 @@ Level 10 establishes a new demand:
 **the player must avoid becoming rhythm-readable**
 
 This encounter is defined by:
+
 - predictable rhythm getting blocked more often
 - varied rhythm creating reliable counterplay
 - pressure coming from timing adaptation rather than item restriction
@@ -186,10 +207,43 @@ This encounter is defined by:
 This matters because it expands the boss ladder without adding new core systems.
 
 Level 10 is not:
+
 - a weak-window repeat
 - a specific-item repeat
 - a zero-mistake repeat
 - a face/body judgment repeat
 
 It is:
+
 - the first validated anti-predictability boss identity in the ladder
+
+---
+
+## Level 11 Identity Meaning
+
+Level 11 establishes a new demand:
+
+**the player must respect a later scoring window and convert with head-focused precision**
+
+This encounter is defined by:
+
+- stronger defensive presence than a generic boss
+- a meaningful late scoring opportunity
+- pressure coming from waiting and converting correctly
+- pressure not primarily coming from item restriction
+- pressure not primarily coming from the Level 09 head/body value split
+- pressure not primarily coming from the Level 10 anti-predictability test
+
+This matters because it expands the boss ladder again without adding a new system.
+
+Level 11 is not:
+
+- a weak-window repeat of Level 06
+- a specific-item repeat of Level 07
+- a zero-mistake repeat of Level 08
+- a face/body judgment repeat of Level 09
+- an anti-predictability repeat of Level 10
+
+It is:
+
+- the validated late-window head-pressure boss identity in the ladder

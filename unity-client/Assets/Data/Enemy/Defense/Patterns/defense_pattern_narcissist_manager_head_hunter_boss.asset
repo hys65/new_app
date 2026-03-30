@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be0abebe2f093f745a1704086c0a0b6d, type: 3}
+  m_Name: defense_pattern_narcissist_manager_head_hunter_boss
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyDefensePatternData
+  defenseId: defense_pattern_narcissist_manager_head_hunter_boss
+  displayName: Head Hunter Boss Defense
+  patternType: 2
+  canBlockBody: 1
+  canBlockHead: 1
+  randomBlockChance: 0
+  blockDuration: 0.1
+  blockCooldown: 0.6
+  triggeredByRepeatedHits: 0
+  repeatedHitCountThreshold: 99
+  repeatedHitWindow: 0.5
+  useTimedActivation: 0
+  firstActivationDelay: 4
+  timedActivationInterval: 6
+  blockedBreakdownMultiplier: 0
+  blockedReactionMultiplier: 0.45
+  reduceHeadHitsOutsideDefense: 0
+  passiveHeadBreakdownMultiplier: 0.25
+  passiveHeadReactionMultiplier: 0.9
+  passiveHeadPopupText: 
+  weakToHeadHits: 1
+  headWeaknessMultiplier: 1.25
+  breakByHammer: 0
+  breakByFoam: 0
+  breakByPaint: 0
+  breakByEgg: 0
+  breakByTomato: 0
+  autoActivateOnHeadHit: 0
+  autoActivateOnBodyHit: 0
+  reducePaintOnFaceGuard: 0

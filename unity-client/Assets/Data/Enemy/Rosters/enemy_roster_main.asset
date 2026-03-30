@@ -55,3 +55,8 @@ MonoBehaviour:
     preset: {fileID: 11400000, guid: 466bd783e1d59dc49874b25fc313ec31, type: 2}
     recommendedSlotId: enemy_slot_03
     enabled: 1
+  - entryId: narcissist_manager_head_hunter_boss
+    displayName: Narcissist Manager
+    preset: {fileID: 11400000, guid: 59628ddcf0dc8734ab772ef5c929ff5f, type: 2}
+    recommendedSlotId: enemy_slot_02
+    enabled: 1

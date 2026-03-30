@@ -29,7 +29,6 @@ Also inspect actual scripts in:
 
 Do not rely only on docs.
 Do not assume docs are fully up to date unless repository scripts and runtime content support them.
-
 If docs and repository state differ, trust the repository and explain the drift clearly.
 
 ---
@@ -58,6 +57,7 @@ The following milestones are completed and runtime-validated:
 - Combat Pacing / Per-Item Throw Cooldown Pass
 - Repository asset-structure cleanup
 - Level 10 boss identity closure
+- Level 11 boss identity closure
 
 The project is no longer at the single-enemy prototype stage.
 It already supports reusable multi-level runtime content in one scene.
@@ -88,6 +88,7 @@ Validated boss-reference block:
 - Level 08 -> Zero-Mistake Boss
 - Level 09 -> Narcissist Manager Face Guard Boss
 - Level 10 -> Adaptive Shutdown Boss
+- Level 11 -> Head Hunter Boss
 
 ---
 
@@ -111,7 +112,6 @@ Applied only through:
 - `EnemyPresetApplicator`
 
 This is a hard rule.
-
 Do not bypass `EnemyPresetApplicator`.
 Do not create parallel preset injection paths.
 
@@ -155,142 +155,46 @@ Validated boss-reference levels:
 - Level 08 = Zero-Mistake Boss
 - Level 09 = Narcissist Manager Face Guard Boss
 - Level 10 = Adaptive Shutdown Boss
+- Level 11 = Head Hunter Boss
 
 Important rule:
 
 Post-tutorial content must not regress into fake repetition.
-Level 11 and beyond should continue boss-identity-driven expansion.
 
 ---
 
-## Level 09 Finalized Direction
+## Current Level 11 Closure Meaning
 
-Level 09 is implemented as:
+Level 11 is now accepted as a distinct boss identity.
 
-**Narcissist Manager – Face Guard Boss**
+Identity summary:
 
-Core rule:
+- the player is pushed toward late-window precision
+- the player must wait for a later scoring opportunity rather than simply spam safe rhythm
+- the encounter pressure is not primarily about item restriction
+- the encounter pressure is not primarily about body-vs-head judgment in the Level 09 sense
+- the encounter pressure is not primarily about anti-predictability in the Level 10 sense
 
-- head hits are long-term low-value
-- body hits are the primary reliable scoring route
-- the level is built around hit-zone judgment, not item restriction
-- current runtime version is accepted as playable and can be closed
+Level 11 establishes:
 
-Final Level 09 configuration:
-
-- Goal Type = `BreakdownTarget`
-- Target Breakdown = `180`
-- Round Duration Seconds = `34`
-
-Important production note:
-
-- enemy-head stain visuals remain imperfect on the current sphere-head setup
-- this is accepted for now
-- do not reopen stain polish unless it becomes a blocker
+- a late-window head-focused boss demand
+- a new boss identity achieved through current systems
+- no new goal type was required
+- no new architecture branch was required
 
 ---
 
-## Level 10 Finalized Direction
+## Current Production Direction
 
-Level 10 is implemented as:
+Do not reopen Level 10 or Level 11 casually if they already feel correct in runtime.
 
-**Adaptive Shutdown Boss**
+Current next milestone:
 
-Core rule:
+- combat readability / boss presentation pass
+- strengthen telegraph / active / weak / block / break / success readability using the current systems
+- continue content cleanup and presentation polish before final release balancing
 
-- the encounter punishes predictable throw rhythm
-- changing throw timing materially improves hit efficiency
-- the level is not primarily about item restriction
-- the level is not primarily about hit-zone judgment
-- the level is not a weak-window repeat
-- the level is accepted as a clean new boss identity
+Important production rule:
 
-Validated play result:
-
-- fixed rhythm is blocked significantly more often than mixed rhythm
-- mixed rhythm is a reliable counterplay path
-- the encounter remains readable and fair
-- accepted subjective result: “feels right”
-
-Design meaning:
-
-- the player is no longer only reading defense windows
-- the player is now actively managing whether the boss can read them back
-
----
-
-## Combat Pacing Status
-
-Per-item throw cooldown is implemented.
-
-High-level direction already completed:
-
-- each weapon/item now supports its own cooldown value
-- throw pacing is no longer effectively unrestricted
-- future boss balancing can assume non-spam throw pacing
-- this was implemented as item-driven combat pacing, not as a hardcoded global cooldown
-
-Implementation rule:
-
-- cooldown data belongs to `GameplayItemData`
-- throw gating belongs at the throw decision point
-- do not move this into projectile collision logic
-- do not replace this with a single global cooldown unless architecture changes justify it
-
----
-
-## Important Current Rules
-
-These rules are mandatory:
-
-1. Do not guess code structure
-2. Do not rewrite systems before inspecting repository code
-3. Keep behavior data-driven
-4. `EnemyPresetApplicator` must remain the only preset injection layer
-5. Do not rely on scene-only defense pattern edits when runtime preset application exists
-6. Boss content must be authored through:
-   - pattern
-   - defense state window profile
-   - preset
-   - roster entry
-   - level selection
-   - runtime slot routing
-7. `LevelEncounterController` owns single-encounter application only
-8. `LevelProgressionController` owns multi-level flow only
-9. `HudController` may present result UI, but must not own progression logic
-10. `GameplayManager` owns round state, not result flow execution
-11. `LevelEnemyController` is legacy and must not coexist with `LevelEnemySelectionController` in the same switching-oriented scene
-
----
-
-## Current Development Position
-
-The project has already moved beyond:
-
-- single enemy prototype validation
-- scene-only encounter setup
-- forced auto-advance after victory
-- Level 08 as a future design target
-- Level 09 as a future design target
-- Level 10 as a future design target
-- per-item throw cooldown as a future gameplay pacing task
-
-The project is currently at:
-
-- reusable multi-level runtime flow
-- validated four-goal system
-- validated seven-boss-reference ladder
-- validated per-item throw pacing layer
-- content authoring expansion stage
-
----
-
-## Next Recommended Milestone
-
-**Level 11 boss identity design and implementation**
-
-High-level direction:
-
-- continue post-Level-10 boss-reference expansion
-- preserve current architecture and canonical asset layout
-- prefer a new identity built from existing systems before proposing new code
+Do not perform final 04–11 release balancing yet.
+Final full-ladder balancing should happen later, after more presentation / art-side readability work is in place.

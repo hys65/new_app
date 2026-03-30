@@ -46,6 +46,7 @@ This remains the project’s core enemy architecture rule.
 ## Important Runtime Behavior
 
 ### Blocking Window
+
 Defense is no longer interpreted as a single rigid boolean in practice.
 
 For correct boss behavior, blocked evaluation now reflects:
@@ -61,14 +62,20 @@ For correct boss behavior, blocked evaluation now reflects:
 A pure `defenseActive` boolean produced two bad edge cases:
 
 ### Edge Case 1
-Enemy still looked defensive, but defense had just turned off.  
+
+Enemy still looked defensive, but defense had just turned off.
+
 Result:
+
 - player saw defense
 - hit was not blocked
 
 ### Edge Case 2
-Current hit triggered defense and showed `GUARD`, but still scored.  
+
+Current hit triggered defense and showed `GUARD`, but still scored.
+
 Result:
+
 - player saw defense begin
 - hit still counted
 
@@ -79,16 +86,20 @@ Both cases destroyed boundary clarity.
 ## Current Fix
 
 ### Defense Exit Block Grace
+
 A short blocked grace window now persists briefly after defense ends.
 
 Purpose:
+
 - blocked evaluation window should be slightly stricter than the visual exit
 - prevents “looks blocked but scores anyway” failures
 
 ### Block On Activation
+
 If the current hit activates defense and the hit type should be blockable, that same hit is evaluated as blocked immediately.
 
 Purpose:
+
 - prevents “GUARD + successful score” on the same impact
 - keeps boss-rule levels fair and readable
 
@@ -101,10 +112,11 @@ For boss-rule encounters:
 **blocked evaluation window must be at least as strict as visual defense presentation**
 
 Never allow:
+
 - obvious defense posture
 - but permissive scoring result
 
-Slightly strict is acceptable.  
+Slightly strict is acceptable.
 Visibly blocked but logically open is not.
 
 ---
@@ -114,111 +126,90 @@ Visibly blocked but logically open is not.
 Weak-window head bypass still exists for weak-window style bosses.
 
 Important constraint:
+
 - weak-window bypass should only apply when defense is truly active and the state window explicitly exposes weakness
 - zero-mistake rule content must not accidentally inherit permissive scoring from unrelated weak-window behavior
+- later head-focused bosses must still rely on explicit authored window logic rather than vague visual timing
 
 ---
 
-## Face Guard Expansion
+## Accepted Boss Variants in the Current Ladder
 
-Level 09 established a new accepted Narcissist Manager boss variant:
+### Meeting Tyrant briefcase boss
 
-**Face Guard Boss**
+Meaning:
 
-This variant is not a simple repeat of Level 05.
+- deterministic hard defense
+- explicit break-route learning
 
-Its purpose is different:
+### Meeting Tyrant weak-window boss
 
-- Level 05 focuses on face-guard identity plus paint invalidation while guarded
-- Level 09 focuses on hit-zone judgment pressure
+Meaning:
 
-Design meaning of Level 09:
+- short opening exploitation
+- the player is rewarded for recognizing a brief scoring window
 
-- head hits are intentionally low-value over time
-- body hits are the primary reliable scoring route
-- the encounter teaches “do not greed for the face” rather than “use one specific item”
+### Narcissist Manager sunglasses boss
 
-This is an important boss-reference distinction.
+Meaning:
 
----
+- face-guard identity
+- guarded face route is intentionally hostile to the wrong item choice
 
-## Geometry and Hit-Zone Constraint
+### Narcissist Manager Face Guard Boss
 
-A boss encounter built around hit-zone judgment depends on readable enemy shape.
+Meaning:
 
-This means:
-
-- head and body must be visually separable
-- body must be a stable main target
-- silhouette matters as much as defense logic
-
-A correct defense pattern can still fail as an encounter if:
-
-- the head dominates the silhouette
-- the body is too small to be a reliable target
-- the current throw style makes body targeting feel random
-
-This was a real production lesson during Level 09 iteration.
-
----
-
-## Stain Visual Constraint
-
-Enemy stain visuals are currently acceptable on flat or broad surfaces.
-
-However:
-
-- stain visuals are not fully trustworthy on the current sphere-head setup
-- a flat quad stain cannot perfectly conform to a curved head surface
-- head stain polish is currently not treated as a blocker
-
-Important rule:
-- do not reopen deep stain-system work unless it becomes necessary for a later milestone
-- current priority remains gameplay clarity and pacing, not perfect curved-surface stain projection
-
----
-
-## Boss Reference Identities
-
-### Level 04 – Meeting Tyrant Briefcase Boss
-Identity:
-- deterministic hard block
-- explicit break item logic
-
-### Level 05 – Narcissist Manager Sunglasses Boss
-Identity:
-- face guard
-- paint invalid while guarded
-
-### Level 06 – Meeting Tyrant Weak-Window Boss
-Identity:
-- short vulnerability windows
-- pressure through timing bursts
-
-### Level 07 – Narcissist Manager Precision Paint Boss
-Identity:
-- required-item success rule
-- paint-ball precision objective
-
-### Level 08 – Zero-Mistake Boss
-Identity:
-- clean-hit streak objective
-- blocked hit resets progress
-- boundary clarity is part of the encounter design
-
-### Level 09 – Narcissist Manager Face Guard Boss
-Identity:
 - head is intentionally low-value
-- body is the primary scoring route
-- player must learn zone choice rather than greed for face hits
+- body is the primary reliable scoring route
+- this is not just a repeat of the sunglasses boss
+
+### Adaptive Shutdown Boss
+
+Meaning:
+
+- the boss punishes predictable throw rhythm
+- the player is pushed to vary timing
+
+### Head Hunter Boss
+
+Meaning:
+
+- the boss applies enough defensive pressure to make later scoring windows matter
+- the player is pushed toward head-focused conversion rather than generic spam
+- the identity is not a simple weak-window repeat
+- the identity is not a simple anti-predictability repeat
 
 ---
 
-## Production Lessons
+## Level 11 Authoring Lesson
 
-- Wrong slot routing can make a valid boss appear absent.
-- Runtime preset application is the source of truth.
-- Defense visuals and block logic must remain aligned.
-- A boss encounter can fail not because of numbers, but because of unreadable boundaries.
-- Future boss-rule content should be evaluated first on clarity, second on difficulty.
-- Geometry and control feel can invalidate a theoretically good boss rule.
+Level 11 proved an important production lesson:
+
+A new boss identity does not require a new goal type if the current systems can produce a genuinely different player demand.
+
+What mattered was not merely raising target values.
+What mattered was establishing:
+
+- stronger defensive presence
+- a meaningful later scoring opportunity
+- head-focused precision pressure
+- a readable identity distinct from Levels 06, 09, and 10
+
+---
+
+## Enemy Production Discipline
+
+For future boss authoring:
+
+- first define the boss demand
+- then author the behavior through the existing preset chain
+- then validate runtime routing
+- only after that consider final balancing
+
+Do not solve weak identity by immediately proposing:
+
+- new architecture
+- new runtime injection paths
+- new goal-type churn
+- scene-only manual overrides
