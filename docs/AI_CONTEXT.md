@@ -22,7 +22,7 @@ Core fantasy:
 
 The project is now in this stage:
 
-**cleaned data-driven boss-reference prototype with unified asset layout**
+**cleaned data-driven boss-reference prototype with unified asset layout and validated Level 10 closure**
 
 Already implemented and runtime-validated:
 - core throw / hit / breakdown gameplay loop
@@ -47,53 +47,51 @@ Validated boss-reference ladder:
 - Level 07 = Narcissist Manager precision paint boss
 - Level 08 = Zero-Mistake Boss
 - Level 09 = Narcissist Manager Face Guard Boss
+- Level 10 = Adaptive Shutdown Boss
 
 ---
 
 ## Canonical Repository Structure
 
 ### Runtime scripts
+
 All gameplay scripts now live under:
 
-```text
-unity-client/Assets/Scripts/gameplay/
-  Core/
-  Data/
-  Enemy/
-  UI/
-  VFX/
-```
+    unity-client/Assets/Scripts/gameplay/
+      Core/
+      Data/
+      Enemy/
+      UI/
+      VFX/
 
 Important rule:
 - there is no separate lowercase `gameplay/enemy/` runtime path anymore
 - `gameplay/Enemy/` is the only valid enemy-runtime script folder
 
 ### Gameplay data assets
+
 Canonical data asset roots:
 
-```text
-unity-client/Assets/Data/Enemy/
-  AI/
-  Archetypes/
-  Defense/
-    Patterns/
-    StateWindows/
-    Visuals/
-  Presets/
-  Rosters/
-
-unity-client/Assets/Data/Levels/
-  Encounters/
-  EnemySelections/
-  Progression/
-```
+    unity-client/Assets/Data/Enemy/
+      AI/
+      Archetypes/
+      Defense/
+        Patterns/
+        StateWindows/
+        Visuals/
+      Presets/
+      Rosters/
+    
+    unity-client/Assets/Data/Levels/
+      Encounters/
+      EnemySelections/
+      Progression/
 
 ### Gameplay item assets
+
 Gameplay items remain here:
 
-```text
-unity-client/Assets/ScriptableObjects/GameplayItems/
-```
+    unity-client/Assets/ScriptableObjects/GameplayItems/
 
 Important rule:
 - enemy data must not be reintroduced into `Assets/ScriptableObjects/Enemy/`
@@ -124,6 +122,7 @@ It is:
 ## Mandatory Architecture Rules
 
 ### Runtime authority
+
 Runtime preset application remains authoritative.
 
 Do not treat pre-Play inspector values as final truth when preset routing is active.
@@ -133,6 +132,7 @@ Boss-specific behavior must be authored through:
 **pattern → state window profile → preset → roster entry → level selection → runtime slot routing**
 
 ### Canonical asset naming
+
 Use the current naming families only:
 - `enemy_ai_*`
 - `enemy_archetype_*`
@@ -150,7 +150,8 @@ Do not create or restore alternate legacy families such as:
 - `*_enemy_preset_data`
 
 ### Scene startup
-`LevelEnemyController` is legacy.
+
+`LevelEnemyController` is legacy.  
 Do not build new work around it if `LevelEnemySelectionController` and progression are active in the same scene.
 
 ---
@@ -158,10 +159,37 @@ Do not build new work around it if `LevelEnemySelectionController` and progressi
 ## Current Production Direction
 
 Levels 01–03 are the teaching block.  
-Levels 04–09 are the validated boss-reference block.
+Levels 04–10 are the validated boss-reference block.
+
+Level 10 is now closed as a valid new boss identity rather than a repeat of earlier boss logic.
 
 Current next design target:
-- create a clean Level 10 boss identity
+- create a clean Level 11 boss identity
 - reuse current systems before proposing new ones
-- avoid fake repeats of Levels 04–09
+- avoid fake repeats of Levels 04–10
 - preserve the cleaned repository structure while authoring new content
+
+---
+
+## Level 10 Identity Meaning
+
+Level 10 establishes a new demand:
+
+**the player must avoid becoming rhythm-readable**
+
+This encounter is defined by:
+- predictable rhythm getting blocked more often
+- varied rhythm creating reliable counterplay
+- pressure coming from timing adaptation rather than item restriction
+- pressure coming from timing adaptation rather than hit-zone judgment
+
+This matters because it expands the boss ladder without adding new core systems.
+
+Level 10 is not:
+- a weak-window repeat
+- a specific-item repeat
+- a zero-mistake repeat
+- a face/body judgment repeat
+
+It is:
+- the first validated anti-predictability boss identity in the ladder

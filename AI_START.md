@@ -56,6 +56,8 @@ The following milestones are completed and runtime-validated:
 - Goal HUD Readability 1.0
 - Boss Preset Override Debugging Pass
 - Combat Pacing / Per-Item Throw Cooldown Pass
+- Repository asset-structure cleanup
+- Level 10 boss identity closure
 
 The project is no longer at the single-enemy prototype stage.
 It already supports reusable multi-level runtime content in one scene.
@@ -85,6 +87,7 @@ Validated boss-reference block:
 - Level 07 -> Narcissist Manager precision paint boss
 - Level 08 -> Zero-Mistake Boss
 - Level 09 -> Narcissist Manager Face Guard Boss
+- Level 10 -> Adaptive Shutdown Boss
 
 ---
 
@@ -151,11 +154,12 @@ Validated boss-reference levels:
 - Level 07 = Narcissist Manager precision paint boss
 - Level 08 = Zero-Mistake Boss
 - Level 09 = Narcissist Manager Face Guard Boss
+- Level 10 = Adaptive Shutdown Boss
 
 Important rule:
 
 Post-tutorial content must not regress into fake repetition.
-Level 10 and beyond should continue boss-identity-driven expansion.
+Level 11 and beyond should continue boss-identity-driven expansion.
 
 ---
 
@@ -183,6 +187,35 @@ Important production note:
 - enemy-head stain visuals remain imperfect on the current sphere-head setup
 - this is accepted for now
 - do not reopen stain polish unless it becomes a blocker
+
+---
+
+## Level 10 Finalized Direction
+
+Level 10 is implemented as:
+
+**Adaptive Shutdown Boss**
+
+Core rule:
+
+- the encounter punishes predictable throw rhythm
+- changing throw timing materially improves hit efficiency
+- the level is not primarily about item restriction
+- the level is not primarily about hit-zone judgment
+- the level is not a weak-window repeat
+- the level is accepted as a clean new boss identity
+
+Validated play result:
+
+- fixed rhythm is blocked significantly more often than mixed rhythm
+- mixed rhythm is a reliable counterplay path
+- the encounter remains readable and fair
+- accepted subjective result: “feels right”
+
+Design meaning:
+
+- the player is no longer only reading defense windows
+- the player is now actively managing whether the boss can read them back
 
 ---
 
@@ -239,13 +272,14 @@ The project has already moved beyond:
 - forced auto-advance after victory
 - Level 08 as a future design target
 - Level 09 as a future design target
+- Level 10 as a future design target
 - per-item throw cooldown as a future gameplay pacing task
 
 The project is currently at:
 
 - reusable multi-level runtime flow
 - validated four-goal system
-- validated six-boss-reference ladder
+- validated seven-boss-reference ladder
 - validated per-item throw pacing layer
 - content authoring expansion stage
 
@@ -253,26 +287,10 @@ The project is currently at:
 
 ## Next Recommended Milestone
 
-**Level 10 Boss Identity design and implementation**
+**Level 11 boss identity design and implementation**
 
 High-level direction:
 
-- continue post-Level-09 boss-reference expansion
-- build on current pacing-aware combat baseline
-- avoid architecture churn unless repository code proves a real limitation
-- keep future content authored through the existing preset / roster / encounter / progression pipeline
-
----
-
-## Required Working Style
-
-When answering:
-
-1. Read docs first
-2. Inspect real scripts second
-3. Respect current architecture
-4. Prefer extending cleanly over rewriting
-5. Give exact change points
-6. If code changes are needed, provide full direct replacement files when safer than partial patches
-7. If scene setup is needed, give exact hierarchy and inspector instructions
-8. If repository state and prior summary conflict, trust the repository and explain the mismatch clearly
+- continue post-Level-10 boss-reference expansion
+- preserve current architecture and canonical asset layout
+- prefer a new identity built from existing systems before proposing new code

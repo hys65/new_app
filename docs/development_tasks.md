@@ -20,6 +20,7 @@ The project has completed:
 - boss preset override debugging pass
 - combat pacing / per-item throw cooldown pass
 - repository asset-structure cleanup
+- Level 10 boss identity closure
 
 ---
 
@@ -43,6 +44,9 @@ Zero-Mistake Boss
 ### Level 09
 Narcissist Manager Face Guard Boss
 
+### Level 10
+Adaptive Shutdown Boss
+
 ---
 
 ## Level 09 Status
@@ -63,6 +67,29 @@ Level 09 is implemented and accepted as playable.
 - head stain visuals remain imperfect on the current sphere-head setup
 - this is accepted for now
 - do not reopen deep stain polish unless it becomes a true blocker later
+
+---
+
+## Level 10 Status
+
+Level 10 is implemented and accepted as playable.
+
+### Final identity
+- predictable throw rhythm is punished
+- mixed rhythm materially improves hit efficiency
+- encounter pressure comes from anti-predictability pressure
+- the encounter is not primarily about item restriction
+- the encounter is not primarily about hit-zone judgment
+- the encounter is not a weak-window repeat
+
+### Validation outcome
+- fixed-rhythm test produced materially more blocked hits than mixed-rhythm test
+- mixed rhythm provided reliable counterplay
+- accepted subjective result: the encounter feels right
+
+### Design meaning
+- the boss ladder now includes an anti-predictability encounter
+- this expands the ladder without requiring new core systems
 
 ---
 
@@ -90,6 +117,7 @@ Do **not** reopen these unless runtime testing proves a real bug:
 - Level 07 reference implementation
 - Level 08 zero-mistake implementation
 - Level 09 face-guard implementation
+- Level 10 adaptive shutdown implementation
 - UnblockedHitStreak goal support
 - Level 08 HUD rule readability
 - Level 08 blocked-boundary evaluation fix
@@ -101,17 +129,17 @@ Do **not** reopen these unless runtime testing proves a real bug:
 
 ## Immediate Next Milestone
 
-**Level 10 boss identity design and content authoring**
+**Level 11 boss identity design and content authoring**
 
 ### Constraints
-- keep it meaningfully different from Levels 04–09
+- keep it meaningfully different from Levels 04–10
 - preserve current architecture and data-driven authoring flow
 - prefer existing systems before proposing new systems
 - avoid fake repeats of existing bosses
 - avoid unnecessary architecture churn
 
 ### Required output
-- clean Level 10 identity
+- clean Level 11 identity
 - exact asset-authoring plan
 - code changes only if truly necessary and tightly justified
 

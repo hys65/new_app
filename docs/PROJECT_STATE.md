@@ -36,6 +36,11 @@ The following systems are implemented and runtime-validated:
 - Result Panel Polish 1.0
 - Level Goal Variety 1.0
 
+### Repository Discipline
+- Canonical asset-layout cleanup
+- Canonical script-folder cleanup
+- Current boss-ladder documentation closure through Level 10
+
 ---
 
 ## Validated Goal Types
@@ -106,45 +111,54 @@ Important accepted limitation:
 - head stain visuals remain imperfect on the current sphere-head setup
 - do not reopen deep stain work unless it becomes a true blocker
 
+### Level 10
+**Adaptive Shutdown Boss**
+- accepted as a distinct boss identity
+- predictable throw rhythm is blocked significantly more often
+- rhythm variation materially improves hit efficiency
+- encounter pressure comes from anti-predictability pressure, not item restriction
+- encounter pressure comes from anti-predictability pressure, not hit-zone judgment
+
+Validated play result:
+- fixed rhythm average blocked count was materially higher than mixed rhythm
+- mixed rhythm produced reliable counterplay
+- accepted subjective result: the encounter feels correct
+
 ---
 
 ## Canonical Repository Layout
 
 ### Scripts
-```text
-unity-client/Assets/Scripts/gameplay/
-  Core/
-  Data/
-  Enemy/
-  UI/
-  VFX/
-```
+
+    unity-client/Assets/Scripts/gameplay/
+      Core/
+      Data/
+      Enemy/
+      UI/
+      VFX/
 
 ### Enemy data
-```text
-unity-client/Assets/Data/Enemy/
-  AI/
-  Archetypes/
-  Defense/
-    Patterns/
-    StateWindows/
-    Visuals/
-  Presets/
-  Rosters/
-```
+
+    unity-client/Assets/Data/Enemy/
+      AI/
+      Archetypes/
+      Defense/
+        Patterns/
+        StateWindows/
+        Visuals/
+      Presets/
+      Rosters/
 
 ### Level data
-```text
-unity-client/Assets/Data/Levels/
-  Encounters/
-  EnemySelections/
-  Progression/
-```
+
+    unity-client/Assets/Data/Levels/
+      Encounters/
+      EnemySelections/
+      Progression/
 
 ### Gameplay items
-```text
-unity-client/Assets/ScriptableObjects/GameplayItems/
-```
+
+    unity-client/Assets/ScriptableObjects/GameplayItems/
 
 Repository cleanliness rule:
 - do not place enemy or level config assets back into `Assets/` root
@@ -168,35 +182,40 @@ Do not rely on scene-only edits for final boss behavior.
 ## Production Lessons Already Validated
 
 ### Data / Runtime Lessons
-- Wrong `recommendedSlotId` can make a valid boss appear missing at runtime.
-- Unity Inspector changes are not always immediately serialized to disk.
-- When asset values matter, always verify actual GitHub file contents after push.
+- wrong `recommendedSlotId` can make a valid boss appear missing at runtime
+- Unity Inspector changes are not always immediately serialized to disk
+- when asset values matter, always verify actual GitHub file contents after push
 
 ### Combat / Goal Lessons
-- Goal logic must consume final hit resolution, not raw visual assumptions.
-- HUD must explicitly support each new goal type.
-- Boss-rule encounters cannot rely on vague defense visuals.
-- Defense visual window and blocked evaluation window must remain tightly aligned.
-- A defense activation triggered by the current hit must not allow that same hit to score for zero-mistake content.
+- goal logic must consume final hit resolution, not raw visual assumptions
+- HUD must explicitly support each new goal type
+- boss-rule encounters cannot rely on vague defense visuals
+- defense visual window and blocked evaluation window must remain tightly aligned
+- a defense activation triggered by the current hit must not allow that same hit to score for zero-mistake content
 
 ### Combat Pacing Lessons
-- High throw frequency can invalidate otherwise good boss balance.
-- Throw-rate control must live at the throw decision point, not inside hit resolution.
-- Per-item pacing is more compatible with current architecture than a single global cooldown.
-- Future boss balancing should assume non-spam throw pacing as the baseline.
+- high throw frequency can invalidate otherwise good boss balance
+- throw-rate control must live at the throw decision point, not inside hit resolution
+- per-item pacing is more compatible with current architecture than a single global cooldown
+- future boss balancing should assume non-spam throw pacing as the baseline
 
 ### Geometry / Readability Lessons
-- A hit-zone judgment encounter requires clear visual separation between head and body.
-- Primitive-body enemies can invalidate good rule design if the silhouette does not support the intended aiming choice.
-- For current sphere-head enemies, head stain visuals are not reliable enough to justify deep polish right now.
+- a hit-zone judgment encounter requires clear visual separation between head and body
+- primitive-body enemies can invalidate good rule design if the silhouette does not support the intended aiming choice
+- for current sphere-head enemies, head stain visuals are not reliable enough to justify deep polish right now
+
+### Level 10 Lessons
+- a new boss identity can still be created with current systems if the demand shift is clear enough
+- anti-predictability pressure is readable when the player can feel the difference between fixed rhythm and mixed rhythm
+- once the encounter already feels correct, unnecessary “smartening up” is more dangerous than helpful
 
 ---
 
 ## Immediate Next Milestone
 
-**Level 10 boss identity design and authoring**
+**Level 11 boss identity design and authoring**
 
 Constraint:
-- keep it meaningfully different from Levels 04–09
+- keep it meaningfully different from Levels 04–10
 - preserve current architecture and cleaned asset layout
 - prefer data authoring over new system churn

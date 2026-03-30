@@ -1,8 +1,8 @@
 # SESSION_LOG.md
 
-## Session Summary – Boss Ladder Closure, Throw Pacing Baseline, and Repository Cleanup
+## Session Summary – Level 10 Closure After Boss Ladder Consolidation
 
-This document tracks the major validated development steps that closed the current boss-reference ladder through Level 09, added per-item throw cooldown pacing, and cleaned the repository into one canonical asset structure.
+This document tracks the validated development step that closed Level 10 as a distinct boss identity after the repository cleanup, the Level 09 face-guard closure, and the combat pacing baseline pass.
 
 ---
 
@@ -26,6 +26,8 @@ Already completed before this session block:
 - stain attachment repair
 - goal HUD readability
 - boss preset override debugging pass
+- per-item throw cooldown pacing
+- repository cleanup into canonical script/data layout
 
 Previously validated boss references:
 - Level 04 = Meeting Tyrant briefcase boss
@@ -33,114 +35,125 @@ Previously validated boss references:
 - Level 06 = Meeting Tyrant weak-window boss
 - Level 07 = Narcissist Manager precision paint boss
 - Level 08 = Zero-Mistake Boss
+- Level 09 = Narcissist Manager Face Guard Boss
 
 ---
 
-## Level 09 Direction and Closure
+## Level 10 Direction
 
-Level 09 was finalized as:
+Level 10 was designed to avoid fake repetition of the existing boss ladder.
 
-**Narcissist Manager – Face Guard Boss**
+The accepted identity was:
 
-Final rule meaning:
-- head hits should be long-term low-value
-- body hits should be the primary reliable scoring route
-- the encounter should teach the player not to greed for face hits
+**Adaptive Shutdown Boss**
 
-Final accepted encounter configuration:
-- Goal Type = `BreakdownTarget`
-- Target Breakdown = `180`
-- Round Duration Seconds = `34`
+Target design meaning:
+- the boss should punish predictable throw rhythm
+- mixed rhythm should produce meaningful counterplay
+- the encounter should not collapse into a specific-item check
+- the encounter should not collapse into a hit-zone judgment repeat
+- the encounter should not collapse into a weak-window repeat
 
-Important production lesson:
-- blocked hits in current code semantics are score denial, not soft-penalty scoring
-- the encounter only became acceptable after geometry and hit-zone readability were improved
+This established a new boss demand without adding new core systems.
 
 ---
 
-## Throw Pacing Pass
+## Validation Result
 
-Per-item throw cooldown was implemented and accepted as part of baseline combat truth.
+The identity was tested through comparative rhythm behavior.
 
-Validated lesson:
-- high throw frequency can invalidate otherwise good boss balance
-- throw-rate control belongs at the throw decision point
-- future balance assumptions can now rely on non-spam pacing
+### Fixed-rhythm result
+- average blocked count was significantly higher
 
-This closed the cooldown milestone.
+### Mixed-rhythm result
+- average blocked count was significantly lower
+- mixed rhythm provided reliable counterplay
 
----
+### Acceptance result
+- subjective play result was accepted as correct
+- the encounter pressure was judged to feel right
+- no further core-mechanic escalation was required
 
-## Repository Cleanup Pass
+The important outcome was not just difficulty.
 
-A full cleanup pass was then completed to remove duplicate asset families and unify repository structure.
+The important outcome was that the player could feel:
+**“If I become predictable, the boss shuts me down more often.”**
 
-### Canonical script layout
-```text
-unity-client/Assets/Scripts/gameplay/
-  Core/
-  Data/
-  Enemy/
-  UI/
-  VFX/
-```
-
-### Canonical enemy data layout
-```text
-unity-client/Assets/Data/Enemy/
-  AI/
-  Archetypes/
-  Defense/
-    Patterns/
-    StateWindows/
-    Visuals/
-  Presets/
-  Rosters/
-```
-
-### Canonical level data layout
-```text
-unity-client/Assets/Data/Levels/
-  Encounters/
-  EnemySelections/
-  Progression/
-```
-
-### Canonical gameplay item layout
-```text
-unity-client/Assets/ScriptableObjects/GameplayItems/
-```
-
-### Cleanup result
-The following classes of repository drift were removed:
-- enemy and level config assets left in `Assets/` root
-- enemy ScriptableObjects split into alternate folders
-- duplicate legacy naming families such as `*_ai_profile` and `*_archetype_data`
-- parallel `gameplay/Enemy` vs `gameplay/enemy` script paths
-
-This is now the authoritative repository layout.
+That means the identity worked.
 
 ---
 
-## Current Production Rule
+## Level 10 Closure Rule
 
-New content must follow:
+Level 10 is now treated as closed content.
 
-**pattern → state window profile → preset → roster entry → level selection → runtime slot routing**
+Do not reopen it casually.
 
-And must be stored in canonical folders from the start.
+Only revisit if runtime testing later proves one of the following:
+- the anti-predictability identity is no longer readable
+- the encounter collapses into another boss identity after future balance changes
+- repository content drifts away from the validated authoring chain
 
-Do not restore legacy file families or alternate asset roots.
+Otherwise, preserve the current implementation as part of the validated boss-reference ladder.
+
+---
+
+## Updated Boss Reference Ladder
+
+- Level 04 = Meeting Tyrant briefcase boss
+- Level 05 = Narcissist Manager sunglasses boss
+- Level 06 = Meeting Tyrant weak-window boss
+- Level 07 = Narcissist Manager precision paint boss
+- Level 08 = Zero-Mistake Boss
+- Level 09 = Narcissist Manager Face Guard Boss
+- Level 10 = Adaptive Shutdown Boss
+
+The ladder now covers:
+- break-item pressure
+- guarded invalidation pressure
+- weak-window exploitation
+- specific-item execution
+- zero-mistake streak pressure
+- hit-zone judgment pressure
+- anti-predictability pressure
+
+---
+
+## Production Lessons From Level 10
+
+- a meaningful new boss identity can still be authored with the current system set
+- anti-predictability pressure becomes readable when test results show a clear behavior gap between fixed rhythm and mixed rhythm
+- once a boss identity already feels correct, additional “smartness” tuning can easily damage fairness
+- the best next step after closure is documentation and ladder expansion, not unnecessary rework
+
+---
+
+## Documentation Closure In This Session
+
+The following documentation was updated to reflect Level 10 closure and the cleaned repository structure:
+
+- `AI_START.md`
+- `docs/AI_CONTEXT.md`
+- `docs/PROJECT_STATE.md`
+- `docs/architecture.md`
+- `docs/development_tasks.md`
+- `docs/SESSION_LOG.md`
+
+The purpose of these updates was:
+- to close Level 10 as validated content
+- to record the anti-predictability boss identity clearly
+- to align documentation with the canonical asset/script layout
+- to keep the next session focused on Level 11 rather than re-arguing Level 10
 
 ---
 
 ## Current Next Step
 
-The next step after cleanup is:
+The next step after Level 10 closure is:
 
-**Level 10 boss identity design and authoring**
+**Level 11 boss identity design and authoring**
 
 Constraint:
-- do not fake-repeat Levels 04–09
-- prefer existing systems before proposing new code
-- preserve the cleaned repository structure while authoring new content
+- do not fake-repeat Levels 04–10
+- preserve the current architecture and canonical asset layout
+- continue preferring existing systems before new code
