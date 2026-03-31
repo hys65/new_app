@@ -23,6 +23,8 @@ The project has completed:
 - Level 10 boss identity closure
 - Level 11 boss identity closure
 
+The project has also advanced through the first meaningful portion of the current readability / presentation pass.
+
 ---
 
 ## Completed Boss Reference Ladder
@@ -144,6 +146,12 @@ Level 11 is implemented and accepted as playable.
 - this expands the ladder without requiring new goal-type churn
 - the important step was identity closure, not premature release balancing
 
+### Important runtime note
+
+- Level 11 intentionally has no break path
+- do not use Level 11 as the reference encounter for `BREAK` readability
+- use a boss with real break-item routing, such as Level 04, when sampling `BREAK`
+
 ---
 
 ## Repository Cleanup Status
@@ -181,6 +189,26 @@ Do **not** reopen these unless runtime testing proves a real bug:
 
 ---
 
+## Current Readability / Presentation Progress
+
+The active milestone has already advanced through the following sub-items:
+
+### Completed / Accepted
+
+- clearer goal HUD rule language
+- clearer result panel goal summary language
+- basic block / weak / break / normal-hit differentiation pass
+- weak-window readability improved to a currently acceptable gameplay level
+- result panel hierarchy reviewed and accepted for the current prototype phase
+
+### Important accepted production boundaries
+
+- primitive proxy-arm posing is **not** a high-value place to force final hero-quality defensive posing
+- current primitive enemy rig only needs baseline readability, not final art-grade guard choreography
+- do not continue spending time fighting local pivot weirdness unless later art quality makes it worthwhile
+
+---
+
 ## Immediate Next Milestone
 
 **Combat Readability / Boss Presentation Pass**
@@ -192,14 +220,65 @@ Do **not** reopen these unless runtime testing proves a real bug:
 - improve readability before final release balancing
 - prefer content / presentation clarification before system churn
 - do not reopen deep stain-system work unless it becomes a true blocker
+- do not overfit primitive proxy poses into pseudo-final animation polish
 
 ### Required output
 
-- clearer telegraph readability
-- clearer active defense readability
+- clearer telegraph readability where practical
+- clearer active defense readability where practical
 - clearer weak-window readability
 - clearer block / break / success readability
 - stronger combat-language consistency across boss encounters
+- clearer player-facing rule language in both live HUD and result review
+
+### What is already materially advanced inside this milestone
+
+- HUD goal presentation now explains encounter rules instead of only exposing counters
+- result panel goal summary now matches live goal language
+- block and break readability have been sampled and pushed further apart
+- weak-window readability now functions as a readable scoring opportunity rather than an invisible internal rule
+
+---
+
+## Remaining Tasks Inside the Current Milestone
+
+These are still open after the current pass:
+
+### 1. Broader encounter consistency check
+
+Validate that the new readability standards feel coherent across more than one boss.
+
+Especially important for:
+
+- Level 04
+- Level 06
+- Level 10
+- Level 11
+
+### 2. Later art-side polish pass
+
+Do not do this now.
+
+This remains a later task for when presentation quality matters more than prototype clarity.
+
+Includes:
+
+- higher-quality defensive posing
+- stronger enemy silhouette readability
+- cleaner visual hierarchy during guard states
+- later art-grade polish for break / weak / guard presentation
+
+### 3. Final 04–11 balancing
+
+Still intentionally postponed.
+
+Do not do this yet.
+
+Correct order remains:
+
+1. keep current boss identities valid
+2. continue readability / presentation work
+3. then perform final full-ladder balancing closer to release
 
 ---
 
@@ -227,3 +306,4 @@ For every future boss level:
 - reject content that feels unclear even if technically correct
 - evaluate geometry, control feel, and hit-zone readability alongside raw rule tuning
 - keep new assets in canonical folders from the start
+- do not confuse temporary primitive readability with final presentation quality

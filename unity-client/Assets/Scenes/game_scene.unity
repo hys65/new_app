@@ -3588,17 +3588,17 @@ MonoBehaviour:
   telegraphTorsoLocalPos: {x: 0, y: 0, z: -0.02}
   telegraphTorsoLocalRot: {x: -4, y: 0, z: 0}
   telegraphHeadLocalRot: {x: 4, y: 0, z: 0}
-  telegraphLeftArmLocalRot: {x: -6, y: 0, z: 8}
-  telegraphRightArmLocalRot: {x: -6, y: 0, z: -8}
-  telegraphGuardLocalPos: {x: 0, y: 0.2, z: 0.18}
-  telegraphGuardLocalRot: {x: -6, y: 0, z: 0}
+  telegraphLeftArmLocalRot: {x: -18, y: 0, z: -20}
+  telegraphRightArmLocalRot: {x: -18, y: 0, z: 20}
+  telegraphGuardLocalPos: {x: 0.05, y: 0.12, z: 0.18}
+  telegraphGuardLocalRot: {x: -8, y: -10, z: 10}
   guardTorsoLocalPos: {x: 0, y: 0, z: -0.05}
   guardTorsoLocalRot: {x: -8, y: 0, z: 0}
   guardHeadLocalRot: {x: 8, y: 0, z: 0}
-  guardLeftArmLocalRot: {x: -8, y: 0, z: 12}
-  guardRightArmLocalRot: {x: -8, y: 0, z: -12}
-  guardGuardLocalPos: {x: 0, y: 0.3, z: 0.26}
-  guardGuardLocalRot: {x: -8, y: 0, z: 0}
+  guardLeftArmLocalRot: {x: -28, y: 0, z: -8}
+  guardRightArmLocalRot: {x: -28, y: 0, z: 8}
+  guardGuardLocalPos: {x: 0, y: 0.18, z: 0.26}
+  guardGuardLocalRot: {x: -12, y: 0, z: 8}
   breakTorsoLocalPos: {x: 0, y: 0, z: -0.01}
   breakTorsoLocalRot: {x: 8, y: 0, z: 0}
   breakHeadLocalRot: {x: -10, y: 0, z: 0}
@@ -5105,20 +5105,20 @@ MonoBehaviour:
   idleRightArmLocalRot: {x: 0, y: 0, z: -4}
   idleGuardLocalPos: {x: 0.28, y: 0.05, z: 0.18}
   idleGuardLocalRot: {x: 0, y: -12, z: 8}
-  telegraphTorsoLocalPos: {x: 0, y: 0, z: -0.03}
-  telegraphTorsoLocalRot: {x: -6, y: 0, z: 0}
-  telegraphHeadLocalRot: {x: 6, y: 0, z: 0}
-  telegraphLeftArmLocalRot: {x: -18, y: 0, z: 24}
-  telegraphRightArmLocalRot: {x: -18, y: 0, z: -24}
-  telegraphGuardLocalPos: {x: 0.03, y: 0.14, z: 0.22}
-  telegraphGuardLocalRot: {x: -10, y: -6, z: 10}
-  guardTorsoLocalPos: {x: 0, y: 0, z: -0.06}
-  guardTorsoLocalRot: {x: -10, y: 0, z: 0}
-  guardHeadLocalRot: {x: 10, y: 0, z: 0}
-  guardLeftArmLocalRot: {x: -52, y: 0, z: 8}
-  guardRightArmLocalRot: {x: -52, y: 0, z: -8}
-  guardGuardLocalPos: {x: 0, y: 0.22, z: 0.3}
-  guardGuardLocalRot: {x: -14, y: 0, z: 10}
+  telegraphTorsoLocalPos: {x: 0, y: 0, z: -0.02}
+  telegraphTorsoLocalRot: {x: -4, y: 0, z: 0}
+  telegraphHeadLocalRot: {x: 4, y: 0, z: 0}
+  telegraphLeftArmLocalRot: {x: -18, y: 0, z: -20}
+  telegraphRightArmLocalRot: {x: -18, y: 0, z: 20}
+  telegraphGuardLocalPos: {x: 0.05, y: 0.12, z: 0.18}
+  telegraphGuardLocalRot: {x: -8, y: -10, z: 10}
+  guardTorsoLocalPos: {x: 0, y: 0, z: -0.05}
+  guardTorsoLocalRot: {x: -8, y: 0, z: 0}
+  guardHeadLocalRot: {x: 8, y: 0, z: 0}
+  guardLeftArmLocalRot: {x: -28, y: 0, z: -8}
+  guardRightArmLocalRot: {x: -28, y: 0, z: 8}
+  guardGuardLocalPos: {x: 0, y: 0.18, z: 0.26}
+  guardGuardLocalRot: {x: -12, y: 0, z: 8}
   breakTorsoLocalPos: {x: 0, y: 0, z: -0.01}
   breakTorsoLocalRot: {x: 8, y: 0, z: 0}
   breakHeadLocalRot: {x: -10, y: 0, z: 0}
@@ -5126,10 +5126,10 @@ MonoBehaviour:
   breakRightArmLocalRot: {x: 8, y: 0, z: 55}
   breakGuardLocalPos: {x: 0.2, y: 0.1, z: 0.08}
   breakGuardLocalRot: {x: 18, y: 0, z: 45}
-  weakTorsoLocalRot: {x: -2, y: 0, z: 0}
-  weakHeadLocalRot: {x: 18, y: 0, z: 0}
-  weakLeftArmLocalRot: {x: -6, y: 0, z: -58}
-  weakRightArmLocalRot: {x: -20, y: 0, z: 52}
+  weakTorsoLocalRot: {x: -4, y: 0, z: 0}
+  weakHeadLocalRot: {x: 14, y: 0, z: 0}
+  weakLeftArmLocalRot: {x: -8, y: 0, z: -40}
+  weakRightArmLocalRot: {x: -18, y: 0, z: 40}
   guardVisible: 0
   debugPoseName: Idle
 --- !u!114 &1620351227

@@ -145,34 +145,49 @@ namespace PowerPrank3D.Gameplay
             switch (goal.goalType)
             {
                 case LevelGoalType.HeadHitCount:
-                    SetPlainText(currentBreakdownText, $"Head Hits: {progress} / {target}");
+                    SetPlainText(
+                        currentBreakdownText,
+                        $"Goal: Land Head Hits {progress} / {target}"
+                    );
                     SetPlainText(
                         targetBreakdownText,
-                        $"Breakdown: {gameplayManager.CurrentBreakdownValue} / {gameplayManager.TargetBreakdownValue}"
+                        "Rule: Only successful head hits count"
                     );
                     break;
 
                 case LevelGoalType.SpecificItemHitCount:
                     string itemLabel = GetGoalItemLabel(goal.requiredItemId);
-                    SetPlainText(currentBreakdownText, $"{itemLabel} Hits: {progress} / {target}");
+                    SetPlainText(
+                        currentBreakdownText,
+                        $"Goal: Land {itemLabel} Hits {progress} / {target}"
+                    );
                     SetPlainText(
                         targetBreakdownText,
-                        $"Breakdown: {gameplayManager.CurrentBreakdownValue} / {gameplayManager.TargetBreakdownValue}"
+                        $"Rule: Only {itemLabel} advances this goal"
                     );
                     break;
 
                 case LevelGoalType.UnblockedHitStreak:
-                    SetPlainText(currentBreakdownText, $"Clean Hits: {progress} / {target}");
+                    SetPlainText(
+                        currentBreakdownText,
+                        $"Goal: Chain Clean Hits {progress} / {target}"
+                    );
                     SetPlainText(
                         targetBreakdownText,
-                        $"Blocked Hit = Reset"
+                        "Rule: Any blocked hit resets the streak"
                     );
                     break;
 
                 case LevelGoalType.BreakdownTarget:
                 default:
-                    SetText(currentBreakdownText, "ui_breakdown_current", gameplayManager.CurrentBreakdownValue.ToString());
-                    SetText(targetBreakdownText, "ui_breakdown_target", gameplayManager.TargetBreakdownValue.ToString());
+                    SetPlainText(
+                        currentBreakdownText,
+                        $"Goal: Build Breakdown {gameplayManager.CurrentBreakdownValue} / {gameplayManager.TargetBreakdownValue}"
+                    );
+                    SetPlainText(
+                        targetBreakdownText,
+                        "Rule: Reach the breakdown target before time runs out"
+                    );
                     break;
             }
         }
@@ -337,17 +352,35 @@ namespace PowerPrank3D.Gameplay
 
         private string BuildGoalSummaryText()
         {
-            if (levelGoalController != null)
+            if (levelGoalController == null || levelGoalController.CurrentGoal == null)
             {
-                return levelGoalController.GetGoalSummaryText();
+                if (gameplayManager == null)
+                {
+                    return string.Empty;
+                }
+
+                return $"Goal: Build Breakdown {gameplayManager.CurrentBreakdownValue} / {gameplayManager.TargetBreakdownValue}";
             }
 
-            if (gameplayManager == null)
-            {
-                return string.Empty;
-            }
+            LevelGoalDefinition goal = levelGoalController.CurrentGoal;
+            int progress = levelGoalController.CurrentProgress;
+            int target = Mathf.Max(1, goal.targetCount);
 
-            return $"{GetText("ui_goal_progress")}: {gameplayManager.CurrentBreakdownValue} / {gameplayManager.TargetBreakdownValue}";
+            switch (goal.goalType)
+            {
+                case LevelGoalType.HeadHitCount:
+                    return $"Goal: Land Head Hits {progress} / {target}";
+
+                case LevelGoalType.SpecificItemHitCount:
+                    return $"Goal: Land {GetGoalItemLabel(goal.requiredItemId)} Hits {progress} / {target}";
+
+                case LevelGoalType.UnblockedHitStreak:
+                    return $"Goal: Chain Clean Hits {progress} / {target}";
+
+                case LevelGoalType.BreakdownTarget:
+                default:
+                    return $"Goal: Build Breakdown {gameplayManager.CurrentBreakdownValue} / {gameplayManager.TargetBreakdownValue}";
+            }
         }
 
         private void OnLocaleChanged(string _)

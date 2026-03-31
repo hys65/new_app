@@ -2,7 +2,7 @@
 
 ## Overview
 
-Enemy behavior is now fully data-driven and runtime-routed.
+Enemy behavior is fully data-driven and runtime-routed.
 
 Behavior definition stack:
 
@@ -30,7 +30,9 @@ This remains the project’s core enemy architecture rule.
 
 ---
 
-## Enemy Defense Controller
+## Main Runtime Controllers
+
+### EnemyDefenseController
 
 `EnemyDefenseController` is the main gameplay gate for:
 
@@ -40,6 +42,59 @@ This remains the project’s core enemy architecture rule.
 - block / break / weak evaluation
 - cooldown handling
 - defense-state-driven hit resolution
+
+### EnemyDefenseStateWindowController
+
+`EnemyDefenseStateWindowController` owns authored defense phases.
+
+Current runtime states:
+
+- `None`
+- `Telegraph`
+- `Active`
+- `Recover`
+
+It also controls:
+
+- whether defense logic is currently active
+- whether a weak window is currently open
+- how long each phase lasts
+- whether cycles are AI-driven, auto-cycled, or otherwise authored by profile
+
+### EnemyAiLayerController
+
+`EnemyAiLayerController` is the current behavior-reading layer.
+
+It does not replace the authored defense pattern.
+
+Instead, it influences **when** a defense cycle should begin based on:
+
+- observed hit cadence
+- current threat
+- reaction stage
+- recent head-hit pressure
+- recover lock state
+
+### EnemyDefenseVisualLayerController
+
+`EnemyDefenseVisualLayerController` is the current presentation-side bridge between defense result and readable combat feedback.
+
+It receives and differentiates:
+
+- `GUARD`
+- `BLOCK`
+- `BREAK`
+- `WEAK`
+
+This is now an important part of combat readability work.
+
+### EnemyVisualProxyController
+
+`EnemyVisualProxyController` is a lightweight proxy-pose layer for primitive enemy rigs.
+
+It can support baseline readability, but it is **not** a reliable final-art posing solution on the current primitive enemy setup.
+
+This limitation is now accepted and documented.
 
 ---
 
@@ -59,7 +114,7 @@ For correct boss behavior, blocked evaluation now reflects:
 
 ## Why This Changed
 
-A pure `defenseActive` boolean produced two bad edge cases:
+A pure `defenseActive` boolean produced two bad edge cases.
 
 ### Edge Case 1
 
@@ -100,7 +155,7 @@ If the current hit activates defense and the hit type should be blockable, that 
 
 Purpose:
 
-- prevents “GUARD + successful score” on the same impact
+- prevents `GUARD + successful score` on the same impact
 - keeps boss-rule levels fair and readable
 
 ---
@@ -116,7 +171,7 @@ Never allow:
 - obvious defense posture
 - but permissive scoring result
 
-Slightly strict is acceptable.
+Slightly strict is acceptable.  
 Visibly blocked but logically open is not.
 
 ---
@@ -125,11 +180,13 @@ Visibly blocked but logically open is not.
 
 Weak-window head bypass still exists for weak-window style bosses.
 
-Important constraint:
+Important constraints:
 
 - weak-window bypass should only apply when defense is truly active and the state window explicitly exposes weakness
 - zero-mistake rule content must not accidentally inherit permissive scoring from unrelated weak-window behavior
 - later head-focused bosses must still rely on explicit authored window logic rather than vague visual timing
+
+Weak window is now treated as a readable combat-language event, not merely a hidden internal multiplier state.
 
 ---
 
@@ -189,12 +246,104 @@ Level 11 proved an important production lesson:
 A new boss identity does not require a new goal type if the current systems can produce a genuinely different player demand.
 
 What mattered was not merely raising target values.
+
 What mattered was establishing:
 
 - stronger defensive presence
 - a meaningful later scoring opportunity
 - head-focused precision pressure
 - a readable identity distinct from Levels 06, 09, and 10
+
+### Important runtime note
+
+Level 11 intentionally has **no break path** in its defense pattern.
+
+This means:
+
+- `BREAK` is not part of Level 11’s intended combat language
+- Level 11 should not be used to judge break readability
+- break readability sampling belongs on a boss with real break-item logic, such as Level 04
+
+---
+
+## Combat Result Language
+
+Enemy combat now has a usable first-pass readable split between:
+
+- normal successful hit
+- `BLOCK`
+- `WEAK`
+- `BREAK`
+
+### BLOCK
+
+Target presentation meaning:
+
+- defended
+- hard
+- short
+- stable
+- clearly “you did not convert this hit”
+
+### WEAK
+
+Target presentation meaning:
+
+- exposed moment
+- scoring opportunity
+- rewarded timing
+- clearly distinct from both block and break
+
+### BREAK
+
+Target presentation meaning:
+
+- defense opened
+- posture lost
+- line broken
+- more unstable and more extended than block
+
+### Normal successful hit
+
+Target presentation meaning:
+
+- basic scoring success
+- should remain readable
+- should not visually overpower special result states
+
+This result split is currently accepted at a prototype readability level.
+
+It is not yet treated as final art polish.
+
+---
+
+## Enemy Visual Presentation Boundary
+
+Current project status has now validated an important production boundary.
+
+### What the proxy visual layer is good for
+
+- baseline telegraph readability
+- basic guard / weak / break differentiation
+- lightweight pose-state support on primitive enemies
+
+### What the proxy visual layer is **not** good for
+
+- final hero-quality defensive posing
+- reliable “cover the face” arm choreography on the current primitive rig
+- high-confidence polish under awkward local pivot directions
+
+### Current production rule
+
+Do not waste time overfitting proxy arm rotations on the current primitive enemy setup.
+
+If primitive pivot behavior fights intended defensive posing:
+
+- stop forcing it
+- keep baseline readability
+- defer final pose polish to later art/presentation work
+
+This is now an accepted rule, not a temporary guess.
 
 ---
 
@@ -205,6 +354,7 @@ For future boss authoring:
 - first define the boss demand
 - then author the behavior through the existing preset chain
 - then validate runtime routing
+- then validate readable player-facing combat language
 - only after that consider final balancing
 
 Do not solve weak identity by immediately proposing:
@@ -213,3 +363,51 @@ Do not solve weak identity by immediately proposing:
 - new runtime injection paths
 - new goal-type churn
 - scene-only manual overrides
+
+### Also do not solve primitive visual awkwardness by over-tuning temporary proxy poses.
+
+That is low-value work unless the project has already entered final art polish.
+
+---
+
+## Current Accepted Enemy-System Lessons
+
+### Runtime / Data lessons
+
+- runtime preset application is authoritative
+- roster routing and slot routing are part of actual behavior setup, not optional metadata
+- GitHub asset verification remains necessary when inspector edits matter
+
+### Gameplay lessons
+
+- defense logic and hit resolution must stay tightly coupled
+- blocked evaluation must remain stricter than misleading visuals
+- goal logic must consume final hit resolution, not raw collision optimism
+
+### Presentation lessons
+
+- weak-window readability matters for real encounter identity
+- result language (`BLOCK / WEAK / BREAK / normal hit`) should be readable without relying on logic knowledge
+- primitive enemy visual rigs support baseline readability, not final presentation quality
+
+---
+
+## Current Enemy-System Boundary
+
+The enemy system is currently considered strong enough for:
+
+- boss identity authoring
+- runtime routing
+- defense-rule differentiation
+- goal-aware encounter design
+- first-pass combat readability work
+
+It is not currently being expanded toward:
+
+- new enemy architecture branches
+- new goal-type-driven enemy rewrites
+- final art-grade defensive posing systems
+
+That boundary should remain firm until later presentation work justifies reopening it.
+
+---

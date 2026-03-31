@@ -18,18 +18,18 @@ MonoBehaviour:
   guardBlendIn: 10
   guardBlendOut: 8
   guardHoldTime: 0.45
-  blockBodyKickRotation: {x: -10, y: 16, z: 0}
-  blockBodyKickPosition: {x: 0, y: 0.02, z: -0.1}
-  blockHeadKickRotation: {x: 6, y: 8, z: 0}
-  blockRecoverSpeed: 14
-  blockImpactStrength: 1
-  breakBodyRotation: {x: 10, y: 14, z: -12}
-  breakBodyPosition: {x: 0, y: 0.02, z: -0.1}
-  breakHeadRotation: {x: -16, y: 20, z: 0}
-  breakHoldTime: 0.55
-  breakRecoverSpeed: 6
-  breakNoiseAmplitude: 2.5
-  breakNoiseSpeed: 10
+  blockBodyKickRotation: {x: -14, y: 22, z: 0}
+  blockBodyKickPosition: {x: 0, y: 0.01, z: -0.07}
+  blockHeadKickRotation: {x: 10, y: 12, z: 0}
+  blockRecoverSpeed: 20
+  blockImpactStrength: 1.15
+  breakBodyRotation: {x: 22, y: -30, z: 16}
+  breakBodyPosition: {x: 0, y: 0.05, z: -0.16}
+  breakHeadRotation: {x: -24, y: 30, z: 0}
+  breakHoldTime: 0.72
+  breakRecoverSpeed: 4.5
+  breakNoiseAmplitude: 4
+  breakNoiseSpeed: 11
   weakBodyRotation: {x: -1, y: 10, z: 0}
   weakHeadRotation: {x: -20, y: 26, z: 0}
   weakHoldTime: 0.42

@@ -1,249 +1,333 @@
-# AI CONTEXT
+# AI_CONTEXT.md
 
 ## Project Identity
 
-Project name: **Power Prank 3D**
+**Power Prank 3D**
 
-Project type:
+Unity 6.3 LTS
 
-- Unity 6.3 LTS prototype
-- single-scene runtime with multi-level content progression
-- fixed-camera prank-throwing boss game
+Single-scene prototype evolved into a structured multi-level boss-reference project.
 
-Core fantasy:
+The project is no longer in early core-loop construction.
 
-- throw prank items
-- build breakdown pressure
-- read defense timing
-- react to boss identity
-- clear goal-driven encounters
+The project is now in a later prototype phase where:
+
+- core systems already exist
+- boss identities through Level 11 already exist
+- runtime routing already exists
+- current work is focused on readability, presentation clarity, and production-safe continuation
 
 ---
 
-## Current Stage
+## Current Repository Truth
 
-The project is now in this stage:
+When docs and code differ, treat **actual current code and runtime structure** as source of truth.
 
-**cleaned data-driven boss-reference prototype with validated Level 11 closure**
+Do not rely on old chat summaries.
 
-Already implemented and runtime-validated:
+Important confirmed runtime stack:
+
+- `GameplayManager`
+- `LevelEncounterController`
+- `LevelProgressionController`
+- `LevelGoalController`
+- `EnemySwitchingManager`
+- `EnemyRuntimePresetController`
+- `EnemyPresetApplicator`
+- `EnemyDefenseController`
+- `EnemyDefenseStateWindowController`
+- `EnemyAiLayerController`
+- `EnemyDefenseVisualLayerController`
+- `EnemyVisualProxyController`
+
+Important confirmed goal types:
+
+- `BreakdownTarget`
+- `HeadHitCount`
+- `SpecificItemHitCount`
+- `UnblockedHitStreak`
+
+Do not invent new goal types casually.
+
+---
+
+## Current Completed Systems
+
+The following are already implemented and treated as real completed project ground:
+
+### Core Gameplay
 
 - core throw / hit / breakdown gameplay loop
+- per-item throw cooldown pacing
+- projectile hit resolution through final defense evaluation
+- combo support
+- goal-aware hit routing
+
+### Enemy Systems
+
 - enemy reaction layer
 - enemy defense visual layer
 - enemy archetype system
 - enemy AI layer
-- enemy switching / roster / level selection
+- enemy switching system
+- roster / level enemy selection
+- preset-driven runtime behavior routing
+
+### Level Systems
+
 - level encounter configuration
-- level progression / runtime level advance
+- level progression / multi-level flow
+- runtime level advance
 - victory choice flow
 - result panel polish
 - level goal variety
-- goal HUD readability
-- boss preset override debugging pass
-- combat pacing / per-item throw cooldown pass
-- Level 10 boss identity closure
-- Level 11 boss identity closure
 
-Validated boss-reference ladder:
+### Repository / Production Discipline
 
-- Level 04 = Meeting Tyrant briefcase boss
-- Level 05 = Narcissist Manager sunglasses boss
-- Level 06 = Meeting Tyrant weak-window boss
-- Level 07 = Narcissist Manager precision paint boss
-- Level 08 = Zero-Mistake Boss
-- Level 09 = Narcissist Manager Face Guard Boss
-- Level 10 = Adaptive Shutdown Boss
-- Level 11 = Head Hunter Boss
+- canonical asset-layout cleanup
+- canonical script-folder cleanup
+- runtime-first debugging discipline
+- GitHub verification habit for important serialized values
 
 ---
 
-## Canonical Repository Structure
+## Current Boss Ladder Status
 
-### Runtime scripts
+Levels 01–03 remain early teaching levels.
 
-All gameplay scripts now live under:
+Levels 04–11 are the validated boss-reference ladder.
 
-unity-client/Assets/Scripts/gameplay/
+### Level 04
+Meeting Tyrant briefcase boss
 
-- Core/
-- Data/
-- Enemy/
-- UI/
-- VFX/
+Meaning:
+- deterministic hard defense
+- explicit break-route learning
 
-Important rule:
+### Level 05
+Narcissist Manager sunglasses boss
 
-- there is no separate lowercase `gameplay/enemy/` runtime path anymore
-- `gameplay/Enemy/` is the only valid enemy-runtime script folder
+Meaning:
+- face-guard identity
+- guarded face route is hostile to the wrong item choice
 
-### Gameplay data assets
+### Level 06
+Meeting Tyrant weak-window boss
 
-Canonical data asset roots:
+Meaning:
+- short opening exploitation
+- window-timing pressure
 
-unity-client/Assets/Data/Enemy/
+### Level 07
+Narcissist Manager precision paint boss
 
-- AI/
-- Archetypes/
-- Defense/
-- Patterns/
-- StateWindows/
-- Visuals/
-- Presets/
-- Rosters/
+Meaning:
+- specific item precision requirement
 
-unity-client/Assets/Data/Levels/
+Validated rule:
+- `SpecificItemHitCount`
+- required item = `item_paint_ball`
+- target count = `10`
+- round duration = `32`
 
-- Encounters/
-- EnemySelections/
-- Progression/
+### Level 08
+Zero-Mistake Boss
 
-### Gameplay item assets
+Meaning:
+- blocked hit resets progress
+- timing discipline and clean conversion
 
-Gameplay items remain here:
+Validated rule:
+- `UnblockedHitStreak`
+- target count = `6`
+- round duration = `32`
 
-unity-client/Assets/ScriptableObjects/GameplayItems/
+### Level 09
+Narcissist Manager Face Guard Boss
 
-Important rule:
+Meaning:
+- head is intentionally low-value
+- body is the main reliable route
+- pressure comes from hit-zone judgment
 
-- enemy data must not be reintroduced into `Assets/ScriptableObjects/Enemy/`
-- enemy presets / patterns / AI / archetypes / level configs must not be left in `Assets/` root
+Validated rule:
+- `BreakdownTarget`
+- target breakdown = `180`
+- round duration = `34`
+
+### Level 10
+Adaptive Shutdown Boss
+
+Meaning:
+- predictable rhythm is punished
+- mixed rhythm improves efficiency
+- pressure comes from anti-predictability
+
+Validated runtime result:
+- fixed rhythm gets blocked materially more often than mixed rhythm
+
+### Level 11
+Head Hunter Boss
+
+Meaning:
+- later scoring opportunity
+- head-focused conversion pressure
+- distinct from Level 06 weak-window pressure
+- distinct from Level 09 body-route pressure
+- distinct from Level 10 anti-predictability pressure
+
+Validated rule:
+- `HeadHitCount`
+- target count = `7`
+- target breakdown = `160`
+- round duration = `38`
+
+Important Level 11 truth:
+- the pattern intentionally has **no break path**
+- do not use Level 11 to sample `BREAK` readability
 
 ---
 
-## Current Runtime Model
+## Runtime Authority Rule
 
-The runtime model is:
-
-- multiple enemy roots may exist in one scene
-- only one enemy is active at a time
-- progression decides which encounter is applied
-- encounter decides which enemy selection and goal data are active
-- runtime preset application decides final enemy behavior
-
-This is not:
-
-- a procedural encounter generator
-- a multi-enemy combat sandbox
-- a scene-manual boss tuning workflow
-
-It is:
-
-- a reusable single-scene multi-level boss-content prototype
-
----
-
-## Mandatory Architecture Rules
-
-### Runtime authority
-
-Runtime preset application remains authoritative.
-
-Do not treat pre-Play inspector values as final truth when preset routing is active.
-
-Boss-specific behavior must be authored through:
+Boss behavior must be authored through:
 
 **pattern → state window profile → preset → roster entry → level selection → runtime slot routing**
 
-### Canonical asset naming
+Do not trust scene-only manual tuning as final boss behavior.
 
-Use the current naming families only:
-
-- `enemy_ai_*`
-- `enemy_archetype_*`
-- `defense_pattern_*`
-- `defense_state_window_*`
-- `enemy_preset_*`
-- `level_*_encounter_config`
-- `level_enemy_selection_level_*`
-
-Important clarification:
-
-Some runtime script class names and some legacy `CreateAssetMenu` defaults may still use older suffix families such as `*ProfileData` or `*_data`.
-If docs and auto-generated default filenames differ, trust the actual repository naming already in active use.
-
-Do not create duplicate parallel naming families inside active content.
-
-### Scene startup
-
-`LevelEnemyController` is legacy.
-
-Do not build new work around it if `LevelEnemySelectionController` and progression are active in the same scene.
+Runtime preset application is authoritative.
 
 ---
 
-## Current Production Direction
+## Current Readability / Presentation Status
 
-Levels 01–03 are the teaching block.
+The project has already moved into:
 
-Levels 04–11 are the validated boss-reference block.
+**Combat Readability / Boss Presentation Pass**
 
-Level 10 is closed as a valid anti-predictability boss identity.
+This pass is in progress and has already advanced materially.
 
-Level 11 is closed as a valid late-window head-pressure boss identity.
+### Already achieved
 
-Current next design / production target:
+- weak-window readability improved to an acceptable gameplay level
+- HUD goal language rewritten from raw counters to rule-facing text
+- result panel goal summary aligned with the same rule language
+- block / weak / break / normal-hit readability inspected through runtime sampling
+- block and break differentiation pushed further apart
+- result panel hierarchy reviewed and accepted for current prototype phase
 
-- strengthen combat readability and boss presentation
-- improve the clarity of telegraph / active / weak / block / break / success states
-- preserve current architecture while polishing the combat language
-- postpone full release balancing until later presentation work is in place
+### Current readable result-language split
 
----
+Prototype-level readable split now exists between:
 
-## Level 10 Identity Meaning
+- normal successful hit
+- `BLOCK`
+- `WEAK`
+- `BREAK`
 
-Level 10 establishes a new demand:
+This is accepted as prototype readability success.
 
-**the player must avoid becoming rhythm-readable**
-
-This encounter is defined by:
-
-- predictable rhythm getting blocked more often
-- varied rhythm creating reliable counterplay
-- pressure coming from timing adaptation rather than item restriction
-- pressure coming from timing adaptation rather than hit-zone judgment
-
-This matters because it expands the boss ladder without adding new core systems.
-
-Level 10 is not:
-
-- a weak-window repeat
-- a specific-item repeat
-- a zero-mistake repeat
-- a face/body judgment repeat
-
-It is:
-
-- the first validated anti-predictability boss identity in the ladder
+It is **not** final art polish.
 
 ---
 
-## Level 11 Identity Meaning
+## Important Accepted Limitations
 
-Level 11 establishes a new demand:
+### 1. Primitive proxy-arm posing is limited
 
-**the player must respect a later scoring window and convert with head-focused precision**
+The current primitive enemy rig and local pivot directions make proxy-arm overfitting low-value.
 
-This encounter is defined by:
+Important rule:
 
-- stronger defensive presence than a generic boss
-- a meaningful late scoring opportunity
-- pressure coming from waiting and converting correctly
-- pressure not primarily coming from item restriction
-- pressure not primarily coming from the Level 09 head/body value split
-- pressure not primarily coming from the Level 10 anti-predictability test
+- do not keep wasting time forcing hero-quality “cover the face” guard posing on the current primitive setup
+- use the proxy layer for baseline readability only
+- defer final art-grade defensive pose polish to later art/presentation work
 
-This matters because it expands the boss ladder again without adding a new system.
+### 2. Head stain visuals are still imperfect
 
-Level 11 is not:
+Especially on current sphere-head setup.
 
-- a weak-window repeat of Level 06
-- a specific-item repeat of Level 07
-- a zero-mistake repeat of Level 08
-- a face/body judgment repeat of Level 09
-- an anti-predictability repeat of Level 10
+Accepted rule:
 
-It is:
+- do not reopen deep stain-system work unless it becomes a true blocker
 
-- the validated late-window head-pressure boss identity in the ladder
+### 3. Full release balancing is intentionally postponed
+
+Do not treat the current stage as final release-balance tuning.
+
+Correct order remains:
+
+1. keep boss identities valid
+2. continue readability / presentation work
+3. do final 04–11 balancing later, closer to release
+
+---
+
+## Current Gameplay Presentation Rules
+
+HUD should now explain the encounter rule, not just display counters.
+
+Current desired language style:
+
+### BreakdownTarget
+- Goal: Build Breakdown X / Y
+- Rule: Reach the breakdown target before time runs out
+
+### HeadHitCount
+- Goal: Land Head Hits X / Y
+- Rule: Only successful head hits count
+
+### SpecificItemHitCount
+- Goal: Land [Item] Hits X / Y
+- Rule: Only [Item] advances this goal
+
+### UnblockedHitStreak
+- Goal: Chain Clean Hits X / Y
+- Rule: Any blocked hit resets the streak
+
+Result panel goal summary should mirror the same rule family.
+
+Do not let live HUD and result review sound like different systems.
+
+---
+
+## Current Engineering / Design Discipline
+
+When continuing work:
+
+- validate runtime behavior, not just inspector assumptions
+- validate GitHub asset contents after important serialized changes
+- prefer content authoring through current data systems before proposing code churn
+- reject fake complexity when existing systems already support the required boss demand
+- evaluate readability alongside logic correctness
+- stop low-value visual micro-tuning when it starts fighting primitive rig limitations
+
+---
+
+## What Not To Reopen Casually
+
+Do not casually reopen:
+
+- finished boss identity levels
+- new goal-type invention
+- deep stain-system work
+- full release balancing
+- proxy-arm overfitting for primitive rigs
+- architecture churn just because a boss feels imperfect before final art polish
+
+Only reopen these if actual runtime evidence proves a real blocker.
+
+---
+
+## Best Next-Step Direction
+
+If continuing from this project state, the safest direction is:
+
+- continue the broader `Combat Readability / Boss Presentation Pass`
+- keep improvements focused on decision clarity
+- preserve the current boss ladder
+- avoid premature final balancing
+- avoid low-value micro-polish on temporary primitive visuals
+
+This is the correct continuation line unless newer runtime evidence proves otherwise.

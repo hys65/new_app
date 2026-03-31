@@ -179,6 +179,44 @@ Accepted production status:
 
 ---
 
+## Combat Readability / Boss Presentation Pass Status
+
+This pass is now actively in progress.
+
+### Completed in this pass
+
+- weak-window readability improved to a currently acceptable gameplay level
+- goal HUD language was rewritten from raw numeric status into rule-facing encounter language
+- result panel goal summary now mirrors HUD goal language
+- block / weak / break / normal hit readability was inspected through runtime sampling
+- block and break visual differentiation was pushed further apart through defense visual profile tuning
+- result panel layout hierarchy was reviewed and accepted for the current prototype phase
+
+### Current readable combat-language status
+
+The project now has a usable first-pass readability split between:
+
+- normal successful hit
+- `BLOCK`
+- `WEAK`
+- `BREAK`
+
+This is treated as a prototype-level readability success, not final presentation polish.
+
+### Important accepted limitation during this pass
+
+Proxy-arm experiments on the primitive enemy model exposed pivot-direction limitations.
+
+Current conclusion:
+
+- the primitive proxy pose layer is acceptable for baseline readability
+- it is **not** a reliable place to force final “cover the face” hero-quality defensive posing
+- final art-grade guard-pose polish should be postponed until later art/presentation work
+
+Do not waste time overfitting arm rotations on the current primitive setup.
+
+---
+
 ## Canonical Repository Layout
 
 ### Scripts
@@ -264,6 +302,7 @@ Do not rely on scene-only edits for final boss behavior.
 - a hit-zone judgment encounter requires clear visual separation between head and body
 - primitive-body enemies can invalidate good rule design if the silhouette does not support the intended aiming choice
 - for current sphere-head enemies, head stain visuals are not reliable enough to justify deep polish right now
+- primitive proxy-arm posing has limited value beyond baseline readability on the current model setup
 
 ### Level 10 Lessons
 
@@ -277,6 +316,14 @@ Do not rely on scene-only edits for final boss behavior.
 - a later scoring window can become its own boss demand if the defensive presence is strong enough
 - do not confuse “more throws required” with “new boss identity”
 - first establish the boss demand, then leave final release balancing for later
+- the Level 11 pattern intentionally has no break path and therefore should not be used to evaluate `BREAK` readability
+
+### Presentation Lessons
+
+- HUD rule language must explain encounter demand, not just expose counters
+- result panel rule language should match live HUD rule language
+- readability passes should prioritize decision clarity over premature final-art polish
+- when primitive rig behavior fights intended posing, stop forcing it and move on to higher-value readability tasks
 
 ---
 
@@ -284,16 +331,22 @@ Do not rely on scene-only edits for final boss behavior.
 
 **Combat Readability / Boss Presentation Pass**
 
-Direction:
+### Already advanced
 
-- improve telegraph clarity
-- improve active defense readability
-- improve weak-window readability
-- improve block / break / success readability
-- preserve current data-driven architecture
-- avoid unnecessary system churn
+- clearer goal HUD rule language
+- clearer result panel goal summary language
+- basic block / break / weak differentiation pass
+- result panel hierarchy review
+
+### Still pending inside this milestone
+
+- broader boss-presentation consistency across more encounters
+- later art-side polish for stronger visual identity
+- final hero-quality defensive posing only when art-side quality justifies reopening it
 
 Important release-planning note:
 
-Do not perform final 04–11 release balancing yet.
+Do not perform final 04–11 release balancing yet.  
 That full-ladder balancing pass should happen later, after more presentation / art-side clarity work is in place.
+
+---
