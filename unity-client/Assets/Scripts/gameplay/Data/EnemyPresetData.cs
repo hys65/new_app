@@ -16,5 +16,6 @@ namespace PowerPrank3D.Gameplay
         public EnemyDefensePatternData defensePattern;
         public EnemyAiProfileData aiProfile;
         public EnemyDefenseStateWindowProfileData defenseStateWindowProfile;
+        public EnemyDefenseVisualProfileData defenseVisualProfile;
     }
 }

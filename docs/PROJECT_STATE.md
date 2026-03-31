@@ -31,6 +31,8 @@ The following systems are implemented and runtime-validated:
 - Boss Preset Override Debugging Pass
 - Enemy gameplay hitbox structure repair
 - Enemy stain attachment repair
+- preset-driven defense visual profile application
+- boss-level defense visual profile asset authoring started and bound into active presets
 
 ### Level Architecture
 
@@ -46,6 +48,7 @@ The following systems are implemented and runtime-validated:
 - Canonical asset-layout cleanup
 - Canonical script-folder cleanup
 - Current boss-ladder documentation closure through Level 11
+- Runtime asset-route verification for important serialized preset fields
 
 ---
 
@@ -190,7 +193,9 @@ This pass is now actively in progress.
 - result panel goal summary now mirrors HUD goal language
 - block / weak / break / normal hit readability was inspected through runtime sampling
 - block and break visual differentiation was pushed further apart through defense visual profile tuning
-- result panel layout hierarchy was reviewed and accepted for the current prototype phase
+- preset-driven defense visual profile application was added to runtime preset routing
+- boss-level defense visual profile assets were created and bound into active boss presets
+- play-mode inspection confirmed active runtime enemies receive the expected preset and visual profile pairing
 
 ### Current readable combat-language status
 
@@ -214,6 +219,40 @@ Current conclusion:
 - final art-grade guard-pose polish should be postponed until later art/presentation work
 
 Do not waste time overfitting arm rotations on the current primitive setup.
+
+---
+
+## Defense Visual Authoring Status
+
+Defense visual authoring is now part of the preset stack.
+
+Current preset identity includes:
+
+- behavior references
+- timing references
+- visual presentation references
+
+Specifically, `EnemyPresetData` now contains:
+
+- `EnemyArchetypeData`
+- `EnemyDefensePatternData`
+- `EnemyAiProfileData`
+- `EnemyDefenseStateWindowProfileData`
+- `EnemyDefenseVisualProfileData`
+
+`EnemyPresetApplicator` now applies the defense visual profile into:
+
+- `EnemyDefenseVisualLayerController`
+
+This is now treated as real project architecture, not a temporary scene convenience.
+
+### Current authoring rule
+
+Boss presentation should be authored through:
+
+**pattern → state window profile → visual profile → preset → roster entry → level selection → runtime slot routing**
+
+Scene-only visual profile edits are not authoritative boss configuration.
 
 ---
 
@@ -266,7 +305,7 @@ Repository cleanliness rule:
 
 Runtime preset application remains authoritative.
 
-Boss-specific behavior must be authored through:
+Boss-specific behavior and visual presentation must be authored through:
 
 **pattern → state window profile → preset → roster entry → level selection → runtime slot routing**
 
@@ -281,6 +320,7 @@ Do not rely on scene-only edits for final boss behavior.
 - wrong `recommendedSlotId` can make a valid boss appear missing at runtime
 - Unity Inspector changes are not always immediately serialized to disk
 - when asset values matter, always verify actual GitHub file contents after push
+- runtime play-mode inspection is required for validating applied presets and visual profiles
 
 ### Combat / Goal Lessons
 
@@ -323,6 +363,7 @@ Do not rely on scene-only edits for final boss behavior.
 - HUD rule language must explain encounter demand, not just expose counters
 - result panel rule language should match live HUD rule language
 - readability passes should prioritize decision clarity over premature final-art polish
+- defense visual profiles should be owned by presets, not scene leftovers
 - when primitive rig behavior fights intended posing, stop forcing it and move on to higher-value readability tasks
 
 ---
@@ -337,6 +378,8 @@ Do not rely on scene-only edits for final boss behavior.
 - clearer result panel goal summary language
 - basic block / break / weak differentiation pass
 - result panel hierarchy review
+- boss-level defense visual profile ownership inside presets
+- runtime verification that active enemies receive correct preset + visual profile pairings
 
 ### Still pending inside this milestone
 

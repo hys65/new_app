@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74d25fc9b96470345b7a28c6d7c2ed15, type: 3}
+  m_Name: defense_visual_narcissist_manager_head_hunter_boss
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyDefenseVisualProfileData
+  guardBodyRotation: {x: 0, y: 10, z: -6}
+  guardBodyPosition: {x: 0, y: 0, z: -0.07}
+  guardHeadRotation: {x: 11, y: -12, z: 0}
+  guardBlendIn: 11
+  guardBlendOut: 8
+  guardHoldTime: 0.36
+  blockBodyKickRotation: {x: -8, y: 15, z: 0}
+  blockBodyKickPosition: {x: 0, y: 0.02, z: -0.09}
+  blockHeadKickRotation: {x: 7, y: 9, z: 0}
+  blockRecoverSpeed: 13
+  blockImpactStrength: 1
+  breakBodyRotation: {x: 14, y: -16, z: 8}
+  breakBodyPosition: {x: 0, y: 0.03, z: -0.1}
+  breakHeadRotation: {x: -12, y: 18, z: 0}
+  breakHoldTime: 0.46
+  breakRecoverSpeed: 6.8
+  breakNoiseAmplitude: 1.9
+  breakNoiseSpeed: 10
+  weakBodyRotation: {x: -2, y: 5, z: 0}
+  weakHeadRotation: {x: -16, y: 20, z: 0}
+  weakHoldTime: 0.48
+  weakRecoverSpeed: 8
+  bodyMotionMultiplier: 1
+  headMotionMultiplier: 1.12
+  telegraphBodyRotation: {x: -2, y: 8, z: -4}
+  telegraphBodyPosition: {x: 0, y: 0, z: -0.028}
+  telegraphHeadRotation: {x: 9, y: -7, z: 0}
+  activeBodyRotation: {x: 1, y: 13, z: -6}
+  activeBodyPosition: {x: 0, y: 0, z: -0.065}
+  activeHeadRotation: {x: 13, y: -14, z: 0}
+  recoverBodyRotation: {x: -4, y: 4, z: 2}
+  recoverBodyPosition: {x: 0, y: 0, z: -0.02}
+  recoverHeadRotation: {x: -7, y: 6, z: 0}
+  stateWindowBlendSpeed: 8.5

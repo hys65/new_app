@@ -13,6 +13,7 @@ It is now a structured boss-reference game flow with:
 - runtime enemy routing
 - runtime level progression
 - player-facing rule language in HUD and result flow
+- preset-authored defense visual presentation
 
 The core architectural principle is:
 
@@ -265,6 +266,7 @@ Bundles together:
 - defense pattern
 - AI profile
 - defense state window profile
+- defense visual profile
 
 #### `EnemyRosterData`
 Adds:
@@ -288,6 +290,44 @@ Pushes preset references into runtime controllers.
 This chain is authoritative.
 
 Do not rely on scene-only edits for final boss behavior.
+
+---
+
+## Defense Visual Presentation as Architecture
+
+Defense visual presentation is now part of real authored runtime architecture.
+
+This is no longer only a scene-level style setting.
+
+### Current rule
+
+`EnemyPresetData` now includes:
+
+- `EnemyDefenseVisualProfileData defenseVisualProfile`
+
+`EnemyPresetApplicator` now applies that profile into:
+
+- `EnemyDefenseVisualLayerController`
+
+### Architectural meaning
+
+Combat readability presentation is now authored through the same preset chain as defense behavior.
+
+That means boss identity is no longer defined only by:
+
+- defense pattern
+- AI profile
+- state window profile
+
+It is also defined by:
+
+- defense visual profile
+
+### Production consequence
+
+Do not author boss presentation by manually leaving different visual profiles on scene objects and hoping runtime lines up.
+
+Boss presentation must travel through the preset chain.
 
 ---
 
@@ -355,6 +395,7 @@ Responsibilities:
 - separate `BLOCK`, `WEAK`, `BREAK`, and guard-related states
 - apply body/head offsets and timed response layers
 - bridge gameplay result into visible combat language
+- consume the preset-applied defense visual profile at runtime
 
 This component is no longer just “extra juice”.
 
@@ -580,6 +621,7 @@ The current architecture is already strong enough for:
 - multiple goal types
 - boss-specific enemy routing
 - runtime preset application
+- runtime-applied defense visual profiles
 - readable combat-result differentiation
 - HUD / result rule explanation
 
@@ -609,7 +651,8 @@ When extending the project:
 3. verify runtime routing
 4. verify readable player-facing rule language
 5. verify readable combat-result language
-6. only then consider final balance or later art polish
+6. verify readable defense visual identity
+7. only then consider final balance or later art polish
 
 ### Avoid this order
 
@@ -625,7 +668,7 @@ That is the wrong development pattern for this project.
 
 ## Final Summary
 
-The architecture of **Power Prank 3D** is now built around three linked truths:
+The architecture of **Power Prank 3D** is now built around four linked truths:
 
 ### 1. Behavior is authored in data
 Not in scene hacks.
@@ -635,5 +678,8 @@ Not inspector wishful thinking.
 
 ### 3. Rules must be readable to the player
 Not only correct in code.
+
+### 4. Defense visual presentation is now part of preset identity
+Not a leftover scene-side styling accident.
 
 That is the current architectural foundation of the project.

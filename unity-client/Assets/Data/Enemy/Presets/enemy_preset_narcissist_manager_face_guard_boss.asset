@@ -18,3 +18,4 @@ MonoBehaviour:
   defensePattern: {fileID: 11400000, guid: 0de7ebfb3ef32c44eb932d7813856c15, type: 2}
   aiProfile: {fileID: 11400000, guid: fe46a75105614574b8501c8a26c0d56a, type: 2}
   defenseStateWindowProfile: {fileID: 11400000, guid: 8650dc42ad7c62c4a8e9322b0502eacd, type: 2}
+  defenseVisualProfile: {fileID: 11400000, guid: 38e2cde19481c1540887a6d16ec1d5ca, type: 2}

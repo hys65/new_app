@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74d25fc9b96470345b7a28c6d7c2ed15, type: 3}
+  m_Name: defense_visual_narcissist_manager_sunglasses_boss
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyDefenseVisualProfileData
+  guardBodyRotation: {x: 3, y: 18, z: -8}
+  guardBodyPosition: {x: 0, y: 0, z: -0.1}
+  guardHeadRotation: {x: 12, y: -14, z: 0}
+  guardBlendIn: 10
+  guardBlendOut: 8
+  guardHoldTime: 0.45
+  blockBodyKickRotation: {x: -14, y: 22, z: 0}
+  blockBodyKickPosition: {x: 0, y: 0.01, z: -0.07}
+  blockHeadKickRotation: {x: 10, y: 12, z: 0}
+  blockRecoverSpeed: 20
+  blockImpactStrength: 1.15
+  breakBodyRotation: {x: 22, y: -30, z: 16}
+  breakBodyPosition: {x: 0, y: 0.05, z: -0.16}
+  breakHeadRotation: {x: -24, y: 30, z: 0}
+  breakHoldTime: 0.72
+  breakRecoverSpeed: 4.5
+  breakNoiseAmplitude: 4
+  breakNoiseSpeed: 11
+  weakBodyRotation: {x: -1, y: 10, z: 0}
+  weakHeadRotation: {x: -20, y: 26, z: 0}
+  weakHoldTime: 0.42
+  weakRecoverSpeed: 8
+  bodyMotionMultiplier: 1
+  headMotionMultiplier: 1
+  telegraphBodyRotation: {x: 0, y: 12, z: -6}
+  telegraphBodyPosition: {x: 0, y: 0, z: -0.04}
+  telegraphHeadRotation: {x: 8, y: -6, z: 0}
+  activeBodyRotation: {x: 3, y: 22, z: -12}
+  activeBodyPosition: {x: 0, y: 0, z: -0.1}
+  activeHeadRotation: {x: 12, y: -14, z: 0}
+  recoverBodyRotation: {x: -3, y: 4, z: 2}
+  recoverBodyPosition: {x: 0, y: 0, z: -0.02}
+  recoverHeadRotation: {x: -4, y: 3, z: 0}
+  stateWindowBlendSpeed: 11

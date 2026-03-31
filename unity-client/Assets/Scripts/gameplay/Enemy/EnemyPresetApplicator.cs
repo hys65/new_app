@@ -12,6 +12,7 @@ namespace PowerPrank3D.Gameplay
         public EnemyDefenseController defenseController;
         public EnemyAiLayerController aiLayer;
         public EnemyDefenseStateWindowController defenseWindow;
+        public EnemyDefenseVisualLayerController defenseVisualLayer;
 
         [Header("Runtime Debug")]
         [SerializeField] private EnemyPresetData lastAppliedPreset;
@@ -50,6 +51,11 @@ namespace PowerPrank3D.Gameplay
             if (defenseWindow != null)
             {
                 defenseWindow.stateProfile = preset.defenseStateWindowProfile;
+            }
+
+            if (defenseVisualLayer != null)
+            {
+                defenseVisualLayer.ApplyVisualProfile(preset.defenseVisualProfile);
             }
 
             lastAppliedPreset = preset;

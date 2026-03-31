@@ -13,7 +13,7 @@ The project is no longer in early core-loop construction.
 The project is now in a later prototype phase where:
 
 - core systems already exist
-- boss identities through Level 11 already exist
+- boss identities through the current validated ladder already exist
 - runtime routing already exists
 - current work is focused on readability, presentation clarity, and production-safe continuation
 
@@ -72,6 +72,7 @@ The following are already implemented and treated as real completed project grou
 - enemy switching system
 - roster / level enemy selection
 - preset-driven runtime behavior routing
+- preset-driven defense visual profile routing
 
 ### Level Systems
 
@@ -95,7 +96,7 @@ The following are already implemented and treated as real completed project grou
 
 Levels 01–03 remain early teaching levels.
 
-Levels 04–11 are the validated boss-reference ladder.
+Validated boss-reference levels currently include:
 
 ### Level 04
 Meeting Tyrant briefcase boss
@@ -194,9 +195,35 @@ Boss behavior must be authored through:
 
 **pattern → state window profile → preset → roster entry → level selection → runtime slot routing**
 
-Do not trust scene-only manual tuning as final boss behavior.
-
 Runtime preset application is authoritative.
+
+Scene-only manual tuning is not authoritative boss behavior.
+
+---
+
+## Current Defense Visual Authoring Rule
+
+Boss presentation is no longer only an archetype-level concern.
+
+`EnemyPresetData` now includes:
+
+- `archetype`
+- `defensePattern`
+- `aiProfile`
+- `defenseStateWindowProfile`
+- `defenseVisualProfile`
+
+`EnemyPresetApplicator` now applies the defense visual profile into:
+
+- `EnemyDefenseVisualLayerController`
+
+This means combat presentation authoring is now part of the same preset runtime chain as behavior authoring.
+
+Important rule:
+
+Do not treat `EnemyDefenseVisualLayerController.visualProfile` as a scene-only manual style setting.
+
+It is now part of authored preset identity.
 
 ---
 
@@ -206,7 +233,13 @@ The project has already moved into:
 
 **Combat Readability / Boss Presentation Pass**
 
-This pass is in progress and has already advanced materially.
+This pass is no longer only about HUD wording.
+
+It now includes:
+
+- readable combat-result language
+- readable rule-facing HUD language
+- boss-level defense visual profile authoring through preset routing
 
 ### Already achieved
 
@@ -215,7 +248,8 @@ This pass is in progress and has already advanced materially.
 - result panel goal summary aligned with the same rule language
 - block / weak / break / normal-hit readability inspected through runtime sampling
 - block and break differentiation pushed further apart
-- result panel hierarchy reviewed and accepted for current prototype phase
+- preset-driven boss-level defense visual profile routing implemented and runtime-validated
+- boss-level visual profile assets created and bound for current active boss presentation work
 
 ### Current readable result-language split
 
@@ -266,7 +300,7 @@ Correct order remains:
 
 ## Current Gameplay Presentation Rules
 
-HUD should now explain the encounter rule, not just display counters.
+HUD should explain the encounter rule, not just display counters.
 
 Current desired language style:
 
@@ -302,6 +336,7 @@ When continuing work:
 - reject fake complexity when existing systems already support the required boss demand
 - evaluate readability alongside logic correctness
 - stop low-value visual micro-tuning when it starts fighting primitive rig limitations
+- keep defense visual authoring inside preset-driven asset ownership rather than scene drift
 
 ---
 
@@ -327,6 +362,7 @@ If continuing from this project state, the safest direction is:
 - continue the broader `Combat Readability / Boss Presentation Pass`
 - keep improvements focused on decision clarity
 - preserve the current boss ladder
+- keep defense visual authoring inside the preset chain
 - avoid premature final balancing
 - avoid low-value micro-polish on temporary primitive visuals
 

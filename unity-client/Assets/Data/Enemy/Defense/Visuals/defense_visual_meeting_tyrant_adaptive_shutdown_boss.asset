@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74d25fc9b96470345b7a28c6d7c2ed15, type: 3}
+  m_Name: defense_visual_meeting_tyrant_adaptive_shutdown_boss
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyDefenseVisualProfileData
+  guardBodyRotation: {x: 0, y: 14, z: -8}
+  guardBodyPosition: {x: 0, y: 0, z: -0.08}
+  guardHeadRotation: {x: 9, y: -10, z: 0}
+  guardBlendIn: 16
+  guardBlendOut: 13
+  guardHoldTime: 0.28
+  blockBodyKickRotation: {x: -9, y: 18, z: 0}
+  blockBodyKickPosition: {x: 0, y: 0.015, z: -0.1}
+  blockHeadKickRotation: {x: 6, y: 9, z: 0}
+  blockRecoverSpeed: 16
+  blockImpactStrength: 1.05
+  breakBodyRotation: {x: 13, y: -17, z: 9}
+  breakBodyPosition: {x: 0, y: 0.025, z: -0.11}
+  breakHeadRotation: {x: -10, y: 17, z: 0}
+  breakHoldTime: 0.4
+  breakRecoverSpeed: 8
+  breakNoiseAmplitude: 1.8
+  breakNoiseSpeed: 12
+  weakBodyRotation: {x: -3, y: 5, z: 0}
+  weakHeadRotation: {x: -9, y: 11, z: 0}
+  weakHoldTime: 0.26
+  weakRecoverSpeed: 11
+  bodyMotionMultiplier: 1
+  headMotionMultiplier: 1
+  telegraphBodyRotation: {x: -1, y: 9, z: -4}
+  telegraphBodyPosition: {x: 0, y: 0, z: -0.025}
+  telegraphHeadRotation: {x: 6, y: -5, z: 0}
+  activeBodyRotation: {x: 2, y: 17, z: -8}
+  activeBodyPosition: {x: 0, y: 0, z: -0.08}
+  activeHeadRotation: {x: 10, y: -10, z: 0}
+  recoverBodyRotation: {x: -2, y: 3, z: 1}
+  recoverBodyPosition: {x: 0, y: 0, z: -0.01}
+  recoverHeadRotation: {x: -3, y: 2, z: 0}
+  stateWindowBlendSpeed: 13

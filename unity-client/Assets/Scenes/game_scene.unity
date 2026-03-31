@@ -3553,6 +3553,7 @@ MonoBehaviour:
   defenseController: {fileID: 1310628146}
   aiLayer: {fileID: 1310628149}
   defenseWindow: {fileID: 1310628148}
+  defenseVisualLayer: {fileID: 1310628147}
   lastAppliedPreset: {fileID: 0}
 --- !u!114 &1310628151
 MonoBehaviour:
@@ -5149,6 +5150,7 @@ MonoBehaviour:
   defenseController: {fileID: 1620351231}
   aiLayer: {fileID: 1620351228}
   defenseWindow: {fileID: 1620351229}
+  defenseVisualLayer: {fileID: 1620351230}
   lastAppliedPreset: {fileID: 0}
 --- !u!114 &1620351228
 MonoBehaviour:

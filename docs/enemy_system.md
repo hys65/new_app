@@ -10,9 +10,10 @@ Behavior definition stack:
 2. `EnemyDefensePatternData`
 3. `EnemyAiProfileData`
 4. `EnemyDefenseStateWindowProfileData`
-5. `EnemyPresetData`
-6. `EnemyRosterData`
-7. `LevelEnemySelectionData`
+5. `EnemyDefenseVisualProfileData`
+6. `EnemyPresetData`
+7. `EnemyRosterData`
+8. `LevelEnemySelectionData`
 
 Runtime authority comes from preset application, not scene-only tuning.
 
@@ -24,9 +25,11 @@ Do not treat scene-edited defense values as authoritative boss configuration.
 
 Actual runtime behavior must be authored through:
 
-**pattern → state window profile → preset → roster entry → level selection → runtime slot routing**
+**pattern → state window profile → visual profile → preset → roster entry → level selection → runtime slot routing**
 
-This remains the project’s core enemy architecture rule.
+This is now the project’s full enemy architecture rule.
+
+Visual presentation authoring is part of that rule.
 
 ---
 
@@ -77,7 +80,7 @@ Instead, it influences **when** a defense cycle should begin based on:
 
 ### EnemyDefenseVisualLayerController
 
-`EnemyDefenseVisualLayerController` is the current presentation-side bridge between defense result and readable combat feedback.
+`EnemyDefenseVisualLayerController` is the presentation-side bridge between defense result and readable combat feedback.
 
 It receives and differentiates:
 
@@ -85,6 +88,8 @@ It receives and differentiates:
 - `BLOCK`
 - `BREAK`
 - `WEAK`
+
+It now also receives its authored profile through the runtime preset application chain.
 
 This is now an important part of combat readability work.
 
@@ -95,6 +100,40 @@ This is now an important part of combat readability work.
 It can support baseline readability, but it is **not** a reliable final-art posing solution on the current primitive enemy setup.
 
 This limitation is now accepted and documented.
+
+---
+
+## Defense Visual Profile as Part of the Enemy System
+
+This is now a real enemy-system fact.
+
+### Current authored bundle
+
+`EnemyPresetData` now includes:
+
+- `EnemyArchetypeData archetype`
+- `EnemyDefensePatternData defensePattern`
+- `EnemyAiProfileData aiProfile`
+- `EnemyDefenseStateWindowProfileData defenseStateWindowProfile`
+- `EnemyDefenseVisualProfileData defenseVisualProfile`
+
+### Current runtime application
+
+`EnemyPresetApplicator` now applies the preset-owned visual profile into:
+
+- `EnemyDefenseVisualLayerController`
+
+### Why this matters
+
+Boss identity is no longer authored only through hidden logic.
+
+It is now also authored through preset-owned readable combat presentation.
+
+This fixes an important production weakness:
+
+- behavior no longer lives in data while visual readability drifts in the scene
+
+That separation is no longer acceptable for boss content.
 
 ---
 
@@ -213,6 +252,13 @@ Meaning:
 - face-guard identity
 - guarded face route is intentionally hostile to the wrong item choice
 
+### Narcissist Manager precision paint boss
+
+Meaning:
+
+- item-locked precision pressure
+- correct item usage matters, but readable presentation still matters for timing and commitment
+
 ### Narcissist Manager Face Guard Boss
 
 Meaning:
@@ -236,6 +282,32 @@ Meaning:
 - the player is pushed toward head-focused conversion rather than generic spam
 - the identity is not a simple weak-window repeat
 - the identity is not a simple anti-predictability repeat
+
+---
+
+## Current Defense Visual Authoring Status
+
+Defense visual profile authoring now exists at two levels:
+
+### Baseline archetype level
+
+Used for:
+
+- generic archetype presentation
+- non-boss or default content
+- fallback presentation identity
+
+### Boss level
+
+Used for:
+
+- boss-specific guard language
+- boss-specific weak / break / block readability flavor
+- keeping presentation ownership aligned with preset identity
+
+Important rule:
+
+Boss content should prefer boss-level defense visual profiles instead of falling back to generic archetype visual profiles whenever distinct boss readability is required.
 
 ---
 
@@ -355,6 +427,7 @@ For future boss authoring:
 - then author the behavior through the existing preset chain
 - then validate runtime routing
 - then validate readable player-facing combat language
+- then validate runtime-applied defense visual identity
 - only after that consider final balancing
 
 Do not solve weak identity by immediately proposing:
@@ -364,7 +437,7 @@ Do not solve weak identity by immediately proposing:
 - new goal-type churn
 - scene-only manual overrides
 
-### Also do not solve primitive visual awkwardness by over-tuning temporary proxy poses.
+Also do not solve primitive visual awkwardness by over-tuning temporary proxy poses.
 
 That is low-value work unless the project has already entered final art polish.
 
@@ -376,6 +449,7 @@ That is low-value work unless the project has already entered final art polish.
 
 - runtime preset application is authoritative
 - roster routing and slot routing are part of actual behavior setup, not optional metadata
+- defense visual profile ownership should live in presets, not scene leftovers
 - GitHub asset verification remains necessary when inspector edits matter
 
 ### Gameplay lessons
@@ -389,6 +463,7 @@ That is low-value work unless the project has already entered final art polish.
 - weak-window readability matters for real encounter identity
 - result language (`BLOCK / WEAK / BREAK / normal hit`) should be readable without relying on logic knowledge
 - primitive enemy visual rigs support baseline readability, not final presentation quality
+- boss presentation now depends on both behavior tuning and preset-owned visual profile authoring
 
 ---
 
@@ -401,6 +476,7 @@ The enemy system is currently considered strong enough for:
 - defense-rule differentiation
 - goal-aware encounter design
 - first-pass combat readability work
+- preset-owned boss-level defense visual profile authoring
 
 It is not currently being expanded toward:
 

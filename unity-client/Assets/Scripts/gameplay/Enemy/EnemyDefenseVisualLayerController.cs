@@ -47,6 +47,8 @@ namespace PowerPrank3D.Gameplay
 
         private float noiseSeed;
 
+        public EnemyDefenseVisualProfileData VisualProfile => visualProfile;
+
         private void Awake()
         {
             if (bodyVisualPivot == null)
@@ -90,6 +92,20 @@ namespace PowerPrank3D.Gameplay
             UpdateStateWindowWeights();
             ApplyVisualPose();
             ApplyProxyState();
+        }
+
+        public void ApplyVisualProfile(EnemyDefenseVisualProfileData profile)
+        {
+            visualProfile = profile;
+
+            if (enableDebugLog)
+            {
+                Debug.Log(
+                    "[EnemyDefenseVisualLayerController] ApplyVisualProfile -> " +
+                    (profile != null ? profile.name : "NULL"),
+                    this
+                );
+            }
         }
 
         private void UpdateStateWindowWeights()
