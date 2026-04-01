@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: Level 08 Enemy Selection
   roster: {fileID: 11400000, guid: a6a87e35948266f4cb29bd63e33ea176, type: 2}
   selectedEnemies:
-  - rosterEntryId: narcissist_manager
+  - rosterEntryId: zero_mistake_boss
     useRosterRecommendedSlot: 1
     overrideSlotId: 
   startupSelectionIndex: 0

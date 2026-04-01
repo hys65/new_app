@@ -73,6 +73,8 @@ The following are already implemented and treated as real completed project grou
 - roster / level enemy selection
 - preset-driven runtime behavior routing
 - preset-driven defense visual profile routing
+- boss presentation consistency pass for active Narcissist Manager boss levels
+- runtime validation that active enemies receive correct preset + state-window + visual-profile pairing
 
 ### Level Systems
 
@@ -112,6 +114,11 @@ Meaning:
 - face-guard identity
 - guarded face route is hostile to the wrong item choice
 
+Validated presentation ownership:
+- independent boss preset verified at runtime
+- boss state window verified at runtime
+- boss visual profile verified at runtime
+
 ### Level 06
 Meeting Tyrant weak-window boss
 
@@ -131,6 +138,11 @@ Validated rule:
 - target count = `10`
 - round duration = `32`
 
+Validated presentation ownership:
+- independent boss preset verified at runtime
+- independent boss state window verified at runtime
+- independent boss visual profile verified at runtime
+
 ### Level 08
 Zero-Mistake Boss
 
@@ -142,6 +154,16 @@ Validated rule:
 - `UnblockedHitStreak`
 - target count = `6`
 - round duration = `32`
+
+Validated ownership update:
+- no longer left on base `narcissist_manager` ownership
+- now routed through independent `enemy_preset_zero_mistake_boss`
+- now routed through independent `zero_mistake_boss` roster ownership
+
+Validated presentation ownership:
+- runtime preset verified
+- runtime state window verified
+- runtime visual profile verified
 
 ### Level 09
 Narcissist Manager Face Guard Boss
@@ -155,6 +177,15 @@ Validated rule:
 - `BreakdownTarget`
 - target breakdown = `180`
 - round duration = `34`
+
+Validated authoring fix:
+- previous state-window drift into `precision_paint_boss` authoring was corrected
+- face-guard boss now owns independent `defense_state_window_narcissist_face_guard_boss`
+
+Validated presentation ownership:
+- runtime preset verified
+- runtime state window verified
+- runtime visual profile verified
 
 ### Level 10
 Adaptive Shutdown Boss
@@ -193,7 +224,7 @@ Important Level 11 truth:
 
 Boss behavior must be authored through:
 
-**pattern → state window profile → preset → roster entry → level selection → runtime slot routing**
+**pattern → state window profile → visual profile → preset → roster entry → level selection → runtime slot routing**
 
 Runtime preset application is authoritative.
 
@@ -240,6 +271,8 @@ It now includes:
 - readable combat-result language
 - readable rule-facing HUD language
 - boss-level defense visual profile authoring through preset routing
+- boss-presentation consistency validation through runtime inspection
+- cleanup of authoring drift between preset identity and state/visual ownership
 
 ### Already achieved
 
@@ -250,6 +283,9 @@ It now includes:
 - block and break differentiation pushed further apart
 - preset-driven boss-level defense visual profile routing implemented and runtime-validated
 - boss-level visual profile assets created and bound for current active boss presentation work
+- Level 05 / 07 / 08 / 09 runtime presentation ownership inspected and validated
+- Level 08 received independent boss preset / roster ownership
+- Level 09 received independent face-guard state-window ownership
 
 ### Current readable result-language split
 
@@ -337,6 +373,7 @@ When continuing work:
 - evaluate readability alongside logic correctness
 - stop low-value visual micro-tuning when it starts fighting primitive rig limitations
 - keep defense visual authoring inside preset-driven asset ownership rather than scene drift
+- when boss presentation drift is found, fix the asset ownership chain instead of patching runtime behavior first
 
 ---
 
@@ -359,11 +396,11 @@ Only reopen these if actual runtime evidence proves a real blocker.
 
 If continuing from this project state, the safest direction is:
 
-- continue the broader `Combat Readability / Boss Presentation Pass`
-- keep improvements focused on decision clarity
+- treat the current boss-presentation consistency work for Levels 05 / 07 / 08 / 09 as closed
 - preserve the current boss ladder
 - keep defense visual authoring inside the preset chain
 - avoid premature final balancing
 - avoid low-value micro-polish on temporary primitive visuals
+- update docs whenever asset ownership changes materially
 
 This is the correct continuation line unless newer runtime evidence proves otherwise.

@@ -137,6 +137,49 @@ That separation is no longer acceptable for boss content.
 
 ---
 
+## Boss Presentation Ownership Rule
+
+Boss presentation ownership is now considered complete only when all of the following are aligned:
+
+- preset identity
+- state-window ownership
+- visual-profile ownership
+- runtime-applied enemy instance
+
+In practice this means:
+
+- a boss should not keep a base-enemy preset if it now represents a distinct boss encounter
+- a boss should not keep a mismatched state-window profile from another boss identity unless that reuse is explicit and documented
+- a boss should not rely on scene leftovers for visual presentation identity
+
+### Recent validated examples
+
+- Level 05 sunglasses boss runtime pairing is aligned
+- Level 07 precision paint boss runtime pairing is aligned
+- Level 08 zero-mistake boss now owns independent preset / roster identity
+- Level 09 face-guard boss now owns independent face-guard state-window identity
+
+### Recent corrected drift example
+
+A real authoring drift was found on Level 09:
+
+- `enemy_preset_narcissist_manager_face_guard_boss`
+- had correct face-guard defense pattern
+- had correct face-guard visual profile
+- but still referenced `defense_state_window_narcissist_precision_paint_boss`
+
+This was corrected by introducing:
+
+- `defense_state_window_narcissist_face_guard_boss`
+
+and rewiring the face-guard preset to that profile.
+
+Important production lesson:
+
+When preset identity and state/visual ownership drift apart, fix the **authored asset chain** first rather than assuming a runtime bug.
+
+---
+
 ## Important Runtime Behavior
 
 ### Blocking Window
@@ -259,6 +302,14 @@ Meaning:
 - item-locked precision pressure
 - correct item usage matters, but readable presentation still matters for timing and commitment
 
+### Zero-Mistake Boss
+
+Meaning:
+
+- blocked hits reset progress
+- the player is pushed toward clean conversion discipline
+- this boss now owns independent preset / roster identity instead of falling through base `narcissist_manager` ownership
+
 ### Narcissist Manager Face Guard Boss
 
 Meaning:
@@ -266,6 +317,7 @@ Meaning:
 - head is intentionally low-value
 - body is the primary reliable scoring route
 - this is not just a repeat of the sunglasses boss
+- this boss now owns independent face-guard state-window authoring instead of drifting into precision-paint timing ownership
 
 ### Adaptive Shutdown Boss
 
@@ -428,6 +480,7 @@ For future boss authoring:
 - then validate runtime routing
 - then validate readable player-facing combat language
 - then validate runtime-applied defense visual identity
+- then validate runtime-applied state-window ownership when boss presentation consistency matters
 - only after that consider final balancing
 
 Do not solve weak identity by immediately proposing:
@@ -450,6 +503,7 @@ That is low-value work unless the project has already entered final art polish.
 - runtime preset application is authoritative
 - roster routing and slot routing are part of actual behavior setup, not optional metadata
 - defense visual profile ownership should live in presets, not scene leftovers
+- state-window ownership must stay semantically aligned with boss identity when distinct boss presentation is required
 - GitHub asset verification remains necessary when inspector edits matter
 
 ### Gameplay lessons
@@ -464,6 +518,7 @@ That is low-value work unless the project has already entered final art polish.
 - result language (`BLOCK / WEAK / BREAK / normal hit`) should be readable without relying on logic knowledge
 - primitive enemy visual rigs support baseline readability, not final presentation quality
 - boss presentation now depends on both behavior tuning and preset-owned visual profile authoring
+- boss presentation consistency validation is a real part of enemy authoring, not optional polish
 
 ---
 
@@ -477,6 +532,7 @@ The enemy system is currently considered strong enough for:
 - goal-aware encounter design
 - first-pass combat readability work
 - preset-owned boss-level defense visual profile authoring
+- runtime validation of active boss presentation ownership
 
 It is not currently being expanded toward:
 

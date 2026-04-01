@@ -1,6 +1,6 @@
 # SESSION_LOG.md
 
-## Session: Boss Ladder Closure Through Level 11 and Readability Pass Progress
+## Session: Boss Presentation Consistency Pass Closure for Active Narcissist Manager Boss Levels
 
 ### Context at session start
 
@@ -19,441 +19,420 @@ Project state at session start:
 - victory choice flow was already implemented
 - result panel polish was already implemented
 - level goal variety was already implemented
-- repository structure cleanup had already been completed
-- Level 10 boss identity had already been closed and accepted
+- repository asset-structure cleanup had already been completed
+- Level 10 and Level 11 boss identities had already been closed
+- docs had already been updated for:
+  - `AI_CONTEXT.md`
+  - `PROJECT_STATE.md`
+  - `architecture.md`
+  - `enemy_system.md`
 
-Work entered this session with the explicit goal of continuing from that real repository state rather than from old summaries.
+The explicit request for this session was to continue from the real current repository state, inspect docs/scripts/assets first, avoid reopening finished boss identity work, and focus on:
 
----
-
-## 1. Repository Reality Check and Drift Check
-
-The repository and current scripts were inspected first.
-
-Confirmed important runtime architecture:
-
-- `GameplayManager` remains the central breakdown / timer / round state owner
-- `LevelEncounterController` applies encounter config into gameplay, enemy selection, and goal controller
-- `LevelProgressionController` owns level index application and next-level progression
-- `LevelGoalType` currently supports only:
-  - `BreakdownTarget`
-  - `HeadHitCount`
-  - `SpecificItemHitCount`
-  - `UnblockedHitStreak`
-- runtime enemy behavior remains authored through:
-  - defense pattern
-  - state window profile
-  - preset
-  - roster entry
-  - level selection
-  - slot routing
-
-Confirmed important code truth:
-
-- a new Level 11 should **not** be solved by inventing a new goal type
-- current architecture was already sufficient for one more distinct boss identity
-- actual script defaults and asset naming still partly differ from stricter docs naming ambitions
-- code/runtime state remains the real source of truth
+- remaining boss presentation consistency work
+- Level 05 / 07 / 08 / 09 runtime inspection
+- presentation ownership cleanup without unnecessary system churn
 
 ---
 
-## 2. Level 11 Boss Identity Design
+## 1. Repository / Runtime Truth Was Reconfirmed First
 
-A new boss identity was designed under the constraint that current systems had to be reused.
+Before changing anything, the current repository reality and runtime chain were treated as source of truth.
 
-Chosen identity:
+Important working rule reaffirmed:
 
-### Level 11 = Head Hunter Boss
+When docs and code differ, actual current code/runtime structure wins.
 
-Core meaning:
+Important current architecture truth reaffirmed:
 
-- not an item-restriction boss
-- not a body-route boss
-- not an anti-predictability repeat
-- not just a weak-window repeat
-- instead, a later-conversion, head-focused precision boss
+**pattern → state window profile → visual profile → preset → roster entry → level selection → runtime slot routing**
 
-Initial design rule:
+This was not treated as a suggestion.
 
-- Goal Type = `HeadHitCount`
-- Target Count = `7`
-- Target Breakdown = `160`
-- Round Duration = `38`
-
-Core design intention:
-
-- player must convert later and cleaner scoring opportunities
-- player must care about head-focused timing instead of generic safe spam
+It was treated as the authoritative boss authoring chain.
 
 ---
 
-## 3. Level 11 Content Authoring Chain Was Built
+## 2. The Active Goal of the Session Was Scoped Correctly
 
-The following new content was authored and connected:
+This session explicitly did **not** aim to:
 
-### New assets created
+- redesign finished boss identities
+- invent new systems
+- reopen primitive proxy-arm posing work
+- do final 04–11 release balancing
 
-- `enemy_ai_narcissist_manager_head_hunter_boss`
-- `defense_pattern_narcissist_manager_head_hunter_boss`
-- `defense_state_window_narcissist_manager_head_hunter_boss`
-- `enemy_preset_narcissist_manager_head_hunter_boss`
-- `level_enemy_selection_level_11`
-- `level_11_encounter_config`
+Instead, it aimed to answer one concrete production question:
 
-### Runtime routing work completed
+### Are the active boss encounters for Levels 05 / 07 / 08 / 09 actually presentation-consistent at runtime?
 
-- new roster entry added to `enemy_roster_main`
-- new roster entry used `recommendedSlotId = enemy_slot_02`
-- `level_enemy_selection_level_11` pointed to the new roster entry
-- `level_11_encounter_config` pointed to the new Level 11 enemy selection
-- `level_11_encounter_config` was appended to main level progression
-- startup index was set to Level 11 for direct testing
+Meaning:
 
-This completed the required boss-authoring chain:
-
-**pattern → state window profile → preset → roster entry → level selection → encounter → progression**
+- is the correct boss preset active?
+- is the correct state-window profile active?
+- is the correct defense visual profile active?
+- is ownership really closed through the authored asset chain?
 
 ---
 
-## 4. Level 11 First Validation and Correction
+## 3. Level 08 Ownership Drift Was Identified
 
-Initial Level 11 tests showed the first authoring pass was too permissive.
+Early inspection established that Level 08 still had a real ownership weakness.
 
-Observed failure of the first pass:
+Its gameplay meaning as **Zero-Mistake Boss** was already accepted, but its authored routing still effectively fell through the base `narcissist_manager` identity rather than through an independent boss ownership chain.
 
-- boss defended too rarely
-- player could often clear the level in roughly 8–9 throws
-- encounter identity did not yet feel like a real boss demand
+### Why this mattered
+
+That meant Level 08 was at risk of:
+
+- sharing base identity ownership too loosely
+- blurring future maintenance boundaries
+- allowing later presentation changes to leak across unrelated content
+
+This was treated as a real authoring problem, not cosmetic naming noise.
+
+---
+
+## 4. Level 08 Received Independent Boss Preset Ownership
+
+A new preset was created:
+
+- `enemy_preset_zero_mistake_boss`
+
+This new preset established a dedicated authored identity for the Zero-Mistake Boss instead of continuing to rely on base `narcissist_manager` ownership.
+
+The preset was authored with:
+
+- `enemy_archetype_narcissist_manager`
+- `defense_pattern_narcissist_manager`
+- `enemy_ai_narcissist_boss`
+- `defense_state_window_narcissist_boss`
+- `defense_visual_narcissist_boss`
+
+Important production decision:
+
+No timing rebalance or system rewrite was done at this step.
+
+The goal was ownership closure first.
+
+---
+
+## 5. Level 08 Received Independent Roster / Selection Ownership
+
+After the new preset was created, roster ownership was extended.
+
+A new roster entry was added to `enemy_roster_main` for Zero-Mistake Boss ownership.
+
+Final accepted entry identity:
+
+- `zero_mistake_boss`
+
+This roster entry pointed to:
+
+- `enemy_preset_zero_mistake_boss`
+
+Recommended slot remained aligned to the existing Narcissist Manager slot route:
+
+- `enemy_slot_02`
+
+Then `level_enemy_selection_level_08` was updated to select:
+
+- `zero_mistake_boss`
+
+This completed the intended authored chain for Level 08:
+
+**preset → roster entry → level selection**
+
+---
+
+## 6. Level 08 Runtime Validation Was Completed
+
+Level 08 was then tested in play mode through live runtime inspection.
+
+The following runtime checks were performed on the active enemy:
+
+- `EnemyRuntimePresetController`
+- `EnemyPresetApplicator`
+- `EnemyDefenseStateWindowController`
+- `EnemyDefenseVisualLayerController`
+
+### Validated runtime result
+
+Level 08 runtime now correctly showed:
+
+- `Current Preset = enemy_preset_zero_mistake_boss`
+- `Last Applied Preset = enemy_preset_zero_mistake_boss`
+- `State Profile = defense_state_window_narcissist_boss`
+- `Visual Profile = defense_visual_narcissist_boss`
 
 Conclusion:
 
-- the problem was not missing architecture
-- the problem was insufficient defensive pressure
+### Level 08 ownership closure succeeded
 
-### Correction direction chosen
+This proved Level 08 was no longer just “conceptually” a boss.
 
-The fix was intentionally kept inside current data systems:
-
-- make AI start defense earlier
-- increase effective defensive presence
-- tighten later scoring pressure
-- keep the encounter AI-driven instead of turning it into a simple auto-cycle script gimmick
-
-After pressure increases, the encounter became accepted as basically correct.
-
-Final accepted production status:
-
-- Level 11 identity is playable
-- Level 11 identity is distinct enough
-- final release balancing is still allowed later
-- no new goal type was needed
+It now owned its preset routing in the authored runtime chain.
 
 ---
 
-## 5. Combat Readability / Boss Presentation Pass Began
+## 7. Level 05 Runtime Validation Was Completed
 
-After Level 11 identity closure, work moved into the next real milestone:
+Level 05 was then inspected in play mode through the same runtime checkpoints.
 
-### Combat Readability / Boss Presentation Pass
+Validated runtime result:
 
-This pass explicitly did **not** aim at final art-grade polish.
-
-It aimed at:
-
-- better telegraph readability
-- better active defense readability
-- better weak-window readability
-- better block / break / success readability
-- clearer goal language in the HUD
-- clearer rule language in the result panel
-
----
-
-## 6. Weak-Window Readability Work
-
-Work began by trying to improve defensive pose readability through:
-
-- `EnemyVisualProxyController`
-- `EnemyDefenseVisualProfileData`
-
-### What happened
-
-Some changes improved clarity, but aggressive proxy-arm edits exposed a hard limitation:
-
-- current primitive enemy rig has awkward local pivot directions
-- proxy-arm experimentation quickly became low-value and unstable
-- attempts to force hero-quality “cover the face” defensive posing produced broken or strange-looking results
-
-### Production decision
-
-This became an important accepted boundary:
-
-- current primitive proxy posing is acceptable for baseline readability
-- it is **not** the right place to force final “cover the face” defensive animation quality
-- final art-grade defensive-pose polish should be delayed until later presentation work
-
-This overfitting path was explicitly stopped.
-
-### Accepted result
-
-Even without perfect guard-arm posing, weak-window readability was improved enough to be useful:
-
-- weak window could now be read as a real scoring opportunity
-- it was not just an invisible internal rule anymore
-- this was accepted as sufficient for the current phase
-
----
-
-## 7. Break-Path Clarification
-
-During hit-result sampling, repeated attempts were made to produce `BREAK` on Level 11.
-
-Repository inspection then confirmed the real reason it never appeared:
-
-### Level 11 defense pattern intentionally has no break path
-
-All break routes were disabled:
-
-- no hammer break
-- no foam break
-- no paint break
-- no egg break
-- no tomato break
-
-This clarified an important runtime rule:
-
-- Level 11 should not be used as the reference encounter for `BREAK` readability
-- `BREAK` readability must be sampled on a boss that actually supports break logic
-- Level 04 became the correct sampling reference
-
-This prevented more wasted testing time.
-
----
-
-## 8. Hit-Result Readability Sampling and Differentiation
-
-A runtime sampling pass was completed for:
-
-- normal successful hit
-- `BLOCK`
-- `WEAK`
-- `BREAK`
-
-### Source encounters used
-
-- Level 11 for:
-  - normal hit
-  - `BLOCK`
-  - `WEAK`
-- Level 04 for:
-  - `BREAK`
-
-### Result-language work completed
-
-`EnemyDefenseVisualLayerController` / defense visual profile tuning was used to further separate:
-
-- `BLOCK`
-- `BREAK`
-
-Accepted presentation meanings:
-
-- `BLOCK` = short, hard, stable, defended
-- `BREAK` = opened, unstable, lost posture
-- `WEAK` = exposed scoring opportunity
-- normal hit = baseline success
-
-This was accepted as a successful first-pass combat-language split.
-
-Not final polish.  
-But enough for prototype readability.
-
----
-
-## 9. HUD Goal Language Rework
-
-`HudController` was inspected and replaced with a new version that rewrote live HUD goal presentation.
-
-Old state:
-
-- mostly raw counters
-- readable enough for debugging
-- weaker as encounter-rule explanation
-
-New state:
-
-### BreakdownTarget
-- `Goal: Build Breakdown X / Y`
-- `Rule: Reach the breakdown target before time runs out`
-
-### HeadHitCount
-- `Goal: Land Head Hits X / Y`
-- `Rule: Only successful head hits count`
-
-### SpecificItemHitCount
-- `Goal: Land [Item] Hits X / Y`
-- `Rule: Only [Item] advances this goal`
-
-### UnblockedHitStreak
-- `Goal: Chain Clean Hits X / Y`
-- `Rule: Any blocked hit resets the streak`
-
-Validation screenshots were reviewed on:
-
-- Level 07
-- Level 08
-- Level 10
-- Level 11
-
-This change was accepted.
-
-### Meaning of the change
-
-The HUD now explains encounter demand instead of just exposing counters.
-
-This was treated as a real readability gain, not cosmetic text cleanup.
-
----
-
-## 10. Result Panel Goal Summary Rework
-
-The result panel’s `goalSummaryText` was then checked and aligned to the same goal-language family as the HUD.
-
-This ensured live play and result review use the same rule framing.
-
-Validated result-summary language:
-
-- `Goal: Land Paint Ball Hits X / Y`
-- `Goal: Chain Clean Hits X / Y`
-- `Goal: Build Breakdown X / Y`
-- `Goal: Land Head Hits X / Y`
-
-Validation screenshots were reviewed on:
-
-- Level 07
-- Level 08
-- Level 10
-- Level 11
-
-This change was accepted.
-
----
-
-## 11. Result Panel Layout Review
-
-The result panel hierarchy and inspector setup were reviewed.
-
-Inspected objects included:
-
-- `ResultCard`
-- `Header`
-- `Body`
-- `Actions`
-- title / summary / button nodes
+- `Current Preset = enemy_preset_narcissist_manager_sunglasses_boss`
+- `Last Applied Preset = enemy_preset_narcissist_manager_sunglasses_boss`
+- `State Profile = defense_state_window_narcissist_boss`
+- `Visual Profile = defense_visual_narcissist_manager_sunglasses_boss`
 
 Conclusion:
 
-- layout was already good enough for current prototype phase
-- information hierarchy was clear enough
-- no extra UI refactor was justified right now
+### Level 05 was already closed and consistent
 
-Accepted information order:
+No drift was found between:
 
-1. Victory / Failed
-2. immediate status subtitle
-3. level label
-4. goal summary
-5. final-level notice if applicable
-6. retry / next buttons
-
-Result:
-
-- result panel logic and hierarchy were accepted for the current phase
-- no further layout churn was pursued
+- preset identity
+- state-window ownership
+- visual-profile ownership
 
 ---
 
-## 12. Documentation Sync Work Began
+## 8. Level 07 Runtime Validation Was Completed
 
-After readability / presentation progress had materially advanced, docs were updated to reflect the real current state.
+Level 07 was then inspected in play mode through the same runtime checkpoints.
 
-Updated and/or prepared for update:
+Validated runtime result:
 
-- `PROJECT_STATE.md`
-- `gameplay_systems.md`
-- `enemy_system.md`
-- `development_tasks.md`
+- `Current Preset = enemy_preset_narcissist_manager_precision_paint_boss`
+- `Last Applied Preset = enemy_preset_narcissist_manager_precision_paint_boss`
+- `State Profile = defense_state_window_narcissist_precision_paint_boss`
+- `Visual Profile = defense_visual_narcissist_manager_precision_paint_boss`
 
-These updates included:
+Conclusion:
 
-- Level 11 closure status
-- readability-pass progress
-- HUD goal language changes
-- result-summary language alignment
-- break-path clarification for Level 11
-- accepted proxy-pose limitation on primitive enemy rigs
+### Level 07 was closed and consistent
+
+This was a stronger closure case than Level 05 because both the state-window and visual-profile ownership were already clearly boss-specific.
 
 ---
 
-## 13. Key Lessons Locked In During This Session
+## 9. Level 09 Runtime Validation Exposed Real Drift
 
-### Level-Authoring Lesson
+Level 09 was then inspected in play mode through the same runtime checkpoints.
 
-A new boss identity can still be created without new architecture if:
+Validated runtime findings:
 
-- the current systems already support a different player demand
-- the demand is genuinely distinct
-- runtime routing is correct
+- `Current Preset = enemy_preset_narcissist_manager_face_guard_boss`
+- `Last Applied Preset = enemy_preset_narcissist_manager_face_guard_boss`
+- `Visual Profile = defense_visual_narcissist_manager_face_guard_boss`
 
-### Runtime Lesson
+These parts were correct.
 
-Do not waste time testing for a result that the current defense pattern explicitly disables.
+But the runtime state-window result was:
 
-Always verify actual authored pattern behavior.
+- `State Profile = defense_state_window_narcissist_precision_paint_boss`
 
-### Presentation Lesson
+This was not accepted as clean.
 
-Rule language in live HUD and result summary should match.
+### Why this was treated as a real problem
 
-The player should not feel like the result panel is explaining a different game.
+The face-guard boss currently had:
 
-### Visual Production Lesson
+- face-guard preset identity
+- face-guard defense pattern
+- face-guard visual profile
+- but precision-paint state-window ownership
 
-Do not overfit temporary primitive proxy rigs into fake hero-quality defensive animation.
+This meant Level 09 was only partially closed.
 
-When rig limitations start fighting readability work, stop and preserve baseline clarity.
-
-### Release-Planning Lesson
-
-Final 04–11 balancing should still happen later, after more art/presentation work.
-
-Do not confuse current readability success with final release tuning.
+It was a real **authoring drift** problem.
 
 ---
 
-## Current Accepted End State of This Session
+## 10. The Cause of Level 09 Drift Was Traced to the Preset Asset Itself
+
+To avoid guessing, the preset asset itself was opened and inspected:
+
+- `enemy_preset_narcissist_manager_face_guard_boss`
+
+The inspection confirmed the cause directly.
+
+Its references were:
+
+- `enemy_archetype_narcissist_manager`
+- `narcissist_manager_face_guard_boss_defense_pattern`
+- `enemy_ai_narcissist_boss`
+- `defense_state_window_narcissist_precision_paint_boss`
+- `defense_visual_narcissist_manager_face_guard_boss`
+
+This proved the problem was **not** a runtime override bug.
+
+It was an authored preset-reference problem.
+
+Conclusion:
+
+### Level 09 drift lived in asset authoring, not in runtime application
+
+---
+
+## 11. Level 09 Received an Independent Face-Guard State-Window Asset
+
+A new state-window asset was created by duplicating the precision-paint profile and renaming it:
+
+- `defense_state_window_narcissist_face_guard_boss`
+
+Important production decision:
+
+The new asset was first created as an ownership cleanup step.
+
+It was **not** immediately used for balancing experiments.
+
+The goal was to close the authoring chain semantically before reopening any timing discussion.
+
+---
+
+## 12. Level 09 Preset Was Rewired to the New State-Window Profile
+
+`enemy_preset_narcissist_manager_face_guard_boss` was then updated so that:
+
+- `Defense State Window Profile`
+
+changed from:
+
+- `defense_state_window_narcissist_precision_paint_boss`
+
+to:
+
+- `defense_state_window_narcissist_face_guard_boss`
+
+This repaired the broken ownership chain inside the preset itself.
+
+---
+
+## 13. Level 09 Runtime Was Revalidated After the Fix
+
+Level 09 was then run again and rechecked in play mode.
+
+The runtime check on `EnemyDefenseStateWindowController` now showed:
+
+- `State Profile = defense_state_window_narcissist_face_guard_boss`
+
+This confirmed the fix propagated correctly into the active enemy instance.
+
+Conclusion:
+
+### Level 09 closure succeeded after authoring repair
+
+The issue had been fully resolved through the correct asset-level fix rather than through unnecessary code churn.
+
+---
+
+## 14. Final Runtime Verdict for the Session
+
+At the end of runtime inspection and cleanup, the following active boss levels were considered closed for the current pass:
+
+### Level 05
+Closed
+
+### Level 07
+Closed
+
+### Level 08
+Closed
+
+### Level 09
+Closed after state-window ownership repair
+
+This meant the active target scope for the Boss Presentation Consistency Pass was successfully completed.
+
+---
+
+## 15. What This Session Explicitly Did Not Change
+
+This session did **not**:
+
+- redesign any finished boss identity
+- add any new goal type
+- add any new runtime system
+- rebalance the full 04–11 ladder
+- reopen primitive proxy-arm polishing
+- attempt final art-grade presentation
+
+This was a targeted ownership / consistency cleanup session.
+
+That scope discipline was preserved.
+
+---
+
+## 16. Key Lessons Locked In During This Session
+
+### Ownership lesson
+
+A boss encounter is not fully closed just because:
+
+- the level name is correct
+- the preset name is correct
+- the encounter feels mostly correct
+
+It is only clean when the authored chain is aligned through:
+
+**preset → state window profile → visual profile → roster entry → level selection → runtime slot routing**
+
+### Validation lesson
+
+Runtime inspection matters.
+
+Do not assume a boss is correctly authored just because the serialized asset names look plausible.
+
+Inspect:
+
+- `EnemyRuntimePresetController`
+- `EnemyPresetApplicator`
+- `EnemyDefenseStateWindowController`
+- `EnemyDefenseVisualLayerController`
+
+### Drift-repair lesson
+
+When ownership drift is found, first determine whether the mismatch lives in:
+
+- the runtime chain
+- or the authored preset itself
+
+In this session, Level 09 proved that a mismatch can live entirely in asset authoring.
+
+### Production lesson
+
+If the current systems already support the needed fix, do not invent new systems.
+
+Both Level 08 and Level 09 were solved through existing authoring structures.
+
+---
+
+## 17. Accepted End State of This Session
 
 At the end of this session, the project had the following accepted state:
 
-- Level 11 boss identity closed
-- Level 11 content chain fully authored and routed
-- Level 11 readability materially improved
-- weak-window readability improved to an acceptable gameplay level
-- break-path logic correctly understood
-- block / weak / break / normal-hit language separated at a prototype-readable level
-- HUD goal language rewritten into encounter-rule language
-- result panel goal summary aligned with live rule language
-- result panel hierarchy reviewed and accepted for the current prototype stage
-- proxy-arm overfitting path explicitly rejected as low-value on the current primitive rig
+- Level 05 presentation ownership runtime-validated
+- Level 07 presentation ownership runtime-validated
+- Level 08 presentation ownership runtime-validated
+- Level 08 independent boss preset / roster ownership created and connected
+- Level 09 presentation ownership runtime-validated
+- Level 09 state-window authoring drift identified
+- Level 09 independent `defense_state_window_narcissist_face_guard_boss` created
+- Level 09 face-guard preset rewired to the independent face-guard state-window profile
+- active boss presentation consistency target scope successfully closed
 
 ---
 
 ## Recommended Next Direction After This Session
 
-Continue the broader **Combat Readability / Boss Presentation Pass** without reopening low-value proxy-arm overfitting.
+The correct next step after this session is:
 
-Correct direction:
+- sync docs to reflect the now-closed boss presentation consistency work
+- preserve the current authored boss ladder
+- avoid reopening finished identity design
+- avoid final 04–11 balance work yet
+- only continue with later spot-checks or later art/presentation work when there is a real reason
 
-- preserve current boss identities
-- keep improving clarity where the player makes decisions
-- defer final art-grade defensive posing
-- defer full 04–11 release balancing until later art/presentation work is further along
+This session completed the intended active boss-presentation ownership cleanup.

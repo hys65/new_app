@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ad9bd1c2addfdca4581d22d682ee7330, type: 3}
-  m_Name: enemy_preset_narcissist_manager_face_guard_boss
+  m_Name: enemy_preset_zero_mistake_boss
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyPresetData
-  presetId: enemy_preset_narcissist_manager_face_guard_boss
-  displayName: Narcissist Manager Face Guard Boss
+  presetId: enemy_preset_zero_mistake_boss
+  displayName: Zero-Mistake Boss
   archetype: {fileID: 11400000, guid: c91f654b40d8b13499a037860b435ab1, type: 2}
-  defensePattern: {fileID: 11400000, guid: 0de7ebfb3ef32c44eb932d7813856c15, type: 2}
+  defensePattern: {fileID: 11400000, guid: 71b87fe87d6d15d4a8731a38c5c8bdec, type: 2}
   aiProfile: {fileID: 11400000, guid: fe46a75105614574b8501c8a26c0d56a, type: 2}
-  defenseStateWindowProfile: {fileID: 11400000, guid: c0a97dcc2df47944dab14f22c0949073, type: 2}
-  defenseVisualProfile: {fileID: 11400000, guid: 38e2cde19481c1540887a6d16ec1d5ca, type: 2}
+  defenseStateWindowProfile: {fileID: 11400000, guid: ed57e20af7ec35548aa40bc4a58aabe2, type: 2}
+  defenseVisualProfile: {fileID: 11400000, guid: 78ef7123edc6c8c4d9352562ae1555ca, type: 2}

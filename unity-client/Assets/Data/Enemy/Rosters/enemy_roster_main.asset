@@ -60,3 +60,8 @@ MonoBehaviour:
     preset: {fileID: 11400000, guid: 59628ddcf0dc8734ab772ef5c929ff5f, type: 2}
     recommendedSlotId: enemy_slot_02
     enabled: 1
+  - entryId: zero_mistake_boss
+    displayName: Zero-Mistake Boss
+    preset: {fileID: 11400000, guid: 6489af9fca940ba49ac3fe244275f21d, type: 2}
+    recommendedSlotId: enemy_slot_02
+    enabled: 1

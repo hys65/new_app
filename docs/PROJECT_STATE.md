@@ -32,7 +32,11 @@ The following systems are implemented and runtime-validated:
 - Enemy gameplay hitbox structure repair
 - Enemy stain attachment repair
 - preset-driven defense visual profile application
-- boss-level defense visual profile asset authoring started and bound into active presets
+- boss-level defense visual profile asset authoring bound into active presets
+- Boss Presentation Consistency Pass completed for Levels 05 / 07 / 08 / 09
+- runtime verification that active enemies receive correct preset + state-window + visual-profile pairings
+- Level 08 independent zero-mistake boss preset / roster ownership closure
+- Level 09 face-guard state-window authoring drift repaired
 
 ### Level Architecture
 
@@ -100,6 +104,9 @@ If a blocked hit occurs, current progress is reset to zero.
 
 - face guard identity
 - paint invalid while guarded
+- runtime preset validated
+- runtime state window validated
+- runtime visual profile validated
 
 ### Level 06
 
@@ -116,6 +123,9 @@ If a blocked hit occurs, current progress is reset to zero.
 - Required Item Id = `item_paint_ball`
 - Target Count = `10`
 - Round Duration Seconds = `32`
+- runtime preset validated
+- runtime state window validated
+- runtime visual profile validated
 
 ### Level 08
 
@@ -124,6 +134,11 @@ If a blocked hit occurs, current progress is reset to zero.
 - Goal Type = `UnblockedHitStreak`
 - Target Count = `6`
 - Round Duration Seconds = `32`
+- independent preset ownership established through `enemy_preset_zero_mistake_boss`
+- independent roster ownership established through `zero_mistake_boss`
+- runtime preset validated
+- runtime state window validated
+- runtime visual profile validated
 
 ### Level 09
 
@@ -134,6 +149,10 @@ If a blocked hit occurs, current progress is reset to zero.
 - Round Duration Seconds = `34`
 - head is intentionally low-value
 - body is the primary reliable scoring route
+- independent `defense_state_window_narcissist_face_guard_boss` now authored and routed
+- runtime preset validated
+- runtime state window validated
+- runtime visual profile validated
 
 Important accepted limitation:
 
@@ -184,7 +203,7 @@ Accepted production status:
 
 ## Combat Readability / Boss Presentation Pass Status
 
-This pass is now actively in progress.
+This pass has now materially advanced and the active boss-presentation consistency work for Levels 05 / 07 / 08 / 09 is complete.
 
 ### Completed in this pass
 
@@ -196,6 +215,8 @@ This pass is now actively in progress.
 - preset-driven defense visual profile application was added to runtime preset routing
 - boss-level defense visual profile assets were created and bound into active boss presets
 - play-mode inspection confirmed active runtime enemies receive the expected preset and visual profile pairing
+- Level 08 was moved off base `narcissist_manager` ownership and given independent preset / roster ownership
+- Level 09 face-guard preset drift into precision-paint state-window ownership was identified and fixed
 
 ### Current readable combat-language status
 
@@ -254,6 +275,17 @@ Boss presentation should be authored through:
 
 Scene-only visual profile edits are not authoritative boss configuration.
 
+### Current validated ownership closure
+
+The following active boss levels have now been runtime-checked for ownership consistency:
+
+- Level 05
+- Level 07
+- Level 08
+- Level 09
+
+For these levels, preset identity, state-window ownership, and visual-profile ownership are now aligned.
+
 ---
 
 ## Canonical Repository Layout
@@ -307,7 +339,7 @@ Runtime preset application remains authoritative.
 
 Boss-specific behavior and visual presentation must be authored through:
 
-**pattern → state window profile → preset → roster entry → level selection → runtime slot routing**
+**pattern → state window profile → visual profile → preset → roster entry → level selection → runtime slot routing**
 
 Do not rely on scene-only edits for final boss behavior.
 
@@ -321,6 +353,7 @@ Do not rely on scene-only edits for final boss behavior.
 - Unity Inspector changes are not always immediately serialized to disk
 - when asset values matter, always verify actual GitHub file contents after push
 - runtime play-mode inspection is required for validating applied presets and visual profiles
+- when preset identity and state/visual ownership drift apart, repair the authored asset chain first
 
 ### Combat / Goal Lessons
 
@@ -364,15 +397,16 @@ Do not rely on scene-only edits for final boss behavior.
 - result panel rule language should match live HUD rule language
 - readability passes should prioritize decision clarity over premature final-art polish
 - defense visual profiles should be owned by presets, not scene leftovers
+- boss presentation consistency should be validated in play mode, not assumed from asset names alone
 - when primitive rig behavior fights intended posing, stop forcing it and move on to higher-value readability tasks
 
 ---
 
 ## Immediate Next Milestone
 
-**Combat Readability / Boss Presentation Pass**
+**Post-Consistency Documentation Sync / Later Spot-Check Continuation**
 
-### Already advanced
+### Just completed
 
 - clearer goal HUD rule language
 - clearer result panel goal summary language
@@ -380,12 +414,16 @@ Do not rely on scene-only edits for final boss behavior.
 - result panel hierarchy review
 - boss-level defense visual profile ownership inside presets
 - runtime verification that active enemies receive correct preset + visual profile pairings
+- runtime verification that active enemies receive correct preset + state-window + visual-profile pairings for Levels 05 / 07 / 08 / 09
+- Level 08 zero-mistake ownership closure
+- Level 09 face-guard state-window ownership closure
 
-### Still pending inside this milestone
+### Still intentionally deferred
 
-- broader boss-presentation consistency across more encounters
+- broader late-ladder spot-checks outside the current active scope
 - later art-side polish for stronger visual identity
 - final hero-quality defensive posing only when art-side quality justifies reopening it
+- final 04–11 release balancing
 
 Important release-planning note:
 
