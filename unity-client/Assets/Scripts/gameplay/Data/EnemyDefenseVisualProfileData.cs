@@ -53,5 +53,23 @@ namespace PowerPrank3D.Gameplay
         public Vector3 recoverHeadRotation = new Vector3(-4f, 3f, 0f);
 
         public float stateWindowBlendSpeed = 8f;
+
+        [Header("Optional Left Arm Guard Pose")]
+        public bool useLeftArmGuardPose = false;
+
+        [Tooltip("防御时左手臂目标 Local Position。基于被驱动的 Transform 本地坐标。")]
+        public Vector3 leftArmGuardLocalPosition = Vector3.zero;
+
+        [Tooltip("防御时左手臂目标 Local Rotation（Euler）。基于被驱动的 Transform 本地旋转。")]
+        public Vector3 leftArmGuardLocalRotation = Vector3.zero;
+
+        [Tooltip("防御时左手臂目标 Local Scale。通常保持默认即可；只有你确实需要时才改。")]
+        public Vector3 leftArmGuardLocalScale = Vector3.one;
+
+        [Tooltip("进入护脸姿态的速度。")]
+        public float leftArmGuardBlendIn = 10f;
+
+        [Tooltip("退出护脸姿态、回到默认姿态的速度。")]
+        public float leftArmGuardBlendOut = 8f;
     }
 }

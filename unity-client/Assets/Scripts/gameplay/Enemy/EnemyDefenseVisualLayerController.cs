@@ -9,6 +9,9 @@ namespace PowerPrank3D.Gameplay
         [SerializeField] private Transform headVisualPivot;
         [SerializeField] private EnemyDefenseVisualProfileData visualProfile;
 
+        [Header("Optional Arm Guard")]
+        [SerializeField] private Transform leftArmGuardTransform;
+
         [Header("Proxy Visual")]
         [SerializeField] private EnemyVisualProxyController visualProxy;
         [SerializeField] private EnemyDefenseController defenseController;
@@ -24,10 +27,15 @@ namespace PowerPrank3D.Gameplay
         private Vector3 headBaseLocalPos;
         private Quaternion headBaseLocalRot;
 
+        private Vector3 leftArmBaseLocalPos;
+        private Quaternion leftArmBaseLocalRot;
+        private Vector3 leftArmBaseLocalScale;
+
         private float guardWeight;
         private float blockWeight;
         private float breakWeight;
         private float weakWeight;
+        private float leftArmGuardWeight;
 
         private float guardTimer;
         private float breakTimer;
@@ -77,6 +85,11 @@ namespace PowerPrank3D.Gameplay
                 headBaseLocalRot = headVisualPivot.localRotation;
             }
 
+            if (leftArmGuardTransform != null)
+            {
+                CacheLeftArmBasePose();
+            }
+
             noiseSeed = Random.Range(0f, 1000f);
         }
 
@@ -106,6 +119,18 @@ namespace PowerPrank3D.Gameplay
                     this
                 );
             }
+        }
+
+        private void CacheLeftArmBasePose()
+        {
+            if (leftArmGuardTransform == null)
+            {
+                return;
+            }
+
+            leftArmBaseLocalPos = leftArmGuardTransform.localPosition;
+            leftArmBaseLocalRot = leftArmGuardTransform.localRotation;
+            leftArmBaseLocalScale = leftArmGuardTransform.localScale;
         }
 
         private void UpdateStateWindowWeights()
@@ -203,6 +228,38 @@ namespace PowerPrank3D.Gameplay
                 Vector3.zero,
                 Time.deltaTime * visualProfile.blockRecoverSpeed
             );
+
+            UpdateLeftArmGuardWeight();
+        }
+
+        private void UpdateLeftArmGuardWeight()
+        {
+            if (visualProfile == null)
+            {
+                return;
+            }
+
+            if (leftArmGuardTransform == null || !visualProfile.useLeftArmGuardPose)
+            {
+                leftArmGuardWeight = 0f;
+                return;
+            }
+
+            bool defenseActive = defenseController != null && defenseController.IsDefenseActive;
+            bool targetArmGuard =
+                defenseActive ||
+                guardWeight > 0.01f ||
+                blockWeight > 0.01f;
+
+            float blendSpeed = targetArmGuard
+                ? Mathf.Max(0.01f, visualProfile.leftArmGuardBlendIn)
+                : Mathf.Max(0.01f, visualProfile.leftArmGuardBlendOut);
+
+            leftArmGuardWeight = Mathf.MoveTowards(
+                leftArmGuardWeight,
+                targetArmGuard ? 1f : 0f,
+                Time.deltaTime * blendSpeed
+            );
         }
 
         private void ApplyVisualPose()
@@ -258,6 +315,46 @@ namespace PowerPrank3D.Gameplay
                 headVisualPivot.localPosition = headBaseLocalPos;
                 headVisualPivot.localRotation = headBaseLocalRot * Quaternion.Euler(finalHeadEuler);
             }
+
+            ApplyLeftArmGuardPose();
+        }
+
+        private void ApplyLeftArmGuardPose()
+        {
+            if (leftArmGuardTransform == null)
+            {
+                return;
+            }
+
+            if (!visualProfile.useLeftArmGuardPose)
+            {
+                leftArmGuardTransform.localPosition = leftArmBaseLocalPos;
+                leftArmGuardTransform.localRotation = leftArmBaseLocalRot;
+                leftArmGuardTransform.localScale = leftArmBaseLocalScale;
+                return;
+            }
+
+            Vector3 targetPos = Vector3.Lerp(
+                leftArmBaseLocalPos,
+                visualProfile.leftArmGuardLocalPosition,
+                leftArmGuardWeight
+            );
+
+            Quaternion targetRot = Quaternion.Slerp(
+                leftArmBaseLocalRot,
+                Quaternion.Euler(visualProfile.leftArmGuardLocalRotation),
+                leftArmGuardWeight
+            );
+
+            Vector3 targetScale = Vector3.Lerp(
+                leftArmBaseLocalScale,
+                visualProfile.leftArmGuardLocalScale,
+                leftArmGuardWeight
+            );
+
+            leftArmGuardTransform.localPosition = targetPos;
+            leftArmGuardTransform.localRotation = targetRot;
+            leftArmGuardTransform.localScale = targetScale;
         }
 
         private void ApplyProxyState()

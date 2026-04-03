@@ -204,7 +204,7 @@ Transform:
   m_GameObject: {fileID: 82113098}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.98, y: -0.11, z: -0.22}
+  m_LocalPosition: {x: -1.15, y: -0.18, z: -0.2}
   m_LocalScale: {x: 0.18, y: 1.2, z: 0.18}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3746,6 +3746,7 @@ MonoBehaviour:
   bodyVisualPivot: {fileID: 201078844}
   headVisualPivot: {fileID: 572992033}
   visualProfile: {fileID: 11400000, guid: 1229c953eb15c4f4cbd6659794cb00fe, type: 2}
+  leftArmGuardTransform: {fileID: 0}
   visualProxy: {fileID: 1310628151}
   defenseController: {fileID: 1310628146}
   reactionLayerController: {fileID: 1310628145}
@@ -5473,6 +5474,7 @@ MonoBehaviour:
   bodyVisualPivot: {fileID: 459262858}
   headVisualPivot: {fileID: 1237582975}
   visualProfile: {fileID: 11400000, guid: 78ef7123edc6c8c4d9352562ae1555ca, type: 2}
+  leftArmGuardTransform: {fileID: 82113099}
   visualProxy: {fileID: 1620351226}
   defenseController: {fileID: 1620351231}
   reactionLayerController: {fileID: 1620351232}

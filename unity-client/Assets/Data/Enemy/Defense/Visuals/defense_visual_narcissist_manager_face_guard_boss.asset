@@ -46,3 +46,9 @@ MonoBehaviour:
   recoverBodyPosition: {x: 0, y: 0, z: -0.02}
   recoverHeadRotation: {x: -4, y: 3, z: 0}
   stateWindowBlendSpeed: 11
+  useLeftArmGuardPose: 1
+  leftArmGuardLocalPosition: {x: -0.49, y: 1.5, z: -0.941}
+  leftArmGuardLocalRotation: {x: 155.36, y: 0, z: 41.147}
+  leftArmGuardLocalScale: {x: 0.1577268, y: 2.5, z: 0.1577268}
+  leftArmGuardBlendIn: 10
+  leftArmGuardBlendOut: 8
