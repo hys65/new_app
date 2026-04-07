@@ -1848,6 +1848,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 657057593}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &678201726 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6712887171165328539, guid: ebe361b1b7d9a2a458ab4573098d2aac, type: 3}
+  m_PrefabInstance: {fileID: 3915286119562522550}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &752469193
 GameObject:
   m_ObjectHideFlags: 0
@@ -1938,6 +1943,11 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!1 &823808794 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4606587531455563693, guid: 60714469573fd354b8ca1bf4da09da17, type: 3}
+  m_PrefabInstance: {fileID: 1631197018446217904}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &870086358
 GameObject:
   m_ObjectHideFlags: 0
@@ -3265,7 +3275,15 @@ Transform:
   - {fileID: 1580555274}
   - {fileID: 657057594}
   - {fileID: 1310628144}
+  - {fileID: 8049227014162882996}
+  - {fileID: 7761678608185185106}
+  - {fileID: 5690981876446766472}
+  - {fileID: 3572944481861580714}
   - {fileID: 1620351224}
+  - {fileID: 5108812293946572023}
+  - {fileID: 4497894283668671397}
+  - {fileID: 3915286119562522551}
+  - {fileID: 1631197018446217905}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1228233593
@@ -3618,7 +3636,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1310628144
 Transform:
   m_ObjectHideFlags: 0
@@ -5305,7 +5323,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1620351224
 Transform:
   m_ObjectHideFlags: 0
@@ -5771,24 +5789,54 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemySwitchingManager
   gameplayManager: {fileID: 97048587}
   enemySlots:
-  - slotId: enemy_slot_01
-    displayName: Meeting Tyrant
-    enemyRoot: {fileID: 1310628143}
-    runtimePresetController: {fileID: 1310628152}
-    reactionLayer: {fileID: 1310628145}
-    defaultPreset: {fileID: 11400000, guid: 7f15965a5d62773448fa1d24b4a8dbd8, type: 2}
-  - slotId: enemy_slot_02
-    displayName: Narcissist Manager
-    enemyRoot: {fileID: 1620351223}
-    runtimePresetController: {fileID: 1620351225}
-    reactionLayer: {fileID: 1620351232}
-    defaultPreset: {fileID: 11400000, guid: bc0df5fa7e58c9d479c85586f88c36c0, type: 2}
-  - slotId: enemy_slot_03
-    displayName: Meeting Tyrant Boss
-    enemyRoot: {fileID: 1310628143}
-    runtimePresetController: {fileID: 1310628152}
-    reactionLayer: {fileID: 1310628145}
+  - slotId: boss_level04
+    displayName: Level 04 Briefcase Boss
+    enemyRoot: {fileID: 8049227014162882999}
+    runtimePresetController: {fileID: 8049227014162882998}
+    reactionLayer: {fileID: 8049227014162882997}
     defaultPreset: {fileID: 11400000, guid: 8ef3d4c13a3789b4da797011a91be528, type: 2}
+  - slotId: boss_level05
+    displayName: Level 05 Sunglasses Boss
+    enemyRoot: {fileID: 823808794}
+    runtimePresetController: {fileID: 1631197018446217906}
+    reactionLayer: {fileID: 1631197018446217913}
+    defaultPreset: {fileID: 11400000, guid: ce98f8de6aeff6e4c850702866b6982c, type: 2}
+  - slotId: boss_level06
+    displayName: Level 06 Weak Window Boss
+    enemyRoot: {fileID: 7761678608185185109}
+    runtimePresetController: {fileID: 7761678608185185108}
+    reactionLayer: {fileID: 7761678608185185107}
+    defaultPreset: {fileID: 11400000, guid: 19cca2914ef8e374b9f883bf721cbc9c, type: 2}
+  - slotId: boss_level07
+    displayName: Level 07 Precision Paint Boss
+    enemyRoot: {fileID: 5108812293946572026}
+    runtimePresetController: {fileID: 5108812293946572025}
+    reactionLayer: {fileID: 5108812293946572024}
+    defaultPreset: {fileID: 11400000, guid: 73d40312fa80d1a4e877b67eb242a4f0, type: 2}
+  - slotId: boss_level08
+    displayName: Level 08 Zero Mistake Boss
+    enemyRoot: {fileID: 5690981876446766475}
+    runtimePresetController: {fileID: 5690981876446766474}
+    reactionLayer: {fileID: 5690981876446766473}
+    defaultPreset: {fileID: 11400000, guid: 6489af9fca940ba49ac3fe244275f21d, type: 2}
+  - slotId: boss_level09
+    displayName: Level 09 Face Guard Boss
+    enemyRoot: {fileID: 678201726}
+    runtimePresetController: {fileID: 3915286119562522552}
+    reactionLayer: {fileID: 3915286119562522559}
+    defaultPreset: {fileID: 11400000, guid: 227ebf3c3c98c6244985c07784996ce2, type: 2}
+  - slotId: boss_level10
+    displayName: Level 10 Adaptive Shutdown Boss
+    enemyRoot: {fileID: 3572944481861580717}
+    runtimePresetController: {fileID: 3572944481861580716}
+    reactionLayer: {fileID: 3572944481861580715}
+    defaultPreset: {fileID: 11400000, guid: 466bd783e1d59dc49874b25fc313ec31, type: 2}
+  - slotId: boss_level11
+    displayName: Level 11 Head Hunter Boss
+    enemyRoot: {fileID: 4497894283668671399}
+    runtimePresetController: {fileID: 4497894283668671398}
+    reactionLayer: {fileID: 4497894283668671396}
+    defaultPreset: {fileID: 11400000, guid: 59628ddcf0dc8734ab772ef5c929ff5f, type: 2}
   startingSlotIndex: 0
   autoApplyDefaultPresetOnStart: 1
   deactivateNonActiveEnemiesOnStart: 1
@@ -7171,6 +7219,718 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!1001 &1631197018446217904
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1224865017}
+    m_Modifications:
+    - target: {fileID: 4606587531455563693, guid: 60714469573fd354b8ca1bf4da09da17, type: 3}
+      propertyPath: m_Name
+      value: EnemyRoot_Level05_Narcissist_Sunglasses
+      objectReference: {fileID: 0}
+    - target: {fileID: 4606587531455563693, guid: 60714469573fd354b8ca1bf4da09da17, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8098499312338261705, guid: 60714469573fd354b8ca1bf4da09da17, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.46
+      objectReference: {fileID: 0}
+    - target: {fileID: 8098499312338261705, guid: 60714469573fd354b8ca1bf4da09da17, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8098499312338261705, guid: 60714469573fd354b8ca1bf4da09da17, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8098499312338261705, guid: 60714469573fd354b8ca1bf4da09da17, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8098499312338261705, guid: 60714469573fd354b8ca1bf4da09da17, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8098499312338261705, guid: 60714469573fd354b8ca1bf4da09da17, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8098499312338261705, guid: 60714469573fd354b8ca1bf4da09da17, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8098499312338261705, guid: 60714469573fd354b8ca1bf4da09da17, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8098499312338261705, guid: 60714469573fd354b8ca1bf4da09da17, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8098499312338261705, guid: 60714469573fd354b8ca1bf4da09da17, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects:
+    - {fileID: 8104275193225061385, guid: 60714469573fd354b8ca1bf4da09da17, type: 3}
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 60714469573fd354b8ca1bf4da09da17, type: 3}
+--- !u!4 &1631197018446217905 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8098499312338261705, guid: 60714469573fd354b8ca1bf4da09da17, type: 3}
+  m_PrefabInstance: {fileID: 1631197018446217904}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1631197018446217906 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7451961156605920905, guid: 60714469573fd354b8ca1bf4da09da17, type: 3}
+  m_PrefabInstance: {fileID: 1631197018446217904}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 823808794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5f0c2133e45c294b80de72c058beffc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyRuntimePresetController
+--- !u!114 &1631197018446217913 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6124973511621290391, guid: 60714469573fd354b8ca1bf4da09da17, type: 3}
+  m_PrefabInstance: {fileID: 1631197018446217904}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 823808794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1220c1117d2b5e14b81d57ba19ed914b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyReactionLayerController
+--- !u!1001 &3572944481861580713
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1224865017}
+    m_Modifications:
+    - target: {fileID: 1736989019837913754, guid: 4edd96c4edf12ed4683484f24af348b0, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.93
+      objectReference: {fileID: 0}
+    - target: {fileID: 1736989019837913754, guid: 4edd96c4edf12ed4683484f24af348b0, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1736989019837913754, guid: 4edd96c4edf12ed4683484f24af348b0, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1736989019837913754, guid: 4edd96c4edf12ed4683484f24af348b0, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1736989019837913754, guid: 4edd96c4edf12ed4683484f24af348b0, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1736989019837913754, guid: 4edd96c4edf12ed4683484f24af348b0, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1736989019837913754, guid: 4edd96c4edf12ed4683484f24af348b0, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1736989019837913754, guid: 4edd96c4edf12ed4683484f24af348b0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1736989019837913754, guid: 4edd96c4edf12ed4683484f24af348b0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1736989019837913754, guid: 4edd96c4edf12ed4683484f24af348b0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2835030387999284710, guid: 4edd96c4edf12ed4683484f24af348b0, type: 3}
+      propertyPath: m_Name
+      value: EnemyRoot_Level10_AdaptiveShutdown
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4edd96c4edf12ed4683484f24af348b0, type: 3}
+--- !u!4 &3572944481861580714 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1736989019837913754, guid: 4edd96c4edf12ed4683484f24af348b0, type: 3}
+  m_PrefabInstance: {fileID: 3572944481861580713}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3572944481861580715 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7342704949093723080, guid: 4edd96c4edf12ed4683484f24af348b0, type: 3}
+  m_PrefabInstance: {fileID: 3572944481861580713}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3572944481861580717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1220c1117d2b5e14b81d57ba19ed914b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyReactionLayerController
+--- !u!114 &3572944481861580716 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2765608835765888650, guid: 4edd96c4edf12ed4683484f24af348b0, type: 3}
+  m_PrefabInstance: {fileID: 3572944481861580713}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3572944481861580717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5f0c2133e45c294b80de72c058beffc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyRuntimePresetController
+--- !u!1 &3572944481861580717 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2835030387999284710, guid: 4edd96c4edf12ed4683484f24af348b0, type: 3}
+  m_PrefabInstance: {fileID: 3572944481861580713}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &3915286119562522550
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1224865017}
+    m_Modifications:
+    - target: {fileID: 5748140729355046616, guid: ebe361b1b7d9a2a458ab4573098d2aac, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.46
+      objectReference: {fileID: 0}
+    - target: {fileID: 5748140729355046616, guid: ebe361b1b7d9a2a458ab4573098d2aac, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5748140729355046616, guid: ebe361b1b7d9a2a458ab4573098d2aac, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5748140729355046616, guid: ebe361b1b7d9a2a458ab4573098d2aac, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5748140729355046616, guid: ebe361b1b7d9a2a458ab4573098d2aac, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5748140729355046616, guid: ebe361b1b7d9a2a458ab4573098d2aac, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5748140729355046616, guid: ebe361b1b7d9a2a458ab4573098d2aac, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5748140729355046616, guid: ebe361b1b7d9a2a458ab4573098d2aac, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5748140729355046616, guid: ebe361b1b7d9a2a458ab4573098d2aac, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5748140729355046616, guid: ebe361b1b7d9a2a458ab4573098d2aac, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6712887171165328539, guid: ebe361b1b7d9a2a458ab4573098d2aac, type: 3}
+      propertyPath: m_Name
+      value: EnemyRoot_Level09_Narcissist_FaceGuard
+      objectReference: {fileID: 0}
+    - target: {fileID: 6712887171165328539, guid: ebe361b1b7d9a2a458ab4573098d2aac, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects:
+    - {fileID: 4186593933679222413, guid: ebe361b1b7d9a2a458ab4573098d2aac, type: 3}
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ebe361b1b7d9a2a458ab4573098d2aac, type: 3}
+--- !u!4 &3915286119562522551 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5748140729355046616, guid: ebe361b1b7d9a2a458ab4573098d2aac, type: 3}
+  m_PrefabInstance: {fileID: 3915286119562522550}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3915286119562522552 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8822907929021435362, guid: ebe361b1b7d9a2a458ab4573098d2aac, type: 3}
+  m_PrefabInstance: {fileID: 3915286119562522550}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 678201726}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5f0c2133e45c294b80de72c058beffc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyRuntimePresetController
+--- !u!114 &3915286119562522559 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5629905778668570345, guid: ebe361b1b7d9a2a458ab4573098d2aac, type: 3}
+  m_PrefabInstance: {fileID: 3915286119562522550}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 678201726}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1220c1117d2b5e14b81d57ba19ed914b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyReactionLayerController
+--- !u!1001 &4497894283668671395
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1224865017}
+    m_Modifications:
+    - target: {fileID: 3223778487092845750, guid: ec5501a3db7fa1e4bbb34a6f54e28dc2, type: 3}
+      propertyPath: m_Name
+      value: EnemyRoot_Level11_HeadHunter
+      objectReference: {fileID: 0}
+    - target: {fileID: 5109114520369887802, guid: ec5501a3db7fa1e4bbb34a6f54e28dc2, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.46
+      objectReference: {fileID: 0}
+    - target: {fileID: 5109114520369887802, guid: ec5501a3db7fa1e4bbb34a6f54e28dc2, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5109114520369887802, guid: ec5501a3db7fa1e4bbb34a6f54e28dc2, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5109114520369887802, guid: ec5501a3db7fa1e4bbb34a6f54e28dc2, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5109114520369887802, guid: ec5501a3db7fa1e4bbb34a6f54e28dc2, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5109114520369887802, guid: ec5501a3db7fa1e4bbb34a6f54e28dc2, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5109114520369887802, guid: ec5501a3db7fa1e4bbb34a6f54e28dc2, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5109114520369887802, guid: ec5501a3db7fa1e4bbb34a6f54e28dc2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5109114520369887802, guid: ec5501a3db7fa1e4bbb34a6f54e28dc2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5109114520369887802, guid: ec5501a3db7fa1e4bbb34a6f54e28dc2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ec5501a3db7fa1e4bbb34a6f54e28dc2, type: 3}
+--- !u!114 &4497894283668671396 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 170166097991132027, guid: ec5501a3db7fa1e4bbb34a6f54e28dc2, type: 3}
+  m_PrefabInstance: {fileID: 4497894283668671395}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4497894283668671399}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1220c1117d2b5e14b81d57ba19ed914b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyReactionLayerController
+--- !u!4 &4497894283668671397 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5109114520369887802, guid: ec5501a3db7fa1e4bbb34a6f54e28dc2, type: 3}
+  m_PrefabInstance: {fileID: 4497894283668671395}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4497894283668671398 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6902691409528227916, guid: ec5501a3db7fa1e4bbb34a6f54e28dc2, type: 3}
+  m_PrefabInstance: {fileID: 4497894283668671395}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4497894283668671399}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5f0c2133e45c294b80de72c058beffc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyRuntimePresetController
+--- !u!1 &4497894283668671399 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3223778487092845750, guid: ec5501a3db7fa1e4bbb34a6f54e28dc2, type: 3}
+  m_PrefabInstance: {fileID: 4497894283668671395}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &5108812293946572022
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1224865017}
+    m_Modifications:
+    - target: {fileID: 5520900194468874960, guid: 18ad58c346b005742b27196c95288fb5, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.46
+      objectReference: {fileID: 0}
+    - target: {fileID: 5520900194468874960, guid: 18ad58c346b005742b27196c95288fb5, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5520900194468874960, guid: 18ad58c346b005742b27196c95288fb5, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5520900194468874960, guid: 18ad58c346b005742b27196c95288fb5, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5520900194468874960, guid: 18ad58c346b005742b27196c95288fb5, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5520900194468874960, guid: 18ad58c346b005742b27196c95288fb5, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5520900194468874960, guid: 18ad58c346b005742b27196c95288fb5, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5520900194468874960, guid: 18ad58c346b005742b27196c95288fb5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5520900194468874960, guid: 18ad58c346b005742b27196c95288fb5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5520900194468874960, guid: 18ad58c346b005742b27196c95288fb5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6747921143784698926, guid: 18ad58c346b005742b27196c95288fb5, type: 3}
+      propertyPath: m_Name
+      value: EnemyRoot_Level07_Narcissist_PrecisionPaint
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 18ad58c346b005742b27196c95288fb5, type: 3}
+--- !u!4 &5108812293946572023 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5520900194468874960, guid: 18ad58c346b005742b27196c95288fb5, type: 3}
+  m_PrefabInstance: {fileID: 5108812293946572022}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5108812293946572024 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2707885444799878383, guid: 18ad58c346b005742b27196c95288fb5, type: 3}
+  m_PrefabInstance: {fileID: 5108812293946572022}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5108812293946572026}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1220c1117d2b5e14b81d57ba19ed914b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyReactionLayerController
+--- !u!114 &5108812293946572025 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7200638981200134035, guid: 18ad58c346b005742b27196c95288fb5, type: 3}
+  m_PrefabInstance: {fileID: 5108812293946572022}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5108812293946572026}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5f0c2133e45c294b80de72c058beffc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyRuntimePresetController
+--- !u!1 &5108812293946572026 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6747921143784698926, guid: 18ad58c346b005742b27196c95288fb5, type: 3}
+  m_PrefabInstance: {fileID: 5108812293946572022}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &5690981876446766471
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1224865017}
+    m_Modifications:
+    - target: {fileID: 1929448796582306774, guid: 9b2ebdd4592f1404f948b00fccef554c, type: 3}
+      propertyPath: m_Name
+      value: EnemyRoot_Level08_ZeroMistake
+      objectReference: {fileID: 0}
+    - target: {fileID: 2999102805730695989, guid: 9b2ebdd4592f1404f948b00fccef554c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.93
+      objectReference: {fileID: 0}
+    - target: {fileID: 2999102805730695989, guid: 9b2ebdd4592f1404f948b00fccef554c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2999102805730695989, guid: 9b2ebdd4592f1404f948b00fccef554c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2999102805730695989, guid: 9b2ebdd4592f1404f948b00fccef554c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2999102805730695989, guid: 9b2ebdd4592f1404f948b00fccef554c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2999102805730695989, guid: 9b2ebdd4592f1404f948b00fccef554c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2999102805730695989, guid: 9b2ebdd4592f1404f948b00fccef554c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2999102805730695989, guid: 9b2ebdd4592f1404f948b00fccef554c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2999102805730695989, guid: 9b2ebdd4592f1404f948b00fccef554c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2999102805730695989, guid: 9b2ebdd4592f1404f948b00fccef554c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9b2ebdd4592f1404f948b00fccef554c, type: 3}
+--- !u!4 &5690981876446766472 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2999102805730695989, guid: 9b2ebdd4592f1404f948b00fccef554c, type: 3}
+  m_PrefabInstance: {fileID: 5690981876446766471}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5690981876446766473 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 586907905969079840, guid: 9b2ebdd4592f1404f948b00fccef554c, type: 3}
+  m_PrefabInstance: {fileID: 5690981876446766471}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5690981876446766475}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1220c1117d2b5e14b81d57ba19ed914b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyReactionLayerController
+--- !u!114 &5690981876446766474 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2327537611893386569, guid: 9b2ebdd4592f1404f948b00fccef554c, type: 3}
+  m_PrefabInstance: {fileID: 5690981876446766471}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5690981876446766475}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5f0c2133e45c294b80de72c058beffc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyRuntimePresetController
+--- !u!1 &5690981876446766475 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1929448796582306774, guid: 9b2ebdd4592f1404f948b00fccef554c, type: 3}
+  m_PrefabInstance: {fileID: 5690981876446766471}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &7761678608185185105
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1224865017}
+    m_Modifications:
+    - target: {fileID: 3228285476931479597, guid: e054211c1c3614448a9fcf5eb533ef96, type: 3}
+      propertyPath: m_Name
+      value: EnemyRoot_Level06_MeetingTyrant_WeakWindow
+      objectReference: {fileID: 0}
+    - target: {fileID: 3298229128948370905, guid: e054211c1c3614448a9fcf5eb533ef96, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.93
+      objectReference: {fileID: 0}
+    - target: {fileID: 3298229128948370905, guid: e054211c1c3614448a9fcf5eb533ef96, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3298229128948370905, guid: e054211c1c3614448a9fcf5eb533ef96, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3298229128948370905, guid: e054211c1c3614448a9fcf5eb533ef96, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3298229128948370905, guid: e054211c1c3614448a9fcf5eb533ef96, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3298229128948370905, guid: e054211c1c3614448a9fcf5eb533ef96, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3298229128948370905, guid: e054211c1c3614448a9fcf5eb533ef96, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3298229128948370905, guid: e054211c1c3614448a9fcf5eb533ef96, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3298229128948370905, guid: e054211c1c3614448a9fcf5eb533ef96, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3298229128948370905, guid: e054211c1c3614448a9fcf5eb533ef96, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e054211c1c3614448a9fcf5eb533ef96, type: 3}
+--- !u!4 &7761678608185185106 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3298229128948370905, guid: e054211c1c3614448a9fcf5eb533ef96, type: 3}
+  m_PrefabInstance: {fileID: 7761678608185185105}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7761678608185185107 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5133118886646056036, guid: e054211c1c3614448a9fcf5eb533ef96, type: 3}
+  m_PrefabInstance: {fileID: 7761678608185185105}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7761678608185185109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1220c1117d2b5e14b81d57ba19ed914b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyReactionLayerController
+--- !u!114 &7761678608185185108 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4383360191812058515, guid: e054211c1c3614448a9fcf5eb533ef96, type: 3}
+  m_PrefabInstance: {fileID: 7761678608185185105}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7761678608185185109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5f0c2133e45c294b80de72c058beffc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyRuntimePresetController
+--- !u!1 &7761678608185185109 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3228285476931479597, guid: e054211c1c3614448a9fcf5eb533ef96, type: 3}
+  m_PrefabInstance: {fileID: 7761678608185185105}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &8049227014162882995
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1224865017}
+    m_Modifications:
+    - target: {fileID: 4342650628011403838, guid: 6878f8477bf0ba448a18fa4948d93729, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.93
+      objectReference: {fileID: 0}
+    - target: {fileID: 4342650628011403838, guid: 6878f8477bf0ba448a18fa4948d93729, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4342650628011403838, guid: 6878f8477bf0ba448a18fa4948d93729, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4342650628011403838, guid: 6878f8477bf0ba448a18fa4948d93729, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4342650628011403838, guid: 6878f8477bf0ba448a18fa4948d93729, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4342650628011403838, guid: 6878f8477bf0ba448a18fa4948d93729, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4342650628011403838, guid: 6878f8477bf0ba448a18fa4948d93729, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4342650628011403838, guid: 6878f8477bf0ba448a18fa4948d93729, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4342650628011403838, guid: 6878f8477bf0ba448a18fa4948d93729, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4342650628011403838, guid: 6878f8477bf0ba448a18fa4948d93729, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5728290630202902537, guid: 6878f8477bf0ba448a18fa4948d93729, type: 3}
+      propertyPath: m_Name
+      value: EnemyRoot_Level04_MeetingTyrant_Briefcase
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 6878f8477bf0ba448a18fa4948d93729, type: 3}
+--- !u!4 &8049227014162882996 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4342650628011403838, guid: 6878f8477bf0ba448a18fa4948d93729, type: 3}
+  m_PrefabInstance: {fileID: 8049227014162882995}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8049227014162882997 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6500575160141780197, guid: 6878f8477bf0ba448a18fa4948d93729, type: 3}
+  m_PrefabInstance: {fileID: 8049227014162882995}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8049227014162882999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1220c1117d2b5e14b81d57ba19ed914b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyReactionLayerController
+--- !u!114 &8049227014162882998 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3340172654669451662, guid: 6878f8477bf0ba448a18fa4948d93729, type: 3}
+  m_PrefabInstance: {fileID: 8049227014162882995}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8049227014162882999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5f0c2133e45c294b80de72c058beffc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PowerPrank3D.Gameplay.EnemyRuntimePresetController
+--- !u!1 &8049227014162882999 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5728290630202902537, guid: 6878f8477bf0ba448a18fa4948d93729, type: 3}
+  m_PrefabInstance: {fileID: 8049227014162882995}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

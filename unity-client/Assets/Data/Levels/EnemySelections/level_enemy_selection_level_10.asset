@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: Level 10 Enemy Selection
   roster: {fileID: 11400000, guid: a6a87e35948266f4cb29bd63e33ea176, type: 2}
   selectedEnemies:
-  - rosterEntryId: meeting_tyrant_adaptive_shutdown_boss
+  - rosterEntryId: level10_adaptive_shutdown_boss
     useRosterRecommendedSlot: 1
     overrideSlotId: 
   startupSelectionIndex: 0

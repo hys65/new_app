@@ -15,53 +15,43 @@ MonoBehaviour:
   rosterId: main_enemy_roster
   displayName: Main Enemy Roster
   entries:
-  - entryId: meeting_tyrant
-    displayName: Meeting Tyrant
-    preset: {fileID: 11400000, guid: 7f15965a5d62773448fa1d24b4a8dbd8, type: 2}
-    recommendedSlotId: enemy_slot_01
-    enabled: 1
-  - entryId: narcissist_manager
-    displayName: Narcissist Manager
-    preset: {fileID: 11400000, guid: bc0df5fa7e58c9d479c85586f88c36c0, type: 2}
-    recommendedSlotId: enemy_slot_02
-    enabled: 1
-  - entryId: meeting_tyrant_briefcase_boss
-    displayName: Meeting Tyrant
+  - entryId: level04_briefcase_boss
+    displayName: Level 04 Briefcase Boss
     preset: {fileID: 11400000, guid: 8ef3d4c13a3789b4da797011a91be528, type: 2}
-    recommendedSlotId: enemy_slot_03
+    recommendedSlotId: boss_level04
     enabled: 1
-  - entryId: narcissist_manager_sunglasses_boss
-    displayName: Narcissist Manager
+  - entryId: level05_sunglasses_boss
+    displayName: Level 05 Sunglasses Boss
     preset: {fileID: 11400000, guid: ce98f8de6aeff6e4c850702866b6982c, type: 2}
-    recommendedSlotId: enemy_slot_02
+    recommendedSlotId: boss_level05
     enabled: 1
-  - entryId: meeting_tyrant_weak_window_boss
-    displayName: Meeting Tyrant
+  - entryId: level06_weak_window_boss
+    displayName: Level 06 Weak Window Boss
     preset: {fileID: 11400000, guid: 19cca2914ef8e374b9f883bf721cbc9c, type: 2}
-    recommendedSlotId: enemy_slot_03
+    recommendedSlotId: boss_level06
     enabled: 1
-  - entryId: narcissist_manager_precision_paint_boss
-    displayName: Narcissist Manager
+  - entryId: level07_precision_paint_boss
+    displayName: Level 07 Precision Paint Boss
     preset: {fileID: 11400000, guid: 73d40312fa80d1a4e877b67eb242a4f0, type: 2}
-    recommendedSlotId: enemy_slot_02
+    recommendedSlotId: boss_level07
     enabled: 1
-  - entryId: narcissist_manager_face_guard_boss
-    displayName: Narcissist Manager
-    preset: {fileID: 11400000, guid: 227ebf3c3c98c6244985c07784996ce2, type: 2}
-    recommendedSlotId: enemy_slot_02
-    enabled: 1
-  - entryId: meeting_tyrant_adaptive_shutdown_boss
-    displayName: Meeting Tyrant
-    preset: {fileID: 11400000, guid: 466bd783e1d59dc49874b25fc313ec31, type: 2}
-    recommendedSlotId: enemy_slot_03
-    enabled: 1
-  - entryId: narcissist_manager_head_hunter_boss
-    displayName: Narcissist Manager
-    preset: {fileID: 11400000, guid: 59628ddcf0dc8734ab772ef5c929ff5f, type: 2}
-    recommendedSlotId: enemy_slot_02
-    enabled: 1
-  - entryId: zero_mistake_boss
-    displayName: Zero-Mistake Boss
+  - entryId: level08_zero_mistake_boss
+    displayName: Level 08 Zero Mistake Boss
     preset: {fileID: 11400000, guid: 6489af9fca940ba49ac3fe244275f21d, type: 2}
-    recommendedSlotId: enemy_slot_02
+    recommendedSlotId: boss_level08
+    enabled: 1
+  - entryId: level09_face_guard_boss
+    displayName: Level 09 Face Guard Boss
+    preset: {fileID: 11400000, guid: 227ebf3c3c98c6244985c07784996ce2, type: 2}
+    recommendedSlotId: boss_level09
+    enabled: 1
+  - entryId: level10_adaptive_shutdown_boss
+    displayName: Level 10 Adaptive Shutdown Boss
+    preset: {fileID: 11400000, guid: 466bd783e1d59dc49874b25fc313ec31, type: 2}
+    recommendedSlotId: boss_level10
+    enabled: 1
+  - entryId: level11_head_hunter_boss
+    displayName: Level 11 Head Hunter Boss
+    preset: {fileID: 11400000, guid: 59628ddcf0dc8734ab772ef5c929ff5f, type: 2}
+    recommendedSlotId: boss_level11
     enabled: 1
