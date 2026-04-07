@@ -1,309 +1,187 @@
 # development_tasks.md
 
-## Current Position
+## Power Prank 3D — Development Tasks
 
-The project has completed:
+------
 
-- core throw / hit / breakdown loop
-- enemy reaction layer
-- defense visual layer
-- archetype system
-- enemy AI layer
-- enemy switching
-- roster / level enemy selection
-- level encounter configuration
-- level progression / multi-level flow
-- runtime level advance
-- victory choice flow
-- result panel polish
-- level goal variety
-- boss preset override debugging pass
-- combat pacing / per-item throw cooldown pass
-- repository asset-structure cleanup
-- Level 10 boss identity closure
-- Level 11 boss identity closure
+# CURRENT STAGE
 
-The project has also advanced through the first meaningful portion of the current readability / presentation pass.
+> System complete → Content unstable → Enter consolidation phase
 
----
+------
 
-## Completed Boss Reference Ladder
+# COMPLETED ✅
 
-### Level 04
+## Core Gameplay
 
-Meeting Tyrant briefcase boss
+- Drag throw system
+- Hit detection (head/body)
+- Breakdown system
+- Hit feedback
 
-### Level 05
+## Enemy Systems
 
-Narcissist Manager sunglasses boss
+- Enemy Reaction Layer 1.0
+- Enemy Defense Visual Layer 1.0
+- Enemy Archetype System
+- Enemy AI Layer 1.0
 
-### Level 06
+## Level Systems
 
-Meeting Tyrant weak-window boss
+- Enemy Switching System
+- Enemy Roster
+- Level Enemy Selection
+- Encounter Config
+- Level Progression
+- Runtime Level Advance
 
-### Level 07
+## Flow / UI
 
-Narcissist Manager precision paint boss
+- Victory choice (Next / Retry)
+- Result panel stabilization
 
-### Level 08
+## Gameplay Tuning (Pass 1)
 
-Zero-Mistake Boss
+- TargetCount loop
+- Throw cooldown pacing
 
-### Level 09
+## Boss Pipeline (Structure)
 
-Narcissist Manager Face Guard Boss
+- Preset-driven configuration
+- Pattern → State Window → Visual Profile chain
+- Runtime preset application
+- Multi-level boss routing verified
 
-### Level 10
+------
 
-Adaptive Shutdown Boss
+# CURRENTLY PAUSED ⏸️
 
-### Level 11
+## Visual / Art Iteration
 
-Head Hunter Boss
+- Sunglasses variants
+- Arm pose tweaking
+- Head highlight experiments
 
----
+## Boss Fine-Tuning
 
-## Level 09 Status
+- Difficulty balancing
+- Micro timing adjustments
 
-Level 09 is implemented and accepted as playable.
+## Per-Level Polish
 
-### Final rule
+- Level 04–11 final feel tuning
 
-- Goal Type = `BreakdownTarget`
-- Target Breakdown = `180`
-- Round Duration Seconds = `34`
+------
 
-### Final identity
+# WHY PAUSED
 
-- head is intentionally low-value
-- body is the primary reliable scoring route
-- encounter pressure comes from hit-zone judgment rather than item restriction or streak reset
+Because:
 
-### Important accepted limitation
+- Current boss versions are **not final direction**
+- Continuing polish = wasted effort
 
-- head stain visuals remain imperfect on the current sphere-head setup
-- this is accepted for now
-- do not reopen deep stain polish unless it becomes a true blocker later
+------
 
----
+# NEW PRIMARY TASK
 
-## Level 10 Status
+## 1. Docs Consolidation Pass
 
-Level 10 is implemented and accepted as playable.
+Goal:
 
-### Final identity
+- Align all documentation with actual working system
+- Remove ambiguity
+- Lock architecture understanding
 
-- predictable throw rhythm is punished
-- mixed rhythm materially improves hit efficiency
-- encounter pressure comes from anti-predictability pressure
-- the encounter is not primarily about item restriction
-- the encounter is not primarily about hit-zone judgment
-- the encounter is not a weak-window repeat
+Scope:
 
-### Validation outcome
+- PROJECT_STATE.md
+- architecture.md
+- development_tasks.md
+- SESSION_LOG.md
+- AI_CONTEXT.md (partial)
 
-- fixed-rhythm test produced materially more blocked hits than mixed-rhythm test
-- mixed rhythm provided reliable counterplay
-- accepted subjective result: the encounter feels right
+------
 
-### Design meaning
+## 2. Boss Redesign Planning
 
-- the boss ladder now includes an anti-predictability encounter
-- this expands the ladder without requiring new core systems
+Goal:
 
----
+- Redefine boss identity
+- Redefine player recognition signals
 
-## Level 11 Status
+Must define:
 
-Level 11 is implemented and accepted as playable.
+- Each boss “what player should instantly understand”
+- Visual + gameplay coupling
 
-### Final rule
+------
 
-- Goal Type = `HeadHitCount`
-- Target Count = `7`
-- Target Breakdown = `160`
-- Round Duration Seconds = `38`
+## 3. Boss Identity Restructuring
 
-### Final identity
+Current problem:
 
-- the player is pushed toward a later scoring opportunity
-- the player is pushed toward head-focused precision rather than generic safe spam
-- the encounter is not primarily about item restriction
-- the encounter is not primarily about body-route judgment
-- the encounter is not primarily about anti-predictability
-- the identity is not a weak-window repeat even though later conversion timing matters
+- Boss differences are weak
+- Recognition relies on temporary visuals
 
-### Validation outcome
+Target:
 
-- the initial authoring pass was too permissive and allowed easy wins
-- the boss identity only started to hold after defensive pressure was increased
-- after the pressure increase, the encounter was accepted as basically correct
-- later full-ladder balance tuning is still allowed
+- Each boss = clear mechanic + clear visual signal
 
-### Design meaning
+------
 
-- the boss ladder now includes a late-window head-pressure encounter
-- this expands the ladder without requiring new goal-type churn
-- the important step was identity closure, not premature release balancing
+## 4. Visual Direction Reset
 
-### Important runtime note
+Current:
 
-- Level 11 intentionally has no break path
-- do not use Level 11 as the reference encounter for `BREAK` readability
-- use a boss with real break-item routing, such as Level 04, when sampling `BREAK`
+- Prototype-based
+- Inconsistent
 
----
+Target:
 
-## Repository Cleanup Status
+- Cohesive visual language
+- System-driven presentation
 
-This is now treated as finished:
+------
 
-- enemy data lives under `Assets/Data/Enemy/...`
-- level data lives under `Assets/Data/Levels/...`
-- gameplay items remain under `Assets/ScriptableObjects/GameplayItems/`
-- enemy runtime scripts use `Assets/Scripts/gameplay/Enemy/`
-- duplicate legacy naming families were removed from active use
+## 5. Re-implementation Phase (Later)
 
-Do not reopen cleanup work unless a real duplicate or misplaced asset reappears.
+After redesign:
 
----
+- Rebuild boss presets
+- Rebuild visual profiles
+- Rebind via roster + level system
 
-## What Is Explicitly Finished
+------
 
-Do **not** reopen these unless runtime testing proves a real bug:
+# HARD RULES
 
-- Level 04 reference implementation
-- Level 05 reference implementation
-- Level 06 reference implementation
-- Level 07 reference implementation
-- Level 08 zero-mistake implementation
-- Level 09 face-guard implementation
-- Level 10 adaptive shutdown implementation
-- Level 11 head-hunter implementation
-- UnblockedHitStreak goal support
-- Level 08 HUD rule readability
-- Level 08 blocked-boundary evaluation fix
-- Level 09 silhouette / hit-zone repair at the current accepted level
-- Per-item throw cooldown baseline
-- Repository structure cleanup pass
+## Rule 1
 
----
+Do NOT continue polishing current boss visuals
 
-## Current Readability / Presentation Progress
+## Rule 2
 
-The active milestone has already advanced through the following sub-items:
+Do NOT balance levels based on temporary content
 
-### Completed / Accepted
+## Rule 3
 
-- clearer goal HUD rule language
-- clearer result panel goal summary language
-- basic block / weak / break / normal-hit differentiation pass
-- weak-window readability improved to a currently acceptable gameplay level
-- result panel hierarchy reviewed and accepted for the current prototype phase
+Do NOT bypass preset system
 
-### Important accepted production boundaries
+## Rule 4
 
-- primitive proxy-arm posing is **not** a high-value place to force final hero-quality defensive posing
-- current primitive enemy rig only needs baseline readability, not final art-grade guard choreography
-- do not continue spending time fighting local pivot weirdness unless later art quality makes it worthwhile
+All future boss work must:
 
----
+- Be data-driven
+- Be reproducible
 
-## Immediate Next Milestone
+------
 
-**Combat Readability / Boss Presentation Pass**
+# KNOWN TRUTH
 
-### Constraints
+> Current boss = functional but temporary
 
-- preserve current architecture and data-driven authoring flow
-- do not casually redesign finished boss levels
-- improve readability before final release balancing
-- prefer content / presentation clarification before system churn
-- do not reopen deep stain-system work unless it becomes a true blocker
-- do not overfit primitive proxy poses into pseudo-final animation polish
+------
 
-### Required output
+# NEXT ACTION
 
-- clearer telegraph readability where practical
-- clearer active defense readability where practical
-- clearer weak-window readability
-- clearer block / break / success readability
-- stronger combat-language consistency across boss encounters
-- clearer player-facing rule language in both live HUD and result review
-
-### What is already materially advanced inside this milestone
-
-- HUD goal presentation now explains encounter rules instead of only exposing counters
-- result panel goal summary now matches live goal language
-- block and break readability have been sampled and pushed further apart
-- weak-window readability now functions as a readable scoring opportunity rather than an invisible internal rule
-
----
-
-## Remaining Tasks Inside the Current Milestone
-
-These are still open after the current pass:
-
-### 1. Broader encounter consistency check
-
-Validate that the new readability standards feel coherent across more than one boss.
-
-Especially important for:
-
-- Level 04
-- Level 06
-- Level 10
-- Level 11
-
-### 2. Later art-side polish pass
-
-Do not do this now.
-
-This remains a later task for when presentation quality matters more than prototype clarity.
-
-Includes:
-
-- higher-quality defensive posing
-- stronger enemy silhouette readability
-- cleaner visual hierarchy during guard states
-- later art-grade polish for break / weak / guard presentation
-
-### 3. Final 04–11 balancing
-
-Still intentionally postponed.
-
-Do not do this yet.
-
-Correct order remains:
-
-1. keep current boss identities valid
-2. continue readability / presentation work
-3. then perform final full-ladder balancing closer to release
-
----
-
-## Release-Planning Note
-
-Full 04–11 balancing should happen later.
-
-Do not treat the current stage as the final release-balance pass.
-
-The correct order is:
-
-1. keep current boss identities valid
-2. continue readability / presentation work
-3. then perform final full-ladder balancing closer to release
-
----
-
-## Ongoing Discipline
-
-For every future boss level:
-
-- verify runtime GitHub asset contents after push
-- treat runtime preset application as authoritative
-- validate both logic and readability
-- reject content that feels unclear even if technically correct
-- evaluate geometry, control feel, and hit-zone readability alongside raw rule tuning
-- keep new assets in canonical folders from the start
-- do not confuse temporary primitive readability with final presentation quality
+Continue docs updates → then move to boss redesign definition

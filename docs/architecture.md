@@ -1,685 +1,267 @@
 # architecture.md
 
-## Overview
+## Power Prank 3D — System Architecture
 
-**Power Prank 3D** now runs on a layered gameplay architecture.
+------
 
-The project is no longer a loose prototype with one enemy and one win rule.
+# CORE PRINCIPLE
 
-It is now a structured boss-reference game flow with:
+> The entire game is **data-driven**.
 
-- data-authored enemy behavior
-- data-authored encounter goals
-- runtime enemy routing
-- runtime level progression
-- player-facing rule language in HUD and result flow
-- preset-authored defense visual presentation
+No gameplay behavior should depend on:
 
-The core architectural principle is:
+- Scene manual setup
+- Hardcoded logic in MonoBehaviours
 
-**author behavior in data, apply it at runtime, then expose the rule clearly to the player**
+Everything must flow through:
 
----
+> Data → Profile → Preset → Runtime Application
 
-## High-Level Runtime Stack
+------
 
-Current gameplay runs through these main layers:
+# ENEMY SYSTEM ARCHITECTURE
 
-1. **Throw Layer**
-2. **Projectile Resolution Layer**
-3. **Defense Evaluation Layer**
-4. **Breakdown / Score Layer**
-5. **Goal Evaluation Layer**
-6. **Enemy Presentation Layer**
-7. **HUD / Result Presentation Layer**
-8. **Level Progression Layer**
+## Full Runtime Chain
 
-These layers are already connected and should not be casually restructured.
+```
+EnemyArchetypeData
+    ↓
+EnemyDefensePatternData
+    ↓
+EnemyDefenseStateWindowProfileData
+    ↓
+EnemyDefenseVisualProfileData
+    ↓
+EnemyPreset
+    ↓
+EnemyPresetApplicator (Runtime)
+    ↓
+Enemy Instance (Scene)
+```
 
----
+------
 
-## Core Gameplay Runtime Flow
+## Layer Responsibilities
 
-### 1. Throw Layer
+### 1. Archetype Layer
 
-Primary runtime owner:
+Defines:
 
-- `ThrowController`
+- Enemy identity
+- Base behavior rules
 
-Responsibilities:
+------
 
-- drag-based throw input
-- UI-blocked input rejection
-- item selection shortcuts
-- per-item cooldown gating
-- projectile spawn
-- throw-force calculation
-- aim preview
-- trajectory preview
+### 2. Defense Pattern Layer
 
-Important rule:
+Defines:
 
-Throw permission is decided **before** projectile existence.
+- Timing structure
+- Guard rhythm
 
-This is why item cooldown belongs here, not inside projectile collision code.
+------
 
----
+### 3. State Window Profile Layer
 
-### 2. Projectile Resolution Layer
+Defines:
 
-Primary runtime owner:
+- When enemy is blocking
+- When enemy is vulnerable
 
-- `ProjectileBehavior`
+------
 
-Responsibilities:
+### 4. Visual Profile Layer
 
-- detect collision with enemy or ground
-- determine head hit vs body hit
-- find enemy runtime controllers
-- evaluate defense result
-- apply final score if allowed
-- notify goal controller with final resolved hit data
-- trigger popup / reaction / visual feedback
-- spawn impact VFX / SFX / stain
+Defines:
 
-Important rule:
+- How defense looks
+- Arm pose / guard posture / visual feedback
 
-A collision is not automatically a valid scoring hit.
+------
 
-A projectile must pass through defense evaluation first.
+### 5. Preset Layer
 
----
+Combines:
 
-### 3. Defense Evaluation Layer
+- Archetype
+- Pattern
+- State window profile
+- Visual profile
 
-Primary runtime owner:
+This is the **single source of truth** for an enemy configuration.
 
-- `EnemyDefenseController`
+------
 
-Supporting owners:
+### 6. Runtime Application
 
-- `EnemyDefenseStateWindowController`
-- `EnemyAiLayerController`
+Handled by:
 
-Responsibilities:
+- `EnemyPresetApplicator`
 
-- determine whether a hit is blocked
-- determine whether a hit breaks defense
-- determine whether a weak-window conversion applies
-- manage defense cooldowns
-- manage activation conditions
-- enforce block-on-activation behavior
-- preserve block readability near state edges
+Rules:
 
-Important architectural meaning:
+- Applies preset at runtime
+- Overwrites scene state
+- Ensures consistency
 
-This layer is the **combat gate** between raw contact and final outcome.
+------
 
-Without it, boss-rule encounters collapse into generic hit trading.
+# LEVEL SYSTEM ARCHITECTURE
 
----
+## Full Chain
 
-## Why Defense Is Split Across Multiple Components
+```
+EnemyRoster
+    ↓
+LevelEnemySelection
+    ↓
+LevelEncounterConfig
+    ↓
+LevelProgressionData
+    ↓
+Runtime Level Loader
+```
 
-Enemy defense is intentionally not owned by a single giant monolith.
+------
 
-The split is:
+## Responsibilities
 
-### `EnemyDefensePatternData`
-Defines authored defensive rule behavior.
+### EnemyRoster
 
-Examples:
+- Defines all available enemies
 
-- can block head / body
-- random block chance
-- break-item permissions
-- passive hit shaping
-- weakness behavior
+### LevelEnemySelection
 
-### `EnemyDefenseStateWindowProfileData`
-Defines authored defense phase timing.
+- Selects enemy per level
 
-Examples:
+### LevelEncounterConfig
 
-- telegraph duration
-- active duration
-- recover duration
-- weak-window start / end
-- whether auto-cycle exists
+- Defines gameplay parameters (TargetCount, duration, etc.)
 
-### `EnemyAiProfileData`
-Defines observed / predictive behavior.
+### LevelProgressionData
 
-Examples:
+- Defines progression order
 
-- how fast enemy reacts to repeated hits
-- how much lead time is used
-- how easily threat triggers defense
-- recover lock behavior
+### Runtime
 
-### `EnemyDefenseController`
-Combines pattern rules with live hit evaluation.
+- Loads level
+- Applies encounter
+- Spawns correct enemy
 
-### `EnemyDefenseStateWindowController`
-Owns the live current phase:
+------
 
-- `None`
-- `Telegraph`
-- `Active`
-- `Recover`
+# CRITICAL ARCHITECTURE RULES
 
-### `EnemyAiLayerController`
-Observes hit rhythm and decides when to trigger defense cycles.
+## Rule 1 — No Parallel Systems
 
-This split is intentional.
+Do NOT:
 
-It lets the project create different boss demands without inventing new systems every time.
+- Add alternate injection paths
+- Bypass preset system
+- Modify enemy directly in scene
 
----
+Everything must go through:
 
-## Score and Breakdown Layer
+> Preset → Applicator
 
-Primary runtime owner:
+------
 
-- `GameplayManager`
+## Rule 2 — Scene Is Not Source of Truth
 
-Responsibilities:
+Scene objects are:
 
-- current breakdown value
-- target breakdown value
-- timer
-- selected item
-- combo state
-- round running state
-- round finish state
+- Temporary
+- Overwritten at runtime
 
-Important rule:
+Do NOT treat:
 
-`GameplayManager` owns breakdown and round state.
+- Transform tweaks
+- Manual mesh positioning
 
-It does **not** own:
+As final behavior definitions.
 
-- throw gating
-- defense evaluation
-- goal-type-specific completion logic
+------
 
-Those are separate layers on purpose.
+## Rule 3 — Boss Must Stay in Pipeline
 
----
+Even during redesign:
 
-## Goal Evaluation Layer
+Boss must still follow:
 
-Primary runtime owner:
+```
+Preset → Roster → Level Selection → Runtime
+```
 
-- `LevelGoalController`
+No exceptions.
 
-Data input:
+------
 
-- `LevelGoalDefinition`
-- `LevelGoalType`
-- `LevelEncounterConfigData`
+# CURRENT VISUAL PROTOTYPE STATUS
 
-Supported goal types:
+Recent work includes:
 
-1. `BreakdownTarget`
-2. `HeadHitCount`
-3. `SpecificItemHitCount`
-4. `UnblockedHitStreak`
+- Sunglasses identity (Level 05)
+- Face guard arm pose (Level 09)
+- Head target emphasis (Level 11)
 
-Responsibilities:
+These are:
 
-- apply encounter goal config
-- track current progress
-- interpret final resolved hits
-- force win for non-breakdown goals when target is met
-- provide goal summary text for review UI
+- Scene-level adjustments
+- Visual exploration
+- Not formalized in data layer
 
-Important rule:
+------
 
-Goal logic consumes **final post-defense hit state**.
+## IMPORTANT
 
-It must not rely on naive collision assumptions.
+> These prototypes must NOT be treated as architecture features.
 
-That is why `CombatHitInfo` includes:
+They are:
 
-- `isHeadHit`
-- `wasBlocked`
-- `itemId`
-- `gainedScore`
+- Temporary
+- Disposable
 
----
+------
 
-## Enemy Runtime Authoring Chain
+# FUTURE BOSS REDESIGN REQUIREMENT
 
-This is the most important enemy architecture rule in the project.
+All future boss work must:
 
-Boss behavior must be authored through:
+1. Be defined in data (profiles / presets)
+2. Not rely on manual hierarchy edits
+3. Be reproducible via preset application
 
-**pattern → state window profile → preset → roster entry → level selection → runtime slot routing**
+------
 
-### Layer meanings
+# SUMMARY
 
-#### `EnemyPresetData`
-Bundles together:
+- Architecture is complete and stable
+- Data-driven pipeline is validated
+- Runtime application is consistent
+- Level system is fully integrated
 
-- archetype
-- defense pattern
-- AI profile
-- defense state window profile
-- defense visual profile
+------
 
-#### `EnemyRosterData`
-Adds:
+# CURRENT LIMITATION (KNOWN)
 
-- entry id
-- preset reference
-- recommended slot id
+- Visual identity is not yet systematized
+- Boss presentation still relies on temporary scene adjustments
 
-#### `LevelEnemySelectionData`
-Chooses which roster entry a level uses.
+------
 
-#### `EnemySwitchingManager`
-Routes the selected preset into the correct live slot.
+# NEXT STEP (ARCHITECTURE LEVEL)
 
-#### `EnemyRuntimePresetController`
-Applies the chosen preset to the live enemy object.
+Not to change architecture.
 
-#### `EnemyPresetApplicator`
-Pushes preset references into runtime controllers.
+Instead:
 
-This chain is authoritative.
+- Redesign boss content
+- Then re-encode into existing system
 
-Do not rely on scene-only edits for final boss behavior.
+------
 
----
+# FINAL STATEMENT
 
-## Defense Visual Presentation as Architecture
+> Do NOT change architecture for content problems.
 
-Defense visual presentation is now part of real authored runtime architecture.
-
-This is no longer only a scene-level style setting.
-
-### Current rule
-
-`EnemyPresetData` now includes:
-
-- `EnemyDefenseVisualProfileData defenseVisualProfile`
-
-`EnemyPresetApplicator` now applies that profile into:
-
-- `EnemyDefenseVisualLayerController`
-
-### Architectural meaning
-
-Combat readability presentation is now authored through the same preset chain as defense behavior.
-
-That means boss identity is no longer defined only by:
-
-- defense pattern
-- AI profile
-- state window profile
-
-It is also defined by:
-
-- defense visual profile
-
-### Production consequence
-
-Do not author boss presentation by manually leaving different visual profiles on scene objects and hoping runtime lines up.
-
-Boss presentation must travel through the preset chain.
-
----
-
-## Level Runtime Flow
-
-Primary runtime owners:
-
-- `LevelEncounterController`
-- `LevelProgressionController`
-
-### `LevelEncounterController`
-
-Responsibilities:
-
-- apply encounter config
-- apply round target / duration
-- configure whether breakdown is the win condition
-- apply enemy selection
-- apply goal config
-
-### `LevelProgressionController`
-
-Responsibilities:
-
-- apply startup level
-- track current level index
-- advance to next level
-- restart current level
-- support next-level flow after victory
-
-Important rule:
-
-Levels are not hardcoded combat states.
-
-They are data-authored encounter packages.
-
----
-
-## Presentation Architecture
-
-Presentation is now split into two major branches:
-
-1. **Enemy combat presentation**
-2. **Player-facing rule presentation**
-
-This split became much more important during the readability pass.
-
----
-
-## Enemy Combat Presentation Branch
-
-### `EnemyReactionLayerController`
-
-Responsibilities:
-
-- stage-based enemy reaction
-- hit response intensity
-- annoyance / agitation / meltdown progression
-
-### `EnemyDefenseVisualLayerController`
-
-Responsibilities:
-
-- convert defense result into readable pose feedback
-- separate `BLOCK`, `WEAK`, `BREAK`, and guard-related states
-- apply body/head offsets and timed response layers
-- bridge gameplay result into visible combat language
-- consume the preset-applied defense visual profile at runtime
-
-This component is no longer just “extra juice”.
-
-It is now a core readability bridge:
-
-**combat result → readable visual state**
-
-### `EnemyVisualProxyController`
-
-Responsibilities:
-
-- lightweight proxy poses for primitive enemies
-- rough telegraph / guard / break / weak silhouette support
-- coarse pose-state differentiation
-
-### Important architecture boundary
-
-`EnemyVisualProxyController` is useful for:
-
-- baseline readability
-- quick primitive pose support
-
-It is **not** a reliable final-art animation solution.
-
-This boundary has now been tested in practice.
-
-Do not overfit primitive proxy-arm rotations trying to force final hero-quality defensive poses.
-
-That belongs to a later art/presentation phase.
-
----
-
-## Player-Facing Rule Presentation Branch
-
-Primary runtime owner:
-
-- `HudController`
-
-Responsibilities:
-
-- live HUD display
-- timer text
-- selected item text
-- combo UI
-- result panel
-- goal summary display
-
-### Why this matters architecturally
-
-Earlier project stages mostly treated goals as internal logic.
-
-Current project state is different.
-
-Now the goal system also has a **presentation contract**.
-
-That means goal semantics must be readable in two places:
-
-1. **during live play**
-2. **during result review**
-
-This is a real architecture fact now.
-
----
-
-## HUD Rule Language Architecture
-
-Current principle:
-
-**HUD should explain the encounter rule, not just expose counters.**
-
-Examples:
-
-### BreakdownTarget
-- `Goal: Build Breakdown X / Y`
-- `Rule: Reach the breakdown target before time runs out`
-
-### HeadHitCount
-- `Goal: Land Head Hits X / Y`
-- `Rule: Only successful head hits count`
-
-### SpecificItemHitCount
-- `Goal: Land [Item] Hits X / Y`
-- `Rule: Only [Item] advances this goal`
-
-### UnblockedHitStreak
-- `Goal: Chain Clean Hits X / Y`
-- `Rule: Any blocked hit resets the streak`
-
-This means `HudController` is no longer just “stat display”.
-
-It is now part of encounter explanation architecture.
-
----
-
-## Result Panel Architecture
-
-Current result panel responsibilities include:
-
-- win / fail title
-- status subtitle
-- level label
-- goal summary
-- final-level completion notice
-- retry / next-level actions
-
-Important architecture rule:
-
-Result-panel goal language should match live HUD goal language.
-
-Do not let result review feel like a different system is explaining the encounter.
-
-This is why `goalSummaryText` now belongs to the same language family as the HUD rule text.
-
----
-
-## Combat Result Language Architecture
-
-The project now has a first-pass readable combat result language split between:
-
-- normal successful hit
-- `BLOCK`
-- `WEAK`
-- `BREAK`
-
-### Meaning of each result
-
-#### Normal successful hit
-Baseline scoring success.
-
-#### `BLOCK`
-The defense held.
-
-Should feel:
-
-- hard
-- short
-- stable
-- denied
-
-#### `WEAK`
-The defense exposed a scoring opportunity.
-
-Should feel:
-
-- intentional
-- rewarded
-- readable as a conversion window
-
-#### `BREAK`
-The defense was opened.
-
-Should feel:
-
-- unstable
-- broken
-- more extended than block
-- clearly different from normal hit
-
-### Important design boundary
-
-Not every boss supports every result.
-
-For example:
-
-- Level 11 intentionally has no break path
-- therefore Level 11 is not the right encounter for evaluating `BREAK` readability
-
-This is not just a tuning note.
-
-It is an architecture / authoring truth.
-
----
-
-## Boss Ladder as an Architectural Product
-
-The current boss ladder is not just content.
-
-It is proof that the architecture can produce multiple different encounter demands without new core-system churn.
-
-### Current validated reference meanings
-
-#### Level 04
-Break-route learning
-
-#### Level 05
-Face-guard identity
-
-#### Level 06
-Weak-window timing
-
-#### Level 07
-Specific-item precision
-
-#### Level 08
-Zero-mistake clean chain
-
-#### Level 09
-Body-route judgment
-
-#### Level 10
-Anti-predictability pressure
-
-#### Level 11
-Later-window head conversion
-
-This matters because future work should prefer:
-
-- better authoring through the existing stack
-
-instead of:
-
-- inventing new systems too early
-
----
-
-## Current Accepted System Boundaries
-
-### Already strong enough
-
-The current architecture is already strong enough for:
-
-- multi-level encounter flow
-- multiple goal types
-- boss-specific enemy routing
-- runtime preset application
-- runtime-applied defense visual profiles
-- readable combat-result differentiation
-- HUD / result rule explanation
-
-### Not solved yet
-
-The architecture does **not** yet claim:
-
-- final art-grade enemy posing
-- final polished combat presentation
-- final 04–11 release balancing
-- high-fidelity final enemy silhouette work
-
-These are later-phase concerns.
-
-Do not pretend they are architecture failures.
-
----
-
-## Production Rules Going Forward
-
-When extending the project:
-
-### Prefer this order
-
-1. define boss demand
-2. author it through current data stack
-3. verify runtime routing
-4. verify readable player-facing rule language
-5. verify readable combat-result language
-6. verify readable defense visual identity
-7. only then consider final balance or later art polish
-
-### Avoid this order
-
-1. feel mild dissatisfaction
-2. invent new architecture
-3. add new goal type
-4. add new injection path
-5. rewrite working systems
-
-That is the wrong development pattern for this project.
-
----
-
-## Final Summary
-
-The architecture of **Power Prank 3D** is now built around four linked truths:
-
-### 1. Behavior is authored in data
-Not in scene hacks.
-
-### 2. Runtime application is authoritative
-Not inspector wishful thinking.
-
-### 3. Rules must be readable to the player
-Not only correct in code.
-
-### 4. Defense visual presentation is now part of preset identity
-Not a leftover scene-side styling accident.
-
-That is the current architectural foundation of the project.
+Fix content inside the architecture.
